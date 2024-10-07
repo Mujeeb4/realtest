@@ -17,11 +17,19 @@ class TestWordpressLogin:
         # Set up headless Chrome options for CI
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--disable-infobars")
+        chrome_options.add_argument("--disable-popup-blocking")
+        chrome_options.add_argument("--disable-notifications")
+        chrome_options.add_argument("--incognito")
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.set_window_size(1296, 696)
+        self.driver.set_page_load_timeout(60)
+        self.driver.set_script_timeout(30)
+        self.driver.implicitly_wait(10)
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -42,29 +50,58 @@ class TestWordpressLogin:
 
     def test_login(self):
         start_time = time.time()
-
-        # Navigate to the login page
-        self.driver.get("https://smoothmaths.co.uk/login")
-
-        # Step 2: Fill in the login form
-        self.driver.find_element(By.ID, "user_login").send_keys("Testing")  
-        self.driver.find_element(By.ID, "user_pass").send_keys("Testing*183258")  
-        self.driver.find_element(By.ID, "wp-submit").click()
+        status = "Failed"
+        screenshot_path = None
 
         try:
-            # Step 3: Wait for either the homepage or an error message to load
-            WebDriverWait(self.driver, 10).until(EC.url_contains("smoothmaths.co.uk"))
+            print("Navigating to login page")
+            self.driver.get("https://smoothmaths.co.uk/login")
 
-            # Step 4: Assert that we have been redirected to the homepage
-            assert self.driver.current_url == "https://smoothmaths.co.uk/", "Login failed or not redirected to the homepage."
-            screenshot_path = f"screenshots/successful_login_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.png"
-            self.driver.save_screenshot(screenshot_path)  # Save a screenshot for successful login
-            status = "Passed"
+            print("Waiting for username field")
+            username_field = WebDriverWait(self.driver, 30).until(
+                EC.presence_of_element_located((By.ID, "user_login"))
+            )
+            username_field.send_keys("Testing")
+
+            print("Waiting for password field")
+            password_field = WebDriverWait(self.driver, 30).until(
+                EC.presence_of_element_located((By.ID, "user_pass"))
+            )
+            password_field.send_keys("Testing*183258")
+
+            print("Waiting for login button")
+            login_button = WebDriverWait(self.driver, 30).until(
+                EC.element_to_be_clickable((By.ID, "wp-submit"))
+            )
+            login_button.click()
+
+            print("Waiting for login result")
+            WebDriverWait(self.driver, 30).until(
+                EC.url_contains("smoothmaths.co.uk")
+            )
+
+            # Check current URL
+            current_url = self.driver.current_url
+            print(f"Current URL after login: {current_url}")
+
+            if current_url == "https://smoothmaths.co.uk/":
+                print("Login successful")
+                status = "Passed"
+            else:
+                print("Login failed or not redirected to the homepage")
+                status = "Failed"
+
+            # Take a screenshot
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = f"screenshots/login_{timestamp}.png"
+            self.driver.save_screenshot(screenshot_path)
 
         except Exception as e:
             status = "Failed"
-            screenshot_path = f"screenshots/login_failed_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.png"
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = f"screenshots/login_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
+            print(f"Test failed due to: {e}")
 
         # Record end time and calculate duration
         end_time = time.time()
