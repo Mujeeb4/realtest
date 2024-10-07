@@ -37,7 +37,7 @@ def append_to_csv(results):
 def test_homepage(driver):
     start_time = time.time()  # Record the start time
 
-    driver.get("https://www.smoothmaths.com")
+    driver.get("https://www.smoothmaths.co.uk")
     status = "Passed" if "SmoothMaths" in driver.title else "Failed"
 
     # Record end time and calculate duration
@@ -69,7 +69,7 @@ def test_homepage(driver):
 def test_contact_form(driver):
     start_time = time.time()  # Record the start time
 
-    driver.get("https://www.smoothmaths.com/contact")
+    driver.get("https://www.smoothmaths.co.uk/contact")
     name_field = driver.find_element(By.ID, "name")
     name_field.send_keys("Test User")
     email_field = driver.find_element(By.ID, "email")
@@ -108,7 +108,7 @@ def test_contact_form(driver):
 def test_login(driver):
     start_time = time.time()  # Record the start time
 
-    driver.get("https://www.smoothmaths.com/login")
+    driver.get("https://www.smoothmaths.co.uk/login")
     username_field = driver.find_element(By.ID, "username")
     username_field.send_keys("test_username")  # Replace with a valid username (if testing login functionality)
     password_field = driver.find_element(By.ID, "password")
