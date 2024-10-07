@@ -45,16 +45,19 @@ class TestForgetPasswordTest:
 
         # Navigate to the login page
         self.driver.get("https://smoothmaths.co.uk/login/")
-        
-        # Click on the 'Forgot Password' link
-        self.driver.find_element(By.LINK_TEXT, "Forgot Password").click()
 
-        # Enter the email or username to request a password reset
-        self.driver.find_element(By.ID, "mepr_user_or_email").send_keys("Testing")  
-        self.driver.find_element(By.ID, "wp-submit").click()
-
-        # Wait for the success message to appear
         try:
+            # Wait for the 'Forgot Password' link to be clickable, update the selector if needed
+            forgot_password_link = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable((By.LINK_TEXT, "Forgot Password"))  # Update the link text if necessary
+            )
+            forgot_password_link.click()
+
+            # Enter the email or username to request a password reset
+            self.driver.find_element(By.ID, "mepr_user_or_email").send_keys("Testing")  
+            self.driver.find_element(By.ID, "wp-submit").click()
+
+            # Wait for the success message to appear
             success_message = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.mepr_password_reset_requested h3"))
             )
@@ -70,6 +73,7 @@ class TestForgetPasswordTest:
         except Exception as e:
             status = "Failed"
             screenshot_path = None
+            print(f"Test failed due to: {e}")
 
         # Record end time and calculate duration
         end_time = time.time()
