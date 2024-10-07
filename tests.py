@@ -1,24 +1,50 @@
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 import os
 import datetime
-from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+# CSV file path to store all test results
+CSV_FILE_PATH = "test_results.csv"
 
 @pytest.fixture
 def driver():
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Ensure GUI is not required
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     yield driver
     driver.quit()
 
-def test_homepage(driver):
-    driver.get("https://www.smoothmaths.com")
-    assert "SmoothMaths" in driver.title
+def append_to_csv(results):
+    """Append the test results to the CSV file."""
+    if not os.path.exists(CSV_FILE_PATH):
+        df = pd.DataFrame(results)
+        df.to_csv(CSV_FILE_PATH, index=False)  # Write a new file if it doesn't exist
+    else:
+        df = pd.DataFrame(results)
+        df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)  # Append to existing file
 
-    # Generate a unique timestamp for screenshot and CSV
+def test_homepage(driver):
+    start_time = time.time()  # Record the start time
+
+    driver.get("https://www.smoothmaths.com")
+    status = "Passed" if "SmoothMaths" in driver.title else "Failed"
+
+    # Record end time and calculate duration
+    end_time = time.time()
+    duration = end_time - start_time
+
+    # Generate a unique timestamp for screenshot
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     # Create 'screenshots' directory if it doesn't exist
@@ -29,19 +55,20 @@ def test_homepage(driver):
     screenshot_path = f"screenshots/homepage_{timestamp}.png"
     driver.save_screenshot(screenshot_path)
 
-    # Save test results with timestamp in CSV
+    # Prepare results for CSV
     results = {
         "Test Case": ["Test Homepage"],
-        "Status": ["Passed" if "SmoothMaths" in driver.title else "Failed"],
+        "Status": [status],
+        "Duration (seconds)": [round(duration, 2)],  # Rounded duration
         "Screenshot": [screenshot_path]
     }
-    df = pd.DataFrame(results)
-
-    # Create a unique CSV file name with timestamp
-    csv_file_path = f"test_results_{timestamp}.csv"
-    df.to_csv(csv_file_path, index=False)
+    
+    # Append results to the CSV file
+    append_to_csv(results)
 
 def test_contact_form(driver):
+    start_time = time.time()  # Record the start time
+
     driver.get("https://www.smoothmaths.com/contact")
     name_field = driver.find_element(By.ID, "name")
     name_field.send_keys("Test User")
@@ -54,32 +81,33 @@ def test_contact_form(driver):
 
     wait = WebDriverWait(driver, 10)
     success_message = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "success-message")))
-    assert "Your message has been sent successfully." in success_message.text
+    status = "Passed" if "Your message has been sent successfully." in success_message.text else "Failed"
 
-    # Generate a unique timestamp for screenshot and CSV
+    # Record end time and calculate duration
+    end_time = time.time()
+    duration = end_time - start_time
+
+    # Generate a unique timestamp for screenshot
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-    # Create 'screenshots' directory if it doesn't exist
-    if not os.path.exists('screenshots'):
-        os.makedirs('screenshots')
 
     # Save screenshot with timestamp
     screenshot_path = f"screenshots/contact_form_{timestamp}.png"
     driver.save_screenshot(screenshot_path)
 
-    # Save test results with timestamp in CSV
+    # Prepare results for CSV
     results = {
         "Test Case": ["Test Contact Form"],
-        "Status": ["Passed" if "Your message has been sent successfully." in success_message.text else "Failed"],
+        "Status": [status],
+        "Duration (seconds)": [round(duration, 2)],  # Rounded duration
         "Screenshot": [screenshot_path]
     }
-    df = pd.DataFrame(results)
 
-    # Create a unique CSV file name with timestamp
-    csv_file_path = f"test_results_{timestamp}.csv"
-    df.to_csv(csv_file_path, index=False)
+    # Append results to the CSV file
+    append_to_csv(results)
 
 def test_login(driver):
+    start_time = time.time()  # Record the start time
+
     driver.get("https://www.smoothmaths.com/login")
     username_field = driver.find_element(By.ID, "username")
     username_field.send_keys("test_username")  # Replace with a valid username (if testing login functionality)
@@ -94,34 +122,28 @@ def test_login(driver):
         # Check for successful login element (adjust selector if needed)
         dashboard_link = wait.until(EC.presence_of_element_located((By.ID, "dashboard-link")))
         assert dashboard_link.text == "Dashboard"
-
-        # Generate a unique timestamp for screenshot and CSV
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        # Create 'screenshots' directory if it doesn't exist
-        if not os.path.exists('screenshots'):
-            os.makedirs('screenshots')
-
-        # Save screenshot with timestamp
-        screenshot_path = f"screenshots/login_{timestamp}.png"
-        driver.save_screenshot(screenshot_path)
-
-        # Save test results with timestamp in CSV
-        results = {
-            "Test Case": ["Test Login"],
-            "Status": ["Passed"],
-            "Screenshot": [screenshot_path]
-        }
+        status = "Passed"
     except Exception as e:
-        # In case of a failure, capture the failure details
-        results = {
-            "Test Case": ["Test Login"],
-            "Status": ["Failed"],
-            "Error": [str(e)]
-        }
+        status = "Failed"
 
-    df = pd.DataFrame([results])
+    # Record end time and calculate duration
+    end_time = time.time()
+    duration = end_time - start_time
 
-    # Create a unique CSV file name with timestamp
-    csv_file_path = f"test_results_{timestamp}.csv"
-    df.to_csv(csv_file_path, index=False)
+    # Generate a unique timestamp for screenshot
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Save screenshot with timestamp
+    screenshot_path = f"screenshots/login_{timestamp}.png"
+    driver.save_screenshot(screenshot_path)
+
+    # Prepare results for CSV
+    results = {
+        "Test Case": ["Test Login"],
+        "Status": [status],
+        "Duration (seconds)": [round(duration, 2)],  # Rounded duration
+        "Screenshot": [screenshot_path]
+    }
+
+    # Append results to the CSV file
+    append_to_csv(results)
