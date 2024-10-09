@@ -3,6 +3,9 @@ name: Selenium Tests
 on:
   schedule:
     - cron: '*/10 * * * *'  # Run every 10 minutes
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -21,12 +24,44 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager pandas
 
+      # Running all tests sequentially
       - name: Run forgot password tests
         run: pytest test_forgetPasswordTest1_2155.py
 
       - name: Run login tests
         run: pytest test_Wordpresslogin1_2155.py
 
+      - name: Run contact us tests
+        run: pytest test_contactus.py
+
+      - name: Run privacy policy tests
+        run: pytest test_privacyPolicy.py
+
+      - name: Run terms & conditions tests
+        run: pytest test_termsConditions.py
+
+      - name: Run FAQs tests
+        run: pytest test_fAQs.py
+
+      - name: Run feedback page tests
+        run: pytest test_feedbackPage.py
+
+      - name: Run Facebook link tests
+        run: pytest test_facebooklink.py
+
+      - name: Run Instagram link tests
+        run: pytest test_instalink.py
+
+      - name: Run TikTok link tests
+        run: pytest test_tiktoklink.py
+
+      - name: Run Twitter link tests
+        run: pytest test_twitterlink.py
+
+      - name: Run LinkedIn link tests
+        run: pytest test_linkedinlink.py
+
+      # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
         with:
