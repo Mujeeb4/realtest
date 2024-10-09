@@ -34,16 +34,21 @@ class TestFeedbackPage():
         # Scroll to the bottom to ensure the "Feedback" link is visible
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-        # Add wait for "Feedback" link to be clickable
+        # Add wait for "Feedback" link to be clickable and scroll it into view
         try:
-            feedback_link = WebDriverWait(self.driver, 10).until(
+            feedback_link = WebDriverWait(self.driver, 15).until(
                 EC.element_to_be_clickable((By.LINK_TEXT, "Feedback"))
             )
+            # Scroll the feedback link into view
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", feedback_link)
             feedback_link.click()
         except Exception as e:
-            raise AssertionError(f"Could not locate the Feedback link. Error: {e}")
+            raise AssertionError(f"Could not locate or click the Feedback link. Error: {e}")
 
-        self.driver.execute_script("window.scrollTo(0,148)")
+        # Add an explicit wait to ensure the page loads and the form is interactable
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located((By.ID, "wpforms-21990-field_2"))
+        )
 
         # Fill in the feedback form
         self.driver.find_element(By.ID, "wpforms-21990-field_2").send_keys("Hanzila")
@@ -53,7 +58,7 @@ class TestFeedbackPage():
 
         # Wait for the confirmation message to appear
         try:
-            confirmation_message = WebDriverWait(self.driver, 15).until(
+            confirmation_message = WebDriverWait(self.driver, 20).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".wpforms-confirmation-container-full p"))
             )
             assert "Thanks for leaving a review" in confirmation_message.text
@@ -86,3 +91,4 @@ class TestFeedbackPage():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+
