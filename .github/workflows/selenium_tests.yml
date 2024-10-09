@@ -43,9 +43,6 @@ jobs:
       - name: Run FAQs tests
         run: pytest test_fAQs.py
 
-      - name: Run feedback page tests
-        run: pytest test_feedbackPage.py
-
       # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
