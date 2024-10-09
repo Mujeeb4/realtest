@@ -1,5 +1,3 @@
-# Updated test_contactus.py
-
 import pytest
 import time
 import csv
@@ -12,11 +10,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 
 class TestContactus:
     def setup_method(self, method):
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-        self.driver.maximize_window()
+        # Set up Chrome options for headless execution
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--remote-debugging-port=9222")
+        
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.vars = {}
 
     def teardown_method(self, method):
@@ -73,4 +80,3 @@ class TestContactus:
                 writer.writerow(["Contact Us Test", "Failed", time.strftime("%Y-%m-%d %H:%M:%S"), str(e)])
 
             raise
-
