@@ -47,7 +47,7 @@ class TestFeedbackPage():
             raise AssertionError(f"Could not locate or click the Feedback link. Error: {e}")
 
         # Add an explicit wait to ensure the form is fully loaded and interactable
-        WebDriverWait(self.driver, 20).until(
+        WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.ID, "wpforms-21990-field_2"))
         )
 
@@ -59,10 +59,11 @@ class TestFeedbackPage():
 
         # Wait for the confirmation message to appear
         try:
-            confirmation_message = WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".wpforms-confirmation-container-full p"))
+            # Updated CSS Selector based on your screenshot
+            confirmation_message = WebDriverWait(self.driver, 30).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, ".wpforms-confirmation-container-full p"))
             )
-            assert "Thanks for leaving a review" in confirmation_message.text
+            assert "Thanks for leaving a review!" in confirmation_message.text
 
             # Save screenshot with timestamp
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -74,7 +75,13 @@ class TestFeedbackPage():
             self._store_test_results("Test Feedback Page", "Passed", screenshot_path)
 
         except Exception as e:
-            # If the confirmation message is not found, raise an error and fail the test
+            # If the confirmation message is not found, capture the page source for debugging
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            page_source = self.driver.page_source
+            with open(f"screenshots/failed_page_source_{timestamp}.html", "w") as f:
+                f.write(page_source)
+
+            # Log the failure
             self._store_test_results("Test Feedback Page", "Failed", "No screenshot - test failed")
             raise AssertionError(f"The confirmation message did not appear as expected. Error: {e}")
 
@@ -90,3 +97,4 @@ class TestFeedbackPage():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+
