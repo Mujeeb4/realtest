@@ -27,27 +27,28 @@ class TestFeedbackPage():
     def test_feedbackPage(self):
         start_time = time.time()
         
-        # Navigate to the feedback page
+        # Navigate to the main page
         self.driver.get("https://smoothmaths.co.uk/")
         self.driver.set_window_size(1296, 696)
 
-        # Scroll to the bottom to ensure the "Feedback" link is visible
+        # Scroll to the bottom of the page to ensure the "Feedback" link is visible
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-        # Add wait for "Feedback" link to be clickable and scroll it into view
+        # Wait for the "Feedback" link to be clickable and ensure it's visible
         try:
-            feedback_link = WebDriverWait(self.driver, 15).until(
+            feedback_link = WebDriverWait(self.driver, 20).until(
                 EC.element_to_be_clickable((By.LINK_TEXT, "Feedback"))
             )
-            # Scroll the feedback link into view
+            # Scroll the feedback link into view to ensure visibility
             self.driver.execute_script("arguments[0].scrollIntoView(true);", feedback_link)
+            time.sleep(1)  # Short pause to ensure the scrolling has completed
             feedback_link.click()
         except Exception as e:
             raise AssertionError(f"Could not locate or click the Feedback link. Error: {e}")
 
-        # Add an explicit wait to ensure the page loads and the form is interactable
-        WebDriverWait(self.driver, 15).until(
-            EC.presence_of_element_located((By.ID, "wpforms-21990-field_2"))
+        # Add an explicit wait to ensure the form is fully loaded and interactable
+        WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.ID, "wpforms-21990-field_2"))
         )
 
         # Fill in the feedback form
@@ -74,8 +75,6 @@ class TestFeedbackPage():
 
         except Exception as e:
             # If the confirmation message is not found, raise an error and fail the test
-            end_time = time.time()
-            duration = end_time - start_time
             self._store_test_results("Test Feedback Page", "Failed", "No screenshot - test failed")
             raise AssertionError(f"The confirmation message did not appear as expected. Error: {e}")
 
@@ -91,4 +90,3 @@ class TestFeedbackPage():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
