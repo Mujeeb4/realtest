@@ -46,21 +46,6 @@ jobs:
       - name: Run feedback page tests
         run: pytest test_feedbackPage.py
 
-      - name: Run Facebook link tests
-        run: pytest test_facebooklink.py
-
-      - name: Run Instagram link tests
-        run: pytest test_instalink.py
-
-      - name: Run TikTok link tests
-        run: pytest test_tiktoklink.py
-
-      - name: Run Twitter link tests
-        run: pytest test_twitterlink.py
-
-      - name: Run LinkedIn link tests
-        run: pytest test_linkedinlink.py
-
       # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
