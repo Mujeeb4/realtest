@@ -65,7 +65,7 @@ jobs:
         run: pytest test_A-Level.py
 
       - name: Run Pricing link tests
-        run: pytest test_Pricinglinks.py
+        run: pytest test_pricing.py
 
       # Uploading artifacts
       - name: Upload screenshots
