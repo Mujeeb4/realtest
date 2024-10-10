@@ -46,8 +46,8 @@ jobs:
       - name: Run feedback tests
         run: pytest test_feedbackPage.py
 
-      - name: Run Monthly registration tests
-        run: pytest test_RegistrationMonthly.py
+      - name: Run 11 Plus link tests
+        run: pytest test_11Pluslinks.py
 
       # Uploading artifacts
       - name: Upload screenshots
