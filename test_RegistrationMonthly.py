@@ -26,7 +26,6 @@ class TestMonthlyPlan():
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
 
-
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -80,13 +79,18 @@ class TestMonthlyPlan():
         end_time = time.time()
         duration = end_time - start_time
 
+    def _store_test_results(self, test_case, status, screenshot_path):
         # Prepare results for CSV
         results = {
-            "Test Case": ["Test Login"],
+            "Test Case": [test_case],
             "Status": [status],
-            "Duration (seconds)": [round(duration, 2)],
             "Screenshot": [screenshot_path]
         }
 
         # Append results to the CSV file
-        self.append_to_csv(results)
+        df = pd.DataFrame(results)
+        if not os.path.exists(CSV_FILE_PATH):
+            df.to_csv(CSV_FILE_PATH, index=False)
+        else:
+            df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+
