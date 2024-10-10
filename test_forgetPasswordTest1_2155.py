@@ -61,7 +61,7 @@ class TestForgetPasswordTest:
             success_message = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.mepr_password_reset_requested h3"))
             )
-            assert "Successfully requested not reset password reset" in success_message.text, "Expected success message not found."
+            assert "Successfully requested password reset" in success_message.text, "Expected success message not found."
 
             # Take a screenshot of the success message
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
