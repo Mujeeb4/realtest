@@ -65,14 +65,17 @@ class TestForgetPasswordTest:
 
             # Take a screenshot of the success message
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/password_reset_{timestamp}.png"
+            screenshot_path = os.path.join("screenshots", f"password_reset_{timestamp}.png")
             self.driver.save_screenshot(screenshot_path)
 
             status = "Passed"
 
         except Exception as e:
+            # Take a screenshot if there's an error
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = os.path.join("screenshots", f"error_password_reset_{timestamp}.png")
+            self.driver.save_screenshot(screenshot_path)
             status = "Failed"
-            screenshot_path = None
             print(f"Test failed due to: {e}")
 
         # Record end time and calculate duration
