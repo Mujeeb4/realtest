@@ -50,7 +50,7 @@ jobs:
         run: pytest test_11Pluslinks.py
 
       - name: Run 13 Plus link tests
-        run: pytest test_13Pluslinks.py
+        run: pytest test_13Pluslink.py
 
       # Uploading artifacts
       - name: Upload screenshots
