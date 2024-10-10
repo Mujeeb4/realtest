@@ -59,13 +59,13 @@ class TestPricingPlans():
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
             ]
 
-            # Correct CSS selectors based on the provided screenshots
+            # Update the CSS selectors for the registration buttons based on the screenshot
             button_selectors = [
-                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_0",
-                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_1",
-                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_2",
-                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_3",
-                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_4"
+                "a.et_pb_button.df_6707f5de4912c_et_pb_button_0",
+                "a.et_pb_button.df_6707f5de4912c_et_pb_button_1",
+                "a.et_pb_button.df_6707f5de4912c_et_pb_button_2",
+                "a.et_pb_button.df_6707f5de4912c_et_pb_button_3",
+                "a.et_pb_button.df_6707f5de4912c_et_pb_button_4"
             ]
 
             # Iterate through each plan's register button
