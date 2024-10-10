@@ -4,10 +4,8 @@ import csv
 import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
@@ -21,7 +19,6 @@ class TestContactus:
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920,1080")
-        chrome_options.add_argument("--remote-debugging-port=9222")
         
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.vars = {}
@@ -47,9 +44,14 @@ class TestContactus:
             self.driver.find_element(By.ID, "et_pb_contact_email_0").send_keys("hanzila@dovidigital.com")
             self.driver.find_element(By.ID, "et_pb_contact_message_0").send_keys("Testing")
 
-            # Fill out Captcha and submit the form
+            # Dynamically solve captcha
+            captcha_question = self.driver.find_element(By.CLASS_NAME, "et_pb_contact_captcha_question").text
+            captcha_answer = eval(captcha_question)  # Evaluate the math captcha question
+            
             captcha_field = self.driver.find_element(By.NAME, "et_pb_contact_captcha_0")
-            captcha_field.send_keys("19")  # Ensure captcha handling
+            captcha_field.send_keys(str(captcha_answer))  # Enter the captcha answer
+
+            # Submit the form
             self.driver.find_element(By.NAME, "et_builder_submit_button").click()
 
             # Wait for the success message and check it
