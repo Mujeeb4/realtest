@@ -49,7 +49,7 @@ jobs:
       - name: Run 11 Plus link tests
         run: pytest test_11Pluslinks.py
 
-      - name: Run 11 Plus link tests
+      - name: Run 13 Plus link tests
         run: pytest test_13Pluslinks.py
 
       # Uploading artifacts
