@@ -59,19 +59,21 @@ class TestPricingPlans():
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
             ]
 
-            # Updated CSS selectors for the register buttons
+            # Correct CSS selectors based on the provided screenshots
             button_selectors = [
-                "a[href='https://smoothmaths.co.uk/register/11-plus-subscription-plan/']",
-                "a[href='https://smoothmaths.co.uk/register/11-plus-answers-quizzes/']",
-                "a[href='https://smoothmaths.co.uk/register/13-plus-answers-solutions/']",
-                "a[href='https://smoothmaths.co.uk/register/13-plus-answers-quizzes/']",
-                "a[href='https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/']"
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_0",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_1",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_2",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_3",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_4"
             ]
 
             # Iterate through each plan's register button
             for index, expected_url in enumerate(plan_urls):
                 # Scroll to the "Register" button
-                self.driver.execute_script("window.scrollBy(0, 400);")
+                self.driver.execute_script("arguments[0].scrollIntoView();", 
+                    self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
+                )
                 time.sleep(1)
 
                 # Click on the "Register" button for the current plan
