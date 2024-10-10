@@ -58,6 +58,12 @@ jobs:
       - name: Run IGCSE link tests
         run: pytest test_IGCSElink.py
 
+      - name: Run AS-Level link tests
+        run: pytest test_AS-Level.py
+
+      - name: Run A-Level link tests
+        run: pytest test_A-Level.py
+
       # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
