@@ -59,13 +59,13 @@ class TestPricingPlans():
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
             ]
 
-            # CSS selector for the register buttons (adjusted based on your screenshot)
+            # Updated CSS selectors for the register buttons
             button_selectors = [
-                "a.et_pb_button_0",  # 11 plus subscription plan
-                "a.et_pb_button_1",  # 11 plus answers quizzes
-                "a.et_pb_button_2",  # 13 plus answers solutions
-                "a.et_pb_button_3",  # 13 plus answers quizzes
-                "a.et_pb_button_4"   # IGCSE/GCSE mathematics solutions
+                "a[href='https://smoothmaths.co.uk/register/11-plus-subscription-plan/']",
+                "a[href='https://smoothmaths.co.uk/register/11-plus-answers-quizzes/']",
+                "a[href='https://smoothmaths.co.uk/register/13-plus-answers-solutions/']",
+                "a[href='https://smoothmaths.co.uk/register/13-plus-answers-quizzes/']",
+                "a[href='https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/']"
             ]
 
             # Iterate through each plan's register button
