@@ -47,11 +47,8 @@ class TestPricingPlans():
                 EC.url_to_be(pricing_page)
             )
             
-            # If-else block to check the pricing page redirection
-            if self.driver.current_url == pricing_page:
-                print("Successfully navigated to the pricing page")
-            else:
-                raise AssertionError("Failed to navigate to pricing page")
+            # Verify if we are on the pricing page
+            assert self.driver.current_url == pricing_page, "Failed to navigate to pricing page"
 
             # List of expected URLs for the registration pages (you may need to adjust these URLs)
             plan_urls = [
@@ -62,22 +59,22 @@ class TestPricingPlans():
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
             ]
 
-            # Click on the "Register" buttons for each plan and check if the URL is correct
+            # Iterate through each plan's register button
             for index, expected_url in enumerate(plan_urls):
                 # Scroll to the "Register" button
                 self.driver.execute_script("window.scrollBy(0, 400);")
                 time.sleep(1)
 
                 # Click on the "Register" button for the current plan
-                register_button = self.driver.find_element(By.CSS_SELECTOR, f".et_pb_pricing_table_button a:nth-child({index+1})")
+                register_button = self.driver.find_element(By.CSS_SELECTOR, f".et_pb_pricing_table_button:nth-child({index+1}) a")
                 register_button.click()
 
                 # Wait for the redirection to the registration page
                 WebDriverWait(self.driver, 30).until(
-                    EC.url_to_be(expected_url)
+                    EC.url_contains(expected_url)
                 )
 
-                # If-else block to check the redirection
+                # Check if we were redirected to the correct page
                 if self.driver.current_url == expected_url:
                     status = "Passed"
                 else:
