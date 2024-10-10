@@ -52,13 +52,13 @@ class TestMonthlyPlan():
             first_register_button = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_pricing_table_button a")
             first_register_button.click()
 
-            # Check if we were redirected to the correct page
+            # Wait for the page to load
             WebDriverWait(self.driver, 30).until(
-                EC.url_contains("register/11-plus-subscription-plan")
+                EC.url_contains("register")
             )
 
             # If-else block to check for correct redirection
-            if "https://smoothmaths.co.uk/register/11-plus-subscription-plan/" in self.driver.current_url:
+            if "register/11-plus-subscription-plan" in self.driver.current_url:
                 status = "Passed"
             else:
                 status = "Failed"
@@ -98,3 +98,4 @@ class TestMonthlyPlan():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+
