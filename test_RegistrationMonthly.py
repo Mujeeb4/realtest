@@ -50,13 +50,22 @@ class TestPricingPlans():
             # Verify if we are on the pricing page
             assert self.driver.current_url == pricing_page, "Failed to navigate to pricing page"
 
-            # List of expected URLs for the registration pages (you may need to adjust these URLs)
+            # List of expected URLs for the registration pages
             plan_urls = [
                 "https://smoothmaths.co.uk/register/11-plus-subscription-plan/",
                 "https://smoothmaths.co.uk/register/11-plus-answers-quizzes/",
                 "https://smoothmaths.co.uk/register/13-plus-answers-solutions/",
                 "https://smoothmaths.co.uk/register/13-plus-answers-quizzes/",
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
+            ]
+
+            # CSS selector for the register buttons (adjusted based on the screenshot provided)
+            button_selectors = [
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_0",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_1",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_2",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_3",
+                "a.et_pb_button.df_6707e2655e7f3_et_pb_button_4"
             ]
 
             # Iterate through each plan's register button
@@ -66,7 +75,7 @@ class TestPricingPlans():
                 time.sleep(1)
 
                 # Click on the "Register" button for the current plan
-                register_button = self.driver.find_element(By.CSS_SELECTOR, f".et_pb_pricing_table_button:nth-child({index+1}) a")
+                register_button = self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
                 register_button.click()
 
                 # Wait for the redirection to the registration page
@@ -121,4 +130,3 @@ class TestPricingPlans():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
