@@ -63,27 +63,35 @@ class TestFeedbackPage():
             confirmation_message = WebDriverWait(self.driver, 30).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".wpforms-confirmation-container-full p"))
             )
-            assert "Thanks for leaving a review!" in confirmation_message.text
 
-            # Save screenshot with timestamp
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/feedback_confirmation_{timestamp}.png"
-            os.makedirs(os.path.dirname(screenshot_path), exist_ok=True)
-            self.driver.save_screenshot(screenshot_path)
+            if "Thanks for leaving a review!" in confirmation_message.text:
+                # Save screenshot with timestamp
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                screenshot_path = f"screenshots/feedback_confirmation_{timestamp}.png"
+                os.makedirs(os.path.dirname(screenshot_path), exist_ok=True)
+                self.driver.save_screenshot(screenshot_path)
 
-            # Store the test result in CSV
-            self._store_test_results("Test Feedback Page", "Passed", screenshot_path)
+                # Store the test result as passed
+                self._store_test_results("Test Feedback Page", "Passed", screenshot_path)
+            else:
+                # If the message is not correct, mark the test as failed
+                self._log_failure()
 
         except Exception as e:
-            # If the confirmation message is not found, capture the page source for debugging
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            page_source = self.driver.page_source
-            with open(f"screenshots/failed_page_source_{timestamp}.html", "w") as f:
-                f.write(page_source)
-
-            # Log the failure
-            self._store_test_results("Test Feedback Page", "Failed", "No screenshot - test failed")
+            # Log the failure in case the confirmation message is not found
+            self._log_failure()
             raise AssertionError(f"The confirmation message did not appear as expected. Error: {e}")
+
+    def _log_failure(self):
+        """Handles logging of failure details and stores them."""
+        # Capture the page source for debugging
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        page_source = self.driver.page_source
+        with open(f"screenshots/failed_page_source_{timestamp}.html", "w") as f:
+            f.write(page_source)
+
+        # Log the failure in CSV
+        self._store_test_results("Test Feedback Page", "Failed", "No screenshot - test failed")
 
     def _store_test_results(self, test_case, status, screenshot_path):
         # Save test results in a CSV file
@@ -97,4 +105,3 @@ class TestFeedbackPage():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
