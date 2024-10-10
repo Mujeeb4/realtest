@@ -27,7 +27,6 @@ class Test11Plus():
     def test_11Plus(self):
         # Navigate to the main page
         self.driver.get("https://smoothmaths.co.uk/")
-        self.save_screenshot("homepage_loaded")
 
         # Hover over the "11 Plus" dropdown to reveal the links
         dropdown = self.driver.find_element(By.LINK_TEXT, "11 Plus")
