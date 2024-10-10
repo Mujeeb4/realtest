@@ -36,13 +36,13 @@ class TestPricingPlans():
             # Navigate to the main page
             self.driver.get("https://smoothmaths.co.uk/")
             
-            # Click on the "Join Now" button in the header
+            # Wait for the page to load and ensure "Join Now" button is clickable
             join_now_button = WebDriverWait(self.driver, 30).until(
                 EC.element_to_be_clickable((By.LINK_TEXT, "JOIN NOW"))
             )
             join_now_button.click()
 
-            # Navigate to pricing page and check if the URL is correct
+            # Wait for navigation to the pricing page
             WebDriverWait(self.driver, 30).until(
                 EC.url_to_be(pricing_page)
             )
@@ -59,7 +59,7 @@ class TestPricingPlans():
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
             ]
 
-            # Update the CSS selectors for the registration buttons based on the screenshot
+            # Correct the CSS selectors based on the previous investigation
             button_selectors = [
                 "a.et_pb_button.df_6707f5de4912c_et_pb_button_0",
                 "a.et_pb_button.df_6707f5de4912c_et_pb_button_1",
@@ -71,13 +71,19 @@ class TestPricingPlans():
             # Iterate through each plan's register button
             for index, expected_url in enumerate(plan_urls):
                 # Scroll to the "Register" button
-                self.driver.execute_script("arguments[0].scrollIntoView();", 
-                    self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
+                WebDriverWait(self.driver, 30).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, button_selectors[index]))
                 )
-                time.sleep(1)
+                register_button = self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
+                
+                # Ensure the button is visible and clickable
+                WebDriverWait(self.driver, 30).until(
+                    EC.visibility_of(register_button)
+                )
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+                time.sleep(1)  # Small pause to ensure the page scrolls
 
                 # Click on the "Register" button for the current plan
-                register_button = self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
                 register_button.click()
 
                 # Wait for the redirection to the registration page
