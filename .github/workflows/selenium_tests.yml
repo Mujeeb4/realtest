@@ -2,7 +2,7 @@ name: Selenium Tests
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Run every 10 minutes
+    - cron: '0 * * * *'  # Run every 1 hour
   push:
     branches:
       - main
@@ -14,11 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'  # Use your preferred Python version
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -44,9 +43,12 @@ jobs:
       - name: Run FAQs tests
         run: pytest test_fAQs.py
 
+      - name: Run feedback tests
+        run: pytest test_feedbackPage.py
+
       # Uploading artifacts
       - name: Upload screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: screenshots
           path: screenshots/*.png
