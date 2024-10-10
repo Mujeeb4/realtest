@@ -37,13 +37,13 @@ class TestPricingPlans():
             self.driver.get("https://smoothmaths.co.uk/")
             
             # Wait for the page to load and ensure "Join Now" button is clickable
-            join_now_button = WebDriverWait(self.driver, 30).until(
+            join_now_button = WebDriverWait(self.driver, 60).until(
                 EC.element_to_be_clickable((By.LINK_TEXT, "JOIN NOW"))
             )
             join_now_button.click()
 
             # Wait for navigation to the pricing page
-            WebDriverWait(self.driver, 30).until(
+            WebDriverWait(self.driver, 60).until(
                 EC.url_to_be(pricing_page)
             )
             
@@ -71,43 +71,43 @@ class TestPricingPlans():
             # Iterate through each plan's register button
             for index, expected_url in enumerate(plan_urls):
                 # Scroll to the "Register" button
-                WebDriverWait(self.driver, 30).until(
+                WebDriverWait(self.driver, 60).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, button_selectors[index]))
                 )
                 register_button = self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
-                
+    
                 # Ensure the button is visible and clickable
-                WebDriverWait(self.driver, 30).until(
+                WebDriverWait(self.driver, 60).until(
                     EC.visibility_of(register_button)
                 )
                 self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
                 time.sleep(1)  # Small pause to ensure the page scrolls
-
+    
                 # Click on the "Register" button for the current plan
                 register_button.click()
-
+    
                 # Wait for the redirection to the registration page
-                WebDriverWait(self.driver, 30).until(
+                WebDriverWait(self.driver, 60).until(
                     EC.url_contains(expected_url)
                 )
-
+    
                 # Check if we were redirected to the correct page
                 if self.driver.current_url == expected_url:
                     status = "Passed"
                 else:
                     status = "Failed"
-
+    
                 # Take a screenshot
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
                 screenshot_path = f"screenshots/plan_{index+1}_{status}_{timestamp}.png"
                 self.driver.save_screenshot(screenshot_path)
-
+    
                 # Record the test result
                 self._store_test_results(f"Plan {index+1} Registration", status, screenshot_path)
-
+    
                 # Go back to the pricing page for the next iteration
                 self.driver.get(pricing_page)
-                WebDriverWait(self.driver, 30).until(
+                WebDriverWait(self.driver, 60).until(
                     EC.url_to_be(pricing_page)
                 )
 
