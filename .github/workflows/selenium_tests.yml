@@ -52,6 +52,9 @@ jobs:
       - name: Run 13 Plus link tests
         run: pytest test_13Pluslink.py
 
+      - name: Run GCSE link tests
+        run: pytest test_GCSElink.py
+
       # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
