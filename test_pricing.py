@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-class Pricing():
+class TestPricing():
     def setup_method(self, method):
         # Set up Chrome options for headless execution (suitable for GitHub Actions)
         chrome_options = webdriver.ChromeOptions()
