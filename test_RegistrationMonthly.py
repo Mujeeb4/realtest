@@ -107,13 +107,13 @@ class TestPricingPlans():
 
                     print(f"Plan {index+1} registration status: {status}")
 
-                    # Take a screenshot
+                    # Take a screenshot of the registration page after successful navigation
                     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                    screenshot_path = f"screenshots/plan_{index+1}_{status}_{timestamp}.png"
-                    self.driver.save_screenshot(screenshot_path)
+                    registration_screenshot_path = f"screenshots/registration_plan_{index+1}_{status}_{timestamp}.png"
+                    self.driver.save_screenshot(registration_screenshot_path)
 
                     # Record the test result
-                    self._store_test_results(f"Plan {index+1} Registration", status, screenshot_path)
+                    self._store_test_results(f"Plan {index+1} Registration", status, registration_screenshot_path)
 
                     # Go back to the pricing page for the next iteration
                     self.driver.get(pricing_page)
@@ -125,16 +125,16 @@ class TestPricingPlans():
                     # Log the exception and continue to the next iteration
                     print(f"Exception occurred for plan {index+1}: {str(e)}")
                     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                    screenshot_path = f"screenshots/failed_plan_{index+1}_{timestamp}.png"
-                    self.driver.save_screenshot(screenshot_path)
-                    self._store_test_results(f"Plan {index+1} Registration", "Failed", screenshot_path)
+                    failed_screenshot_path = f"screenshots/failed_plan_{index+1}_{timestamp}.png"
+                    self.driver.save_screenshot(failed_screenshot_path)
+                    self._store_test_results(f"Plan {index+1} Registration", "Failed", failed_screenshot_path)
 
         except Exception as e:
             # Save a screenshot and record the test as failed if any exception occurs
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/failed_pricing_plan_{timestamp}.png"
-            self.driver.save_screenshot(screenshot_path)
-            self._store_test_results("Pricing Plan Test", "Failed", screenshot_path)
+            failed_pricing_screenshot_path = f"screenshots/failed_pricing_plan_{timestamp}.png"
+            self.driver.save_screenshot(failed_pricing_screenshot_path)
+            self._store_test_results("Pricing Plan Test", "Failed", failed_pricing_screenshot_path)
             raise AssertionError(f"Test failed: {e}")
 
         # Record end time and calculate duration
@@ -156,3 +156,4 @@ class TestPricingPlans():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+
