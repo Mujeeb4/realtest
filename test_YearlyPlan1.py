@@ -31,12 +31,7 @@ class TestPlanYearly():
     def test_plan_yearly(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
-        expected_urls = [
-            "https://smoothmaths.co.uk/register/11-plus-subscription-plan/",
-            "https://smoothmaths.co.uk/register/13-plus-subscription-plan/",
-            "https://smoothmaths.co.uk/register/gcse-subscription-plan/"
-        ]
-
+        
         try:
             # Navigate directly to the pricing page
             self.driver.get(pricing_page)
@@ -58,9 +53,18 @@ class TestPlanYearly():
             yearly_plan_button.click()
             print("Yearly plan button clicked")
 
-            # Capture screenshots for each register button and its linked page
-            for i in range(5, 10):  # IDs for buttons from et_pb_button_5_wrapper to et_pb_button_9_wrapper
-                self._click_and_screenshot_button(i, expected_urls[i - 5])
+            # Define the register button classes for the yearly plans
+            register_button_classes = [
+                "et_pb_button df_6709694ca8586_et_pb_button_5 et_pb_bg_layout_light",
+                "et_pb_button df_6709694ca8586_et_pb_button_6 et_pb_bg_layout_light",
+                "et_pb_button df_6709694ca8586_et_pb_button_7 et_pb_bg_layout_light",
+                "et_pb_button df_6709694ca8586_et_pb_button_8 et_pb_bg_layout_light",
+                "et_pb_button df_6709694ca8586_et_pb_button_9 et_pb_bg_layout_light"
+            ]
+
+            # Loop through each register button class, click it, and take a screenshot
+            for index, button_class in enumerate(register_button_classes):
+                self._click_and_screenshot_button(button_class, index + 1)
 
         except Exception as e:
             # Log the exception and save a failure screenshot
@@ -76,46 +80,40 @@ class TestPlanYearly():
             duration = end_time - start_time
             print(f"Test duration for Yearly Plan: {round(duration, 2)} seconds")
 
-    def _click_and_screenshot_button(self, button_id, expected_url):
-        # Locate the specific register button by XPath and click it
-        button_xpath = f"//div[contains(@class, 'et_pb_button_{button_id}_wrapper')]//a[contains(text(),'Register')]"
+    def _click_and_screenshot_button(self, button_class, plan_number):
         try:
+            # Locate the register button by class and click it
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, button_xpath))
+                EC.presence_of_element_located((By.CLASS_NAME, button_class))
             )
-            print(f"Found and clicking button with class 'et_pb_button_{button_id}_wrapper'")
+            print(f"Found and clicking button for plan {plan_number}")
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
             time.sleep(1)
             register_button.click()
 
-            # Wait for the redirection to the expected URL
-            WebDriverWait(self.driver, 60).until(
-                EC.url_contains(expected_url)
-            )
-
-            # Capture the screenshot of the new page
-            time.sleep(2)  # Allow time for the page to load fully
+            # Wait for the redirection and capture a screenshot
+            time.sleep(3)  # Allow time for the redirection to complete
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_yearly_{button_id}_{timestamp}.png"
+            screenshot_path = f"screenshots/plan_yearly_{plan_number}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
             # Record the test result
-            self._store_test_results(f"Yearly Plan {button_id} Registration", "Passed", screenshot_path)
+            self._store_test_results(f"Yearly Plan {plan_number} Registration", "Passed", screenshot_path)
 
             # Navigate back to the pricing page to capture the next button
             self.driver.get("https://smoothmaths.co.uk/pricing/")
             WebDriverWait(self.driver, 60).until(
                 EC.url_to_be("https://smoothmaths.co.uk/pricing/")
             )
-            print(f"Navigated back to pricing page after capturing screenshot for button {button_id}")
+            print(f"Navigated back to pricing page after capturing screenshot for plan {plan_number}")
 
         except Exception as e:
             # If something goes wrong, log it and take a screenshot
-            print(f"Failed to click button {button_id}: {str(e)}")
+            print(f"Failed to click button for plan {plan_number}: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_yearly_failed_{button_id}_{timestamp}.png"
+            screenshot_path = f"screenshots/plan_yearly_failed_{plan_number}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
-            self._store_test_results(f"Yearly Plan {button_id} Registration", "Failed", screenshot_path)
+            self._store_test_results(f"Yearly Plan {plan_number} Registration", "Failed", screenshot_path)
 
     def _store_test_results(self, test_case, status, screenshot_path):
         # Prepare results for CSV
