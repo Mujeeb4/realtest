@@ -36,9 +36,9 @@ class TestPricingPlans():
             # Navigate to the main page
             self.driver.get("https://smoothmaths.co.uk/")
             
-            # Wait for the page to load and ensure "Join Now" button is clickable
+            # Wait for the page to load and ensure the "Join Now" button is clickable using its class
             join_now_button = WebDriverWait(self.driver, 60).until(
-                EC.element_to_be_clickable((By.LINK_TEXT, "JOIN NOW"))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "a.divi-life-cta-menu"))
             )
             join_now_button.click()
 
@@ -59,52 +59,58 @@ class TestPricingPlans():
                 "https://smoothmaths.co.uk/register/igcse-gcse-mathematics-solutions/"
             ]
 
-            # Correct the CSS selectors based on the previous investigation
+            # Updated locators with XPath and CSS Selectors
             button_selectors = [
-                "a.et_pb_button.df_6707f5de4912c_et_pb_button_0",
-                "a.et_pb_button.df_6707f5de4912c_et_pb_button_1",
-                "a.et_pb_button.df_6707f5de4912c_et_pb_button_2",
-                "a.et_pb_button.df_6707f5de4912c_et_pb_button_3",
-                "a.et_pb_button.df_6707f5de4912c_et_pb_button_4"
+                "//a[contains(text(),'Register')]",  # XPath for the first button
+                "a[href*='11-plus-answers-quizzes']",  # CSS Selector for the second button
+                "a[href*='13-plus-answers-solutions']",  # CSS Selector for the third button
+                "a[href*='13-plus-answers-quizzes']",  # CSS Selector for the fourth button
+                "a[href*='igcse-gcse-mathematics-solutions']"  # CSS Selector for the fifth button
             ]
 
             # Iterate through each plan's register button
             for index, expected_url in enumerate(plan_urls):
-                # Scroll to the "Register" button
+                # Use XPath for the first button, then CSS Selectors for the rest
+                if index == 0:
+                    locator = (By.XPATH, button_selectors[index])
+                else:
+                    locator = (By.CSS_SELECTOR, button_selectors[index])
+
+                # Wait for the "Register" button to be present
                 WebDriverWait(self.driver, 60).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, button_selectors[index]))
+                    EC.presence_of_element_located(locator)
                 )
-                register_button = self.driver.find_element(By.CSS_SELECTOR, button_selectors[index])
-    
+                register_button = self.driver.find_element(*locator)
+
                 # Ensure the button is visible and clickable
                 WebDriverWait(self.driver, 60).until(
                     EC.visibility_of(register_button)
                 )
                 self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
                 time.sleep(1)  # Small pause to ensure the page scrolls
-    
+
                 # Click on the "Register" button for the current plan
                 register_button.click()
-    
+
                 # Wait for the redirection to the registration page
                 WebDriverWait(self.driver, 60).until(
                     EC.url_contains(expected_url)
                 )
-    
+
                 # Check if we were redirected to the correct page
                 if self.driver.current_url == expected_url:
                     status = "Passed"
                 else:
                     status = "Failed"
-    
+
                 # Take a screenshot
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
                 screenshot_path = f"screenshots/plan_{index+1}_{status}_{timestamp}.png"
                 self.driver.save_screenshot(screenshot_path)
-    
+
                 # Record the test result
                 self._store_test_results(f"Plan {index+1} Registration", status, screenshot_path)
-    
+
                 # Go back to the pricing page for the next iteration
                 self.driver.get(pricing_page)
                 WebDriverWait(self.driver, 60).until(
