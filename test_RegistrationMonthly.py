@@ -40,9 +40,9 @@ class TestPricingPlans():
             # Take a screenshot of the homepage
             self.driver.save_screenshot("screenshots/homepage_before_click.png")
 
-            # Wait for the page to load and ensure "Join Now" button is clickable
+            # Use secondary locator (XPath) for the "Join Now" button
             join_now_button = WebDriverWait(self.driver, 120).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "a.divi-life-cta-menu"))
+                EC.element_to_be_clickable((By.XPATH, "//a[@href='https://smoothmaths.co.uk/pricing/'][text()='Join Now']"))
             )
             print("Join Now button located")
 
