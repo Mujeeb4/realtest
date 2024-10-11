@@ -2,7 +2,7 @@ import pytest
 import time
 import os
 import datetime
-import pandas as pd  # Make sure pandas is imported
+import pandas as pd  # Ensure pandas is imported
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -28,10 +28,11 @@ class TestPlan2():
     def teardown_method(self, method):
         self.driver.quit()
 
-    def test_plan_1(self):
+    def test_plan_2(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
-        expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-and-quizzes/"
+        expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-quizzes/"
+        status = "Failed"  # Default to Failed in case of any issues
 
         try:
             # Navigate directly to the pricing page
@@ -60,15 +61,6 @@ class TestPlan2():
                 EC.url_contains(expected_url)
             )
 
-            # Take a screenshot of the checkout/payment page
-            time.sleep(2)  # Pause to allow the page to load fully
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_2_{status}_{timestamp}.png"
-            self.driver.save_screenshot(screenshot_path)
-
-            # Record the test result
-            self._store_test_results("Plan 2 Registration", status, screenshot_path)
-            
             # Check if we were redirected to the expected checkout/payment page
             current_url = self.driver.current_url
             if current_url == expected_url:
@@ -77,7 +69,15 @@ class TestPlan2():
             else:
                 print(f"Unexpected URL: {current_url}")
                 status = "Failed"
-                
+
+            # Take a screenshot of the checkout/payment page
+            time.sleep(2)  # Pause to allow the page to load fully
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = f"screenshots/plan_2_{status}_{timestamp}.png"
+            self.driver.save_screenshot(screenshot_path)
+
+            # Record the test result
+            self._store_test_results("Plan 2 Registration", status, screenshot_path)
 
         except Exception as e:
             # Log the exception and save a failure screenshot
