@@ -67,8 +67,11 @@ jobs:
       - name: Run Pricing link tests
         run: pytest test_pricing.py
 
-      - name: Run Registration Monthly link tests
+      - name: Run Registration Monthly Plan 1 link tests
         run: pytest test_MonthlyPlan1.py
+
+      - name: Run Registration Monthly Plan 2 link tests
+        run: pytest test_MonthlyPlan2.py
 
       # Uploading artifacts
       - name: Upload screenshots
