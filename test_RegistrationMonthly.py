@@ -35,17 +35,27 @@ class TestPricingPlans():
         try:
             # Navigate to the main page
             self.driver.get("https://smoothmaths.co.uk/")
-            
-            # Wait for the page to load and ensure the "Join Now" button is clickable using its class
+            print("Navigating to the homepage")
+
+            # Wait for the page to load and ensure "Join Now" button is clickable
             join_now_button = WebDriverWait(self.driver, 60).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, "a.divi-life-cta-menu"))
             )
+            print("Join Now button located")
+
+            # Scroll into view if necessary
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", join_now_button)
+            time.sleep(1)  # Allow time for scroll and rendering
+
+            # Click the button
             join_now_button.click()
+            print("Join Now button clicked")
 
             # Wait for navigation to the pricing page
             WebDriverWait(self.driver, 60).until(
                 EC.url_to_be(pricing_page)
             )
+            print("Navigated to pricing page")
             
             # Verify if we are on the pricing page
             assert self.driver.current_url == pricing_page, "Failed to navigate to pricing page"
@@ -76,6 +86,7 @@ class TestPricingPlans():
                 else:
                     locator = (By.CSS_SELECTOR, button_selectors[index])
 
+                print(f"Locating button for plan {index+1}")
                 # Wait for the "Register" button to be present
                 WebDriverWait(self.driver, 60).until(
                     EC.presence_of_element_located(locator)
@@ -102,6 +113,8 @@ class TestPricingPlans():
                     status = "Passed"
                 else:
                     status = "Failed"
+
+                print(f"Plan {index+1} registration status: {status}")
 
                 # Take a screenshot
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
