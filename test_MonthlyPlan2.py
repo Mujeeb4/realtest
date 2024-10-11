@@ -60,15 +60,6 @@ class TestPlan2():
                 EC.url_contains(expected_url)
             )
 
-            # Check if we were redirected to the expected checkout/payment page
-            current_url = self.driver.current_url
-            if current_url == expected_url:
-                print("Successfully navigated to the expected URL")
-                status = "Passed"
-            else:
-                print(f"Unexpected URL: {current_url}")
-                status = "Failed"
-
             # Take a screenshot of the checkout/payment page
             time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -77,6 +68,16 @@ class TestPlan2():
 
             # Record the test result
             self._store_test_results("Plan 2 Registration", status, screenshot_path)
+            
+            # Check if we were redirected to the expected checkout/payment page
+            current_url = self.driver.current_url
+            if current_url == expected_url:
+                print("Successfully navigated to the expected URL")
+                status = "Passed"
+            else:
+                print(f"Unexpected URL: {current_url}")
+                status = "Failed"
+                
 
         except Exception as e:
             # Log the exception and save a failure screenshot
