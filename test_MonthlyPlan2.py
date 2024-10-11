@@ -31,7 +31,7 @@ class TestPlan2():
     def test_plan_2(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
-        expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-and-quizzes/"
+        expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-quizzes/"
         status = "Failed"  # Default to Failed in case of any issues
 
         try:
@@ -45,15 +45,18 @@ class TestPlan2():
             )
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 2 using the updated secondary class and click it
+            # Locate the "Register" button for Plan 2 using the correct selector and click it
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button.df_67095a7de19d1_et_pb_button_1.et_pb_bg_layout_light"))
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='11-plus-answers-quizzes']"))
             )
 
             # Scroll into view and click the button
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
             time.sleep(1)
             self.driver.execute_script("arguments[0].click();", register_button)
+
+            # Log the current URL for debugging purposes
+            print(f"Current URL after clicking the register button: {self.driver.current_url}")
 
             # Wait for the redirection to the registration page
             print(f"Waiting for redirection to {expected_url}")
@@ -63,6 +66,7 @@ class TestPlan2():
 
             # Check if we were redirected to the expected checkout/payment page
             current_url = self.driver.current_url
+            print(f"Expected URL: {expected_url}, Current URL: {current_url}")
             if current_url == expected_url:
                 print("Successfully navigated to the expected URL")
                 status = "Passed"
