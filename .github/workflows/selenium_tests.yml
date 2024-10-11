@@ -67,6 +67,9 @@ jobs:
       - name: Run Pricing link tests
         run: pytest test_pricing.py
 
+      - name: Run Registration link tests
+        run: pytest test_RegistrationMonthly.py
+
       # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
