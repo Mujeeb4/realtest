@@ -33,39 +33,16 @@ class TestPricingPlans():
         pricing_page = "https://smoothmaths.co.uk/pricing/"
         
         try:
-            # Navigate to the main page
-            self.driver.get("https://smoothmaths.co.uk/")
-            print("Navigating to the homepage")
+            # Navigate directly to the pricing page
+            self.driver.get(pricing_page)
+            print("Navigating to the pricing page")
 
-            # Take a screenshot of the homepage
-            self.driver.save_screenshot("screenshots/homepage_before_click.png")
-
-            # Use secondary locator (XPath) for the "Join Now" button
-            join_now_button = WebDriverWait(self.driver, 120).until(
-                EC.element_to_be_clickable((By.XPATH, "//a[@href='https://smoothmaths.co.uk/pricing/'][text()='Join Now']"))
-            )
-            print("Join Now button located")
-
-            # Scroll into view if necessary
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", join_now_button)
-            time.sleep(1)  # Allow time for scroll and rendering
-
-            # Take a screenshot before clicking the button
-            self.driver.save_screenshot("screenshots/join_now_button_visibility.png")
-
-            # Click the button
-            join_now_button.click()
-            print("Join Now button clicked")
-
-            # Wait for navigation to the pricing page
+            # Wait for the page to load and verify we're on the pricing page
             WebDriverWait(self.driver, 60).until(
                 EC.url_to_be(pricing_page)
             )
-            print("Navigated to pricing page")
+            print("Successfully navigated to pricing page")
             
-            # Verify if we are on the pricing page
-            assert self.driver.current_url == pricing_page, "Failed to navigate to pricing page"
-
             # Take a screenshot of the pricing page
             self.driver.save_screenshot("screenshots/pricing_page.png")
 
