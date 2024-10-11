@@ -46,9 +46,9 @@ class TestPlan2():
             )
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 2 using the correct primary class selector
+            # Locate the "Register" button for Plan 2 using an XPath locator
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button.df_67095a7de19d1_et_pb_button_1.et_pb_bg_layout_light"))
+                EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'Register')]"))
             )
 
             # Scroll into view and click the button using JavaScript in case of issues
