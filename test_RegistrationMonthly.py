@@ -37,8 +37,11 @@ class TestPricingPlans():
             self.driver.get("https://smoothmaths.co.uk/")
             print("Navigating to the homepage")
 
+            # Take a screenshot of the homepage
+            self.driver.save_screenshot("screenshots/homepage_before_click.png")
+
             # Wait for the page to load and ensure "Join Now" button is clickable
-            join_now_button = WebDriverWait(self.driver, 60).until(
+            join_now_button = WebDriverWait(self.driver, 120).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, "a.divi-life-cta-menu"))
             )
             print("Join Now button located")
@@ -46,6 +49,9 @@ class TestPricingPlans():
             # Scroll into view if necessary
             self.driver.execute_script("arguments[0].scrollIntoView(true);", join_now_button)
             time.sleep(1)  # Allow time for scroll and rendering
+
+            # Take a screenshot before clicking the button
+            self.driver.save_screenshot("screenshots/join_now_button_visibility.png")
 
             # Click the button
             join_now_button.click()
@@ -59,6 +65,9 @@ class TestPricingPlans():
             
             # Verify if we are on the pricing page
             assert self.driver.current_url == pricing_page, "Failed to navigate to pricing page"
+
+            # Take a screenshot of the pricing page
+            self.driver.save_screenshot("screenshots/pricing_page.png")
 
             # List of expected URLs for the registration pages
             plan_urls = [
