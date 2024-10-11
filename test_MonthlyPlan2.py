@@ -31,7 +31,7 @@ class TestPlan2():
     def test_plan_2(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
-        expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-quizzes/"
+        expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-and-quizzes/"
         status = "Failed"  # Default to Failed in case of any issues
 
         try:
@@ -45,9 +45,9 @@ class TestPlan2():
             )
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 2 and click it
+            # Locate the "Register" button for Plan 2 using the updated secondary class and click it
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='11-plus-answers-quizzes']"))
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button.df_67095a7de19d1_et_pb_button_1.et_pb_bg_layout_light"))
             )
 
             # Scroll into view and click the button
