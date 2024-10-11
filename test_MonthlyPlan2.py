@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
@@ -50,10 +51,20 @@ class TestPlan2():
                 EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button.df_67095a7de19d1_et_pb_button_1.et_pb_bg_layout_light"))
             )
 
-            # Scroll into view and click the button
+            # Scroll into view and click the button using JavaScript in case of issues
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-            time.sleep(1)
-            self.driver.execute_script("arguments[0].click();", register_button)
+            time.sleep(1)  # Small pause to ensure the page scrolls
+
+            # Attempt to click the button
+            try:
+                WebDriverWait(self.driver, 60).until(
+                    EC.element_to_be_clickable(register_button)
+                )
+                print("Trying to click the 'Register' button using JavaScript.")
+                self.driver.execute_script("arguments[0].click();", register_button)
+            except (TimeoutException, ElementClickInterceptedException) as e:
+                print(f"Failed to click the 'Register' button: {str(e)}")
+                raise
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
