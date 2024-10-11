@@ -19,7 +19,7 @@ class TestPricingPlans():
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_window_size(1382, 744)
+        self.driver.set_window_size(1920, 1080)  # Increased size to fit more content
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -42,9 +42,6 @@ class TestPricingPlans():
                 EC.url_to_be(pricing_page)
             )
             print("Successfully navigated to pricing page")
-            
-            # Take a screenshot of the pricing page
-            self.driver.save_screenshot("screenshots/pricing_page.png")
 
             # List of expected URLs for the registration pages
             plan_urls = [
@@ -108,6 +105,8 @@ class TestPricingPlans():
                     print(f"Plan {index+1} registration status: {status}")
 
                     # Take a screenshot of the registration page after successful navigation
+                    time.sleep(2)  # Small pause to ensure page is fully loaded
+                    self.driver.execute_script("window.scrollTo(0, 500);")  # Scroll to middle for better view
                     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
                     registration_screenshot_path = f"screenshots/registration_plan_{index+1}_{status}_{timestamp}.png"
                     self.driver.save_screenshot(registration_screenshot_path)
@@ -156,4 +155,3 @@ class TestPricingPlans():
             df.to_csv(CSV_FILE_PATH, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
