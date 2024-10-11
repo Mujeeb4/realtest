@@ -68,7 +68,7 @@ jobs:
         run: pytest test_pricing.py
 
       - name: Run Registration Monthly link tests
-        run: pytest test_RegistrationMonthly.py
+        run: pytest test_MonthlyPlan1.py
 
       - name: Run Registration Yearly link tests
         run: pytest test_RegistrationYearly.py
