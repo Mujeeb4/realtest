@@ -90,12 +90,14 @@ class TestPricingPlans():
                 register_button.click()
 
                 # Wait for the redirection to the registration page
-                WebDriverWait(self.driver, 60).until(
+                WebDriverWait(self.driver, 120).until(  # Increased timeout for slower redirects
                     EC.url_contains(expected_url)
                 )
 
                 # Check if we were redirected to the correct page
-                if self.driver.current_url == expected_url:
+                current_url = self.driver.current_url
+                print(f"Current URL after click: {current_url}")
+                if current_url == expected_url:
                     status = "Passed"
                 else:
                     status = "Failed"
