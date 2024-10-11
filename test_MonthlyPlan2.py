@@ -2,7 +2,7 @@ import pytest
 import time
 import os
 import datetime
-import pandas as pd  # Make sure pandas is imported
+import pandas as pd  # Ensure pandas is imported
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -41,14 +41,13 @@ class TestPlan2():
             print("Navigating to the pricing page for Plan 2")
 
             # Wait for the page to load and verify we're on the pricing page
-            WebDriverWait(self.driver, 60).until(
-                EC.url_to_be(pricing_page)
-            )
+            WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
             # Locate the "Register" button for Plan 2 using an XPath locator
+            # This is specifically targeting the second register button using XPath indexing
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'Register')]"))
+                EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[2]"))
             )
 
             # Scroll into view and click the button using JavaScript in case of issues
@@ -57,9 +56,7 @@ class TestPlan2():
 
             # Attempt to click the button
             try:
-                WebDriverWait(self.driver, 60).until(
-                    EC.element_to_be_clickable(register_button)
-                )
+                WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable(register_button))
                 print("Trying to click the 'Register' button using JavaScript.")
                 self.driver.execute_script("arguments[0].click();", register_button)
             except (TimeoutException, ElementClickInterceptedException) as e:
@@ -71,9 +68,7 @@ class TestPlan2():
 
             # Wait for the redirection to the registration page
             print(f"Waiting for redirection to {expected_url}")
-            WebDriverWait(self.driver, 120).until(
-                EC.url_contains(expected_url)
-            )
+            WebDriverWait(self.driver, 120).until(EC.url_contains(expected_url))
 
             # Check if we were redirected to the expected checkout/payment page
             current_url = self.driver.current_url
