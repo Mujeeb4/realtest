@@ -2,6 +2,7 @@ import pytest
 import time
 import os
 import datetime
+import pandas as pd  # <--- Add this import for pandas
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
