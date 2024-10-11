@@ -2,7 +2,7 @@ import pytest
 import time
 import os
 import datetime
-import pandas as pd  # <--- Add this import for pandas
+import pandas as pd  # Make sure pandas is imported
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -36,7 +36,7 @@ class TestPlan2():
         try:
             # Navigate directly to the pricing page
             self.driver.get(pricing_page)
-            print("Navigating to the pricing page for Plan 1")
+            print("Navigating to the pricing page for Plan 2")
 
             # Wait for the page to load and verify we're on the pricing page
             WebDriverWait(self.driver, 60).until(
@@ -44,8 +44,8 @@ class TestPlan2():
             )
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 1 and click it
-           register_button = WebDriverWait(self.driver, 60).until(
+            # Locate the "Register" button for Plan 2 and click it
+            register_button = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='11-plus-answers-quizzes']"))
             )
 
@@ -72,7 +72,7 @@ class TestPlan2():
             # Take a screenshot of the checkout/payment page
             time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_1_{status}_{timestamp}.png"
+            screenshot_path = f"screenshots/plan_2_{status}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
             # Record the test result
@@ -82,7 +82,7 @@ class TestPlan2():
             # Log the exception and save a failure screenshot
             print(f"Exception occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_1_failed_{timestamp}.png"
+            screenshot_path = f"screenshots/plan_2_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
             self._store_test_results("Plan 2 Registration", "Failed", screenshot_path)
 
@@ -90,7 +90,7 @@ class TestPlan2():
             # Record end time and calculate duration
             end_time = time.time()
             duration = end_time - start_time
-            print(f"Test duration for Plan 1: {round(duration, 2)} seconds")
+            print(f"Test duration for Plan 2: {round(duration, 2)} seconds")
 
     def _store_test_results(self, test_case, status, screenshot_path):
         # Prepare results for CSV
