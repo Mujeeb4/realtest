@@ -2,7 +2,7 @@ import pytest
 import time
 import os
 import datetime
-import pandas as pd  # Ensure pandas is imported
+import pandas as pd  # Make sure pandas is imported
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -45,9 +45,9 @@ class TestPlan2():
             )
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 2 using the correct selector and click it
+            # Locate the "Register" button for Plan 2 using the correct primary class selector
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='11-plus-answers-quizzes']"))
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button.df_67095a7de19d1_et_pb_button_1.et_pb_bg_layout_light"))
             )
 
             # Scroll into view and click the button
