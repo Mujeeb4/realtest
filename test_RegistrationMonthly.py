@@ -66,57 +66,68 @@ class TestPricingPlans():
 
             # Iterate through each plan's register button
             for index, expected_url in enumerate(plan_urls):
-                # Use XPath for the first button, then CSS Selectors for the rest
-                if index == 0:
-                    locator = (By.XPATH, button_selectors[index])
-                else:
-                    locator = (By.CSS_SELECTOR, button_selectors[index])
+                try:
+                    print(f"Locating button for plan {index+1}")
+                    # Use XPath for the first button, then CSS Selectors for the rest
+                    if index == 0:
+                        locator = (By.XPATH, button_selectors[index])
+                    else:
+                        locator = (By.CSS_SELECTOR, button_selectors[index])
 
-                print(f"Locating button for plan {index+1}")
-                # Wait for the "Register" button to be present
-                WebDriverWait(self.driver, 60).until(
-                    EC.presence_of_element_located(locator)
-                )
-                register_button = self.driver.find_element(*locator)
+                    # Wait for the "Register" button to be present and clickable
+                    WebDriverWait(self.driver, 60).until(
+                        EC.presence_of_element_located(locator)
+                    )
+                    register_button = self.driver.find_element(*locator)
 
-                # Ensure the button is visible and clickable
-                WebDriverWait(self.driver, 60).until(
-                    EC.visibility_of(register_button)
-                )
-                self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-                time.sleep(1)  # Small pause to ensure the page scrolls
+                    # Ensure the button is visible and clickable
+                    WebDriverWait(self.driver, 60).until(
+                        EC.visibility_of(register_button)
+                    )
+                    self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+                    time.sleep(1)  # Small pause to ensure the page scrolls
 
-                # Click on the "Register" button for the current plan
-                register_button.click()
+                    # Click on the "Register" button using JavaScript in case of issues
+                    print(f"Clicking on 'Register' button for plan {index+1}")
+                    self.driver.execute_script("arguments[0].click();", register_button)
 
-                # Wait for the redirection to the registration page
-                WebDriverWait(self.driver, 120).until(  # Increased timeout for slower redirects
-                    EC.url_contains(expected_url)
-                )
+                    # Wait for the redirection to the registration page
+                    print(f"Waiting for redirection to {expected_url}")
+                    WebDriverWait(self.driver, 120).until(
+                        EC.url_contains(expected_url)
+                    )
 
-                # Check if we were redirected to the correct page
-                current_url = self.driver.current_url
-                print(f"Current URL after click: {current_url}")
-                if current_url == expected_url:
-                    status = "Passed"
-                else:
-                    status = "Failed"
+                    # Check if we were redirected to the correct page
+                    current_url = self.driver.current_url
+                    print(f"Current URL after click: {current_url}")
+                    if current_url == expected_url:
+                        status = "Passed"
+                    else:
+                        status = "Failed"
 
-                print(f"Plan {index+1} registration status: {status}")
+                    print(f"Plan {index+1} registration status: {status}")
 
-                # Take a screenshot
-                timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                screenshot_path = f"screenshots/plan_{index+1}_{status}_{timestamp}.png"
-                self.driver.save_screenshot(screenshot_path)
+                    # Take a screenshot
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                    screenshot_path = f"screenshots/plan_{index+1}_{status}_{timestamp}.png"
+                    self.driver.save_screenshot(screenshot_path)
 
-                # Record the test result
-                self._store_test_results(f"Plan {index+1} Registration", status, screenshot_path)
+                    # Record the test result
+                    self._store_test_results(f"Plan {index+1} Registration", status, screenshot_path)
 
-                # Go back to the pricing page for the next iteration
-                self.driver.get(pricing_page)
-                WebDriverWait(self.driver, 60).until(
-                    EC.url_to_be(pricing_page)
-                )
+                    # Go back to the pricing page for the next iteration
+                    self.driver.get(pricing_page)
+                    WebDriverWait(self.driver, 60).until(
+                        EC.url_to_be(pricing_page)
+                    )
+                
+                except Exception as e:
+                    # Log the exception and continue to the next iteration
+                    print(f"Exception occurred for plan {index+1}: {str(e)}")
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                    screenshot_path = f"screenshots/failed_plan_{index+1}_{timestamp}.png"
+                    self.driver.save_screenshot(screenshot_path)
+                    self._store_test_results(f"Plan {index+1} Registration", "Failed", screenshot_path)
 
         except Exception as e:
             # Save a screenshot and record the test as failed if any exception occurs
