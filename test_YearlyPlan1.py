@@ -56,8 +56,9 @@ class TestPlan1():
 
             # Locate the "Register" button for Plan 1 using an XPath locator
             register_button = WebDriverWait(self.driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, "//a[@class='et_pb_button df_670d3b6a14a0b_et_pb_button_5 et_pb_bg_layout_light']"))
+            EC.presence_of_element_located((By.XPATH, "//a[@href='https://smoothmaths.co.uk/register/11-plus-subscription-plan-yearly']"))
             )
+
 
             # Scroll into view and click the button using JavaScript
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)   
