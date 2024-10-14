@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 
 # CSV file path to store test results
@@ -30,7 +29,7 @@ class TestPlan1():
     def teardown_method(self, method):
         self.driver.quit()
 
-    def test_plan_3(self):
+    def test_plan_1(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
         expected_url = "https://smoothmaths.co.uk/register/11-plus-subscription-plan-yearly"
@@ -50,25 +49,25 @@ class TestPlan1():
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
             print("Yearly button clicked via JavaScript and XPath")
-
+            
             time.sleep(1)
 
-            # Locate the "Register" button for Plan 1 and make sure it's visible
+            # Locate the "Register" button for Plan 1 using an XPath locator
             register_button = WebDriverWait(self.driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
+                EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
             )
 
-
-            # Use ActionChains to ensure it is interactable
-            actions = ActionChains(self.driver)
-            actions.move_to_element(register_button).perform()
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-
-            time.sleep(1)  # Ensure time for element to be fully visible
-
-            # Try clicking it using JavaScript
-            self.driver.execute_script("arguments[0].click();", register_button)
-            print("Register button clicked using JavaScript")
+            # Retry clicking the register button up to 3 times
+            for attempt in range(3):
+                try:
+                    # Scroll into view and try to click the button using JavaScript
+                    self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+                    self.driver.execute_script("arguments[0].click();", register_button)
+                    print(f"Register button clicked on attempt {attempt + 1}")
+                    break
+                except Exception as e:
+                    print(f"Attempt {attempt + 1} failed: {str(e)}")
+                    time.sleep(2)  # Wait and retry
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
