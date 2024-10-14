@@ -19,7 +19,7 @@ class TestPlan1():
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_window_size(1920, 1080)  # Adjust screen size for better screenshots
+        self.driver.set_window_size(1920, 1080)
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -34,60 +34,44 @@ class TestPlan1():
         expected_url = "https://smoothmaths.co.uk/register/11-plus-subscription-plan-yearly"
 
         try:
-            # Navigate directly to the pricing page
             self.driver.get(pricing_page)
-            print("Navigating to the pricing page for Plan 1")
+            print("Navigating to the pricing page")
 
-            # Wait for the page to load and verify we're on the pricing page
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
-            print("Successfully navigated to pricing page")
+            print("Successfully on the pricing page")
 
-            # Click the "Yearly" button using JavaScript and XPath
+            # Click the "Yearly" button using JavaScript
             yearly_button = WebDriverWait(self.driver, 30).until(
                 EC.presence_of_element_located((By.XPATH, "//button/span[contains(text(),'Yearly')]/.."))
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
-            print("Yearly button clicked via JavaScript and XPath")
-            
-            time.sleep(1)
+            print("Yearly button clicked via JavaScript")
 
-            # Locate the "Register" button for Plan 1 and click it using JavaScript
+            # Ensure the "Register" button is enabled before clicking
             register_button = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
             )
 
-            # Use JavaScript to click the register button
-            self.driver.execute_script("arguments[0].click();", register_button)
-            print("Register button clicked via JavaScript")
+            if register_button.is_enabled():
+                self.driver.execute_script("arguments[0].click();", register_button)
+                print("Register button clicked after ensuring it is enabled")
 
-            # Log the current URL for debugging purposes
-            print(f"Current URL after clicking the register button: {self.driver.current_url}")
-
-            # Wait for the redirection to the registration page
-            print(f"Waiting for redirection to {expected_url}")
             WebDriverWait(self.driver, 120).until(EC.url_contains(expected_url))
 
-            # Check if we were redirected to the expected checkout/payment page
             current_url = self.driver.current_url
             print(f"Expected URL: {expected_url}, Current URL: {current_url}")
             if current_url == expected_url:
-                print("Successfully navigated to the expected URL")
                 status = "Passed"
             else:
-                print(f"Unexpected URL: {current_url}")
                 status = "Failed"
 
-            # Take a screenshot of the checkout/payment page
-            time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = f"screenshots/plan_1_{status}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
-            # Record the test result
             self._store_test_results("Plan 1 Registration", status, screenshot_path)
 
         except Exception as e:
-            # Log the exception and save a failure screenshot
             print(f"Exception occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = f"screenshots/plan_1_failed_{timestamp}.png"
@@ -95,20 +79,17 @@ class TestPlan1():
             self._store_test_results("Plan 1 Registration", "Failed", screenshot_path)
 
         finally:
-            # Record end time and calculate duration
             end_time = time.time()
             duration = end_time - start_time
             print(f"Test duration for Plan 1: {round(duration, 2)} seconds")
 
     def _store_test_results(self, test_case, status, screenshot_path):
-        # Prepare results for CSV
         results = {
             "Test Case": [test_case],
             "Status": [status],
             "Screenshot": [screenshot_path]
         }
 
-        # Append results to the CSV file
         if not os.path.exists(CSV_FILE_PATH):
             pd.DataFrame(results).to_csv(CSV_FILE_PATH, index=False)
         else:
