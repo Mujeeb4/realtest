@@ -53,9 +53,9 @@ class TestPlan1():
             
             time.sleep(1)
 
-            # Locate the "Register" button for Plan 1 using an ActionChain
+            # Locate the "Register" button for Plan 1 and click it
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button_5"))
+                EC.presence_of_element_located((By.XPATH, "//a[contains(text(),'Register')]"))
             )
 
             # Use ActionChains to move to the button and click it
