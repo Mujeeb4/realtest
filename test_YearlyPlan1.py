@@ -12,7 +12,7 @@ from selenium.common.exceptions import TimeoutException, ElementClickIntercepted
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestPlan3():
+class TestPlan1():
     def setup_method(self, method):
         # Use headless Chrome for CI
         chrome_options = webdriver.ChromeOptions()
@@ -57,7 +57,6 @@ class TestPlan3():
             # Locate the "Register" button for Plan 1 using an XPath locator
             register_button = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
-            )
 
             # Scroll into view and click the button using JavaScript
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
