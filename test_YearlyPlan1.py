@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, WebDriverException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
@@ -29,7 +29,7 @@ class TestPlan1():
     def teardown_method(self, method):
         self.driver.quit()
 
-    def test_plan_1(self):
+    def test_plan_3(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
         expected_url = "https://smoothmaths.co.uk/register/11-plus-subscription-plan-yearly"
@@ -49,28 +49,22 @@ class TestPlan1():
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
             print("Yearly button clicked via JavaScript")
-            
-            time.sleep(2)
 
-            # Retry mechanism for clicking the "Register" button
-            for attempt in range(3):  # Retry up to 3 times
-                try:
-                    # Locate the "Register" button for the first yearly plan
-                    register_button = WebDriverWait(self.driver, 30).until(
-                        EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
-                    )
+            time.sleep(1)
 
-                    # Check if the button is clickable and visible
-                    if register_button.is_displayed() and register_button.is_enabled():
-                        # Try clicking with JavaScript
-                        self.driver.execute_script("arguments[0].click();", register_button)
-                        print("Register button clicked via JavaScript")
-                        break
-                    else:
-                        raise Exception("Register button is not clickable or visible")
-                except Exception as e:
-                    print(f"Attempt {attempt + 1} failed: {e}")
-                    time.sleep(2)  # Wait before retrying
+            # Locate the "Register" button for Plan 1 using XPath
+            register_button = WebDriverWait(self.driver, 60).until(
+                EC.presence_of_element_located((By.XPATH, "//a[contains(text(),'Register')]"))
+            )
+
+            # Ensure button is enabled before clicking
+            if register_button.is_enabled():
+                print("Register button is enabled.")
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+                self.driver.execute_script("arguments[0].click();", register_button)
+                print("Register button clicked using JavaScript")
+            else:
+                print("Register button is not enabled.")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
@@ -82,9 +76,15 @@ class TestPlan1():
             # Check if we were redirected to the expected checkout/payment page
             current_url = self.driver.current_url
             print(f"Expected URL: {expected_url}, Current URL: {current_url}")
-            status = "Passed" if current_url == expected_url else "Failed"
+            if current_url == expected_url:
+                print("Successfully navigated to the expected URL")
+                status = "Passed"
+            else:
+                print(f"Unexpected URL: {current_url}")
+                status = "Failed"
 
             # Take a screenshot of the checkout/payment page
+            time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = f"screenshots/plan_1_{status}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
@@ -92,9 +92,9 @@ class TestPlan1():
             # Record the test result
             self._store_test_results("Plan 1 Registration", status, screenshot_path)
 
-        except Exception as e:
+        except WebDriverException as e:
             # Log the exception and save a failure screenshot
-            print(f"Exception occurred: {str(e)}")
+            print(f"WebDriverException occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = f"screenshots/plan_1_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
