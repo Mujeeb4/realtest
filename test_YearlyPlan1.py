@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 
 # CSV file path to store test results
@@ -45,31 +46,22 @@ class TestPlan1():
 
             # Click the "Yearly" button using JavaScript and XPath
             yearly_button = WebDriverWait(self.driver, 30).until(
-            EC.presence_of_element_located((By.XPATH, "//button/span[contains(text(),'Yearly')]/.."))
+                EC.presence_of_element_located((By.XPATH, "//button/span[contains(text(),'Yearly')]/.."))
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
             print("Yearly button clicked via JavaScript and XPath")
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", yearly_button)
+            
             time.sleep(1)
-            yearly_button.click()
-            print("Yearly button clicked")
 
-            # Locate the "Register" button for Plan 1 using an XPath locator
-            register_button = self.driver.find_element(By.CSS_SELECTOR, "a.et_pb_button_5")
-            register_button.click()
+            # Locate the "Register" button for Plan 1 using an ActionChain
+            register_button = WebDriverWait(self.driver, 60).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button_5"))
+            )
 
-            # Scroll into view and click the button using JavaScript
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)   
-            time.sleep(1)  # Small pause to ensure the page scrolls
-
-            # Attempt to click the button
-            try:
-                WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable(register_button))
-                print("Trying to click the 'Register' button using JavaScript.")
-                self.driver.execute_script("arguments[0].click();", register_button)
-            except (TimeoutException, ElementClickInterceptedException) as e:
-                print(f"Failed to click the 'Register' button: {str(e)}")
-                raise
+            # Use ActionChains to move to the button and click it
+            actions = ActionChains(self.driver)
+            actions.move_to_element(register_button).click().perform()
+            print("Register button clicked using ActionChains")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
