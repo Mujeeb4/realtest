@@ -49,16 +49,34 @@ class TestPlan1():
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
             print("Yearly button clicked via JavaScript")
+            
             time.sleep(2)
 
-            # Click the "Register" button for the first yearly plan
-            register_button = WebDriverWait(self.driver, 30).until(
-                EC.element_to_be_clickable((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
-            )
-            self.driver.execute_script("arguments[0].click();", register_button)
-            print("Register button clicked via JavaScript")
+            # Retry mechanism for clicking the "Register" button
+            for attempt in range(3):  # Retry up to 3 times
+                try:
+                    # Locate the "Register" button for the first yearly plan
+                    register_button = WebDriverWait(self.driver, 30).until(
+                        EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
+                    )
+
+                    # Check if the button is clickable and visible
+                    if register_button.is_displayed() and register_button.is_enabled():
+                        # Try clicking with JavaScript
+                        self.driver.execute_script("arguments[0].click();", register_button)
+                        print("Register button clicked via JavaScript")
+                        break
+                    else:
+                        raise Exception("Register button is not clickable or visible")
+                except Exception as e:
+                    print(f"Attempt {attempt + 1} failed: {e}")
+                    time.sleep(2)  # Wait before retrying
+
+            # Log the current URL for debugging purposes
+            print(f"Current URL after clicking the register button: {self.driver.current_url}")
 
             # Wait for the redirection to the registration page
+            print(f"Waiting for redirection to {expected_url}")
             WebDriverWait(self.driver, 120).until(EC.url_contains(expected_url))
 
             # Check if we were redirected to the expected checkout/payment page
