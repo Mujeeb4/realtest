@@ -72,6 +72,16 @@ jobs:
 
       - name: Run Registration Monthly Plan 2 link tests
         run: pytest test_MonthlyPlan2.py
+
+      - name: Run Registration Monthly Plan 3 link tests
+        run: pytest test_MonthlyPlan3.py
+
+      - name: Run Registration Monthly Plan 4 link tests
+        run: pytest test_MonthlyPlan4.py
+
+      - name: Run Registration Monthly Plan 5 link tests
+        run: pytest test_MonthlyPlan5.py
+      
       - name: Run Registration Yearly Plan 1 link tests
         run: pytest test_YearlyPlan1.py
 
