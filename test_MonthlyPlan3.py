@@ -33,7 +33,6 @@ class TestPlan3():
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
         expected_url = "https://smoothmaths.co.uk/register/13-plus-subscription-plan"
-        status = "Failed"  # Default to Failed in case of any issues
 
         try:
             # Navigate directly to the pricing page
