@@ -43,12 +43,12 @@ class TestPlan3():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Try using JavaScript to click the "Yearly" button
+            # Click the "Yearly" button using JavaScript and XPath
             yearly_button = WebDriverWait(self.driver, 30).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "button.df-cs-button.secondary.df-cs-icon-left.active"))
+            EC.presence_of_element_located((By.XPATH, "//button/span[contains(text(),'Yearly')]/.."))
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
-            print("Yearly button clicked via JavaScript")
+            print("Yearly button clicked via JavaScript and XPath")
             self.driver.execute_script("arguments[0].scrollIntoView(true);", yearly_button)
             time.sleep(1)
             yearly_button.click()
