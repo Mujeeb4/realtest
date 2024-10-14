@@ -50,18 +50,24 @@ class TestPlan1():
             )
             self.driver.execute_script("arguments[0].click();", yearly_button)
             print("Yearly button clicked via JavaScript and XPath")
-            
+
             time.sleep(1)
 
-            # Locate the "Register" button for Plan 1 and click it
+            # Locate the "Register" button for Plan 1 and make sure it's visible
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, "//a[contains(text(),'Register')]"))
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a.et_pb_button_5"))
             )
 
-            # Use ActionChains to move to the button and click it
+            # Use ActionChains to ensure it is interactable
             actions = ActionChains(self.driver)
-            actions.move_to_element(register_button).click().perform()
-            print("Register button clicked using ActionChains")
+            actions.move_to_element(register_button).perform()
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+
+            time.sleep(1)  # Ensure time for element to be fully visible
+
+            # Try clicking it using JavaScript
+            self.driver.execute_script("arguments[0].click();", register_button)
+            print("Register button clicked using JavaScript")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
