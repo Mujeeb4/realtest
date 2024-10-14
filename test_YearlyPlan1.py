@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
@@ -52,22 +51,14 @@ class TestPlan1():
             
             time.sleep(1)
 
-            # Locate the "Register" button for Plan 1 using an XPath locator
+            # Locate the "Register" button for Plan 1 and click it using JavaScript
             register_button = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
             )
 
-            # Retry clicking the register button up to 3 times
-            for attempt in range(3):
-                try:
-                    # Scroll into view and try to click the button using JavaScript
-                    self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-                    self.driver.execute_script("arguments[0].click();", register_button)
-                    print(f"Register button clicked on attempt {attempt + 1}")
-                    break
-                except Exception as e:
-                    print(f"Attempt {attempt + 1} failed: {str(e)}")
-                    time.sleep(2)  # Wait and retry
+            # Use JavaScript to click the register button
+            self.driver.execute_script("arguments[0].click();", register_button)
+            print("Register button clicked via JavaScript")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
