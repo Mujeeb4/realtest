@@ -29,6 +29,21 @@ class TestPlan1():
     def teardown_method(self, method):
         self.driver.quit()
 
+    def click_with_retry(self, locator, retries=3):
+        for attempt in range(retries):
+            try:
+                element = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable(locator)
+                )
+                element.click()
+                print(f"Element clicked successfully on attempt {attempt + 1}")
+                return True
+            except (TimeoutException, ElementClickInterceptedException) as e:
+                print(f"Failed to click element on attempt {attempt + 1}: {str(e)}")
+                time.sleep(2)  # Wait before retrying
+        print("Failed to click element after maximum retries")
+        return False
+
     def test_plan_3(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
@@ -43,28 +58,17 @@ class TestPlan1():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Click the "Yearly" button using JavaScript and XPath
-            yearly_button = WebDriverWait(self.driver, 30).until(
-                EC.presence_of_element_located((By.XPATH, "//button/span[contains(text(),'Yearly')]/.."))
-            )
-            self.driver.execute_script("arguments[0].click();", yearly_button)
-            print("Yearly button clicked via JavaScript")
+            # Click the "Yearly" button using JavaScript and retry if necessary
+            yearly_locator = (By.XPATH, "//button/span[contains(text(),'Yearly')]/..")
+            if not self.click_with_retry(yearly_locator):
+                raise Exception("Failed to click the Yearly button after retries.")
 
-            time.sleep(1)
+            time.sleep(1)  # Give the page time to update
 
-            # Locate the "Register" button for Plan 1 using XPath
-            register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, "//a[contains(text(),'Register')]"))
-            )
-
-            # Ensure button is enabled before clicking
-            if register_button.is_enabled():
-                print("Register button is enabled.")
-                self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-                self.driver.execute_script("arguments[0].click();", register_button)
-                print("Register button clicked using JavaScript")
-            else:
-                print("Register button is not enabled.")
+            # Locate and click the "Register" button for Plan 1
+            register_locator = (By.XPATH, "//a[contains(text(),'Register')]")
+            if not self.click_with_retry(register_locator):
+                raise Exception("Failed to click the Register button after retries.")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
