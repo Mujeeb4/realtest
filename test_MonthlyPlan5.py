@@ -33,7 +33,6 @@ class TestPlan5():
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
         expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics"
-        status = "Failed"  # Default to Failed in case of any issues
 
         try:
             # Navigate directly to the pricing page
