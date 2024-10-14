@@ -2,7 +2,7 @@ import pytest
 import time
 import os
 import datetime
-import pandas as pd  # Ensure pandas is imported
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -43,9 +43,9 @@ class TestPlan3():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Click on the "Yearly" button using XPath
+            # Click on the "Yearly" button using a more specific XPath
             yearly_button = WebDriverWait(self.driver, 30).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Yearly')]"))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "button.df-cs-button.secondary.df-cs-icon-left.active"))
             )
             self.driver.execute_script("arguments[0].scrollIntoView(true);", yearly_button)
             time.sleep(1)
