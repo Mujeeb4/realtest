@@ -56,10 +56,11 @@ class TestPlan1():
 
             # Locate the "Register" button for Plan 1 using an XPath locator
             register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
+            EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[1]"))
+            )
 
             # Scroll into view and click the button using JavaScript
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)   
             time.sleep(1)  # Small pause to ensure the page scrolls
 
             # Attempt to click the button
