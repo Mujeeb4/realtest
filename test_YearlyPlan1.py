@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, WebDriverException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
@@ -30,21 +30,24 @@ class TestPlan1():
         self.driver.quit()
 
     def click_with_retry(self, locator, retries=3):
-        for attempt in range(retries):
+        """Clicks an element with retry mechanism"""
+        attempts = 0
+        while attempts < retries:
             try:
-                element = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable(locator)
+                element = WebDriverWait(self.driver, 30).until(
+                    EC.presence_of_element_located(locator)
                 )
                 element.click()
-                print(f"Element clicked successfully on attempt {attempt + 1}")
+                print(f"Element clicked successfully on attempt {attempts + 1}")
                 return True
             except (TimeoutException, ElementClickInterceptedException) as e:
-                print(f"Failed to click element on attempt {attempt + 1}: {str(e)}")
+                print(f"Failed to click element on attempt {attempts + 1}: {e}")
+                attempts += 1
                 time.sleep(2)  # Wait before retrying
-        print("Failed to click element after maximum retries")
+        print(f"Failed to click element after {retries} retries.")
         return False
 
-    def test_plan_3(self):
+    def test_plan_1(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
         expected_url = "https://smoothmaths.co.uk/register/11-plus-subscription-plan-yearly"
@@ -58,7 +61,7 @@ class TestPlan1():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Click the "Yearly" button using JavaScript and retry if necessary
+            # Click the "Yearly" button and retry if necessary
             yearly_locator = (By.XPATH, "//button/span[contains(text(),'Yearly')]/..")
             if not self.click_with_retry(yearly_locator):
                 raise Exception("Failed to click the Yearly button after retries.")
@@ -96,9 +99,9 @@ class TestPlan1():
             # Record the test result
             self._store_test_results("Plan 1 Registration", status, screenshot_path)
 
-        except WebDriverException as e:
+        except Exception as e:
             # Log the exception and save a failure screenshot
-            print(f"WebDriverException occurred: {str(e)}")
+            print(f"Exception occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = f"screenshots/plan_1_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
