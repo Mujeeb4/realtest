@@ -88,6 +88,15 @@ jobs:
       - name: Run Registration Yearly Plan 2 link tests
         run: pytest test_YearlyPlan2.py
 
+      - name: Run Registration Yearly Plan 3 link tests
+        run: pytest test_YearlyPlan3.py
+
+      - name: Run Registration Yearly Plan 4 link tests
+        run: pytest test_YearlyPlan4.py
+
+      - name: Run Registration Yearly Plan 5 link tests
+        run: pytest test_YearlyPlan5.py
+
       # Uploading artifacts
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
