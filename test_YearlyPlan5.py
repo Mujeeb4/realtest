@@ -53,7 +53,7 @@ class TestPlan3():
   def test_plan_5(self):
     start_time = time.time()
     pricing_page = "https://smoothmaths.co.uk/pricing/"
-    expected_url = "https://smoothmaths.co.uk/register/11-plus-subscription-plan-yearly"
+    expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics-plan-yearly"
 
     try:
         # Navigate directly to the pricing page
