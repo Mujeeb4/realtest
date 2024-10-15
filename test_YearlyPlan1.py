@@ -69,15 +69,15 @@ class TestPlan1():
             if not self.click_with_retry(yearly_locator):
                 raise Exception("Failed to click the Yearly button after retries.")
 
-            # Explicitly wait for the "Yearly" button to be activated
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//button[contains(@class,'active')]//span[text()='Yearly']"))
-            )
-            print("Yearly button is now active.")
+            time.sleep(2)  # Give the page time to update
 
-            # Now that the Yearly plans are displayed, wait for the "Register" button in the yearly section
-            register_locator = (By.XPATH, "(//div[@class='et_pb_column']//a[contains(@class, 'et_pb_button') and contains(text(),'Register')])[1]")
-            
+            # Ensure the page switches to yearly plans before interacting with the Register button
+            WebDriverWait(self.driver, 30).until(
+                EC.visibility_of_element_located((By.XPATH, "//a[contains(text(), 'Register') and contains(@href, 'yearly')]"))
+            )
+
+            # Locate and click the "Register" button for the first yearly plan
+            register_locator = (By.XPATH, "(//a[contains(text(),'Register') and contains(@href, 'yearly')])[1]")
             if not self.click_with_retry(register_locator):
                 raise Exception("Failed to click the Register button after retries.")
 
