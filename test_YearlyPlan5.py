@@ -50,73 +50,87 @@ class TestPlan5():
         print(f"Failed to click element after {retries} retries.")
         return False
 
-  def test_plan_5(self):
-    start_time = time.time()
-    pricing_page = "https://smoothmaths.co.uk/pricing/"
-    expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics-plan-yearly"
+    def test_plan_5(self):
+        start_time = time.time()
+        pricing_page = "https://smoothmaths.co.uk/pricing/"
+        expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics-plan-yearly"
 
-    try:
-        # Navigate directly to the pricing page
-        self.driver.get(pricing_page)
-        print("Navigating to the pricing page for Plan 5")
+        try:
+            # Navigate directly to the pricing page
+            self.driver.get(pricing_page)
+            print("Navigating to the pricing page for Plan 5")
 
-        # Wait for the page to load and verify we're on the pricing page
-        WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
-        print("Successfully navigated to pricing page")
+            # Wait for the page to load and verify we're on the pricing page
+            WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
+            print("Successfully navigated to pricing page")
 
-        # Click the "Yearly" button and retry if necessary
-        yearly_locator = (By.XPATH, "//button/span[contains(text(),'Yearly')]/..")
-        if not self.click_with_retry(yearly_locator):
-            raise Exception("Failed to click the Yearly button after retries.")
+            # Click the "Yearly" button and retry if necessary
+            yearly_locator = (By.XPATH, "//button/span[contains(text(),'Yearly')]/..")
+            if not self.click_with_retry(yearly_locator):
+                raise Exception("Failed to click the Yearly button after retries.")
 
-        time.sleep(2)  # Give the page time to update
+            time.sleep(2)  # Give the page time to update
 
-        # Ensure the page switches to yearly plans before interacting with the Register button
-        WebDriverWait(self.driver, 30).until(
-            EC.visibility_of_element_located((By.XPATH, "//a[contains(text(), 'Register') and contains(@href, 'yearly')]"))
-        )
+            # Ensure the page switches to yearly plans before interacting with the Register button
+            WebDriverWait(self.driver, 30).until(
+                EC.visibility_of_element_located((By.XPATH, "//a[contains(text(), 'Register') and contains(@href, 'yearly')]"))
+            )
 
-        # Locate and click the "Register" button for the fifth yearly plan (Plan 5)
-        register_locator = (By.XPATH, "(//a[contains(text(),'Register') and contains(@href, 'yearly')])[5]")
-        if not self.click_with_retry(register_locator):
-            raise Exception("Failed to click the Register button for Plan 5 after retries.")
+            # Locate and click the "Register" button for the fifth yearly plan (Plan 5)
+            register_locator = (By.XPATH, "(//a[contains(text(),'Register') and contains(@href, 'yearly')])[5]")
+            if not self.click_with_retry(register_locator):
+                raise Exception("Failed to click the Register button for Plan 5 after retries.")
 
-        # Log the current URL for debugging purposes
-        print(f"Current URL after clicking the register button: {self.driver.current_url}")
+            # Log the current URL for debugging purposes
+            print(f"Current URL after clicking the register button: {self.driver.current_url}")
 
-        # Wait for the redirection to the registration page
-        print(f"Waiting for redirection to {expected_url}")
-        WebDriverWait(self.driver, 120).until(EC.url_contains(expected_url))
+            # Wait for the redirection to the registration page
+            print(f"Waiting for redirection to {expected_url}")
+            WebDriverWait(self.driver, 120).until(EC.url_contains(expected_url))
 
-        # Check if we were redirected to the expected checkout/payment page
-        current_url = self.driver.current_url
-        print(f"Expected URL: {expected_url}, Current URL: {current_url}")
-        if current_url == expected_url:
-            print("Successfully navigated to the expected URL")
-            status = "Passed"
+            # Check if we were redirected to the expected checkout/payment page
+            current_url = self.driver.current_url
+            print(f"Expected URL: {expected_url}, Current URL: {current_url}")
+            if current_url == expected_url:
+                print("Successfully navigated to the expected URL")
+                status = "Passed"
+            else:
+                print(f"Unexpected URL: {current_url}")
+                status = "Failed"
+
+            # Take a screenshot of the checkout/payment page
+            time.sleep(2)  # Pause to allow the page to load fully
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = f"screenshots/plan_5_{status}_{timestamp}.png"
+            self.driver.save_screenshot(screenshot_path)
+
+            # Record the test result
+            self._store_test_results("Plan 5 Registration", status, screenshot_path)
+
+        except Exception as e:
+            # Log the exception and save a failure screenshot
+            print(f"Exception occurred: {str(e)}")
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = f"screenshots/plan_5_failed_{timestamp}.png"
+            self.driver.save_screenshot(screenshot_path)
+            self._store_test_results("Plan 5 Registration", "Failed", screenshot_path)
+
+        finally:
+            # Record end time and calculate duration
+            end_time = time.time()
+            duration = end_time - start_time
+            print(f"Test duration for Plan 5: {round(duration, 2)} seconds")
+
+    def _store_test_results(self, test_case, status, screenshot_path):
+        # Prepare results for CSV
+        results = {
+            "Test Case": [test_case],
+            "Status": [status],
+            "Screenshot": [screenshot_path]
+        }
+
+        # Append results to the CSV file
+        if not os.path.exists(CSV_FILE_PATH):
+            pd.DataFrame(results).to_csv(CSV_FILE_PATH, index=False)
         else:
-            print(f"Unexpected URL: {current_url}")
-            status = "Failed"
-
-        # Take a screenshot of the checkout/payment page
-        time.sleep(2)  # Pause to allow the page to load fully
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        screenshot_path = f"screenshots/plan_5_{status}_{timestamp}.png"
-        self.driver.save_screenshot(screenshot_path)
-
-        # Record the test result
-        self._store_test_results("Plan 5 Registration", status, screenshot_path)
-
-    except Exception as e:
-        # Log the exception and save a failure screenshot
-        print(f"Exception occurred: {str(e)}")
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        screenshot_path = f"screenshots/plan_5_failed_{timestamp}.png"
-        self.driver.save_screenshot(screenshot_path)
-        self._store_test_results("Plan 5 Registration", "Failed", screenshot_path)
-
-    finally:
-        # Record end time and calculate duration
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f"Test duration for Plan 5: {round(duration, 2)} seconds")
+            pd.DataFrame(results).to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
