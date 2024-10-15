@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, WebDriverException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
@@ -37,10 +37,13 @@ class TestPlan1():
                 element = WebDriverWait(self.driver, 30).until(
                     EC.presence_of_element_located(locator)
                 )
-                element.click()
+                # Scroll the element into view
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+                # Use JavaScript to ensure it's clickable
+                self.driver.execute_script("arguments[0].click();", element)
                 print(f"Element clicked successfully on attempt {attempts + 1}")
                 return True
-            except (TimeoutException, ElementClickInterceptedException) as e:
+            except (TimeoutException, ElementClickInterceptedException, WebDriverException) as e:
                 print(f"Failed to click element on attempt {attempts + 1}: {e}")
                 attempts += 1
                 time.sleep(2)  # Wait before retrying
@@ -66,10 +69,10 @@ class TestPlan1():
             if not self.click_with_retry(yearly_locator):
                 raise Exception("Failed to click the Yearly button after retries.")
 
-            time.sleep(1)  # Give the page time to update
+            time.sleep(2)  # Give the page time to update
 
             # Locate and click the "Register" button for Plan 1
-            register_locator = (By.XPATH, "//a[contains(text(),'Register')]")
+            register_locator = (By.XPATH, "(//a[contains(text(),'Register')])[1]")
             if not self.click_with_retry(register_locator):
                 raise Exception("Failed to click the Register button after retries.")
 
