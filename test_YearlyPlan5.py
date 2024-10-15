@@ -12,7 +12,7 @@ from selenium.common.exceptions import TimeoutException, ElementClickIntercepted
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestPlan3():
+class TestPlan5():
     def setup_method(self, method):
         # Use headless Chrome for CI
         chrome_options = webdriver.ChromeOptions()
