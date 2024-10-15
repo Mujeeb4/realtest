@@ -75,10 +75,9 @@ class TestPlan1():
             )
             print("Yearly button is now active.")
 
-            time.sleep(2)  # Give the page time to update
-
-            # Locate and click the "Register" button for Plan 1 under the yearly plan
-            register_locator = (By.XPATH, "(//a[contains(text(),'Register')])[1]")
+            # Now that the Yearly plans are displayed, wait for the "Register" button in the yearly section
+            register_locator = (By.XPATH, "(//div[@class='et_pb_column']//a[contains(@class, 'et_pb_button') and contains(text(),'Register')])[1]")
+            
             if not self.click_with_retry(register_locator):
                 raise Exception("Failed to click the Register button after retries.")
 
