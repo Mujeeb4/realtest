@@ -1,13 +1,11 @@
 import pytest
 import time
 import os
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 
-class Subscription():
+class Subscription:
     def setup_method(self, method):
         # Set up Chrome options for headless execution (suitable for GitHub Actions)
         chrome_options = webdriver.ChromeOptions()
@@ -24,8 +22,8 @@ class Subscription():
     def teardown_method(self, method):
         self.driver.quit()
 
-
-class Subscription():
+    def save_screenshot(self, name):
+        self.driver.save_screenshot(f'screenshots/{name}.png')
 
     # Subscription Test Function
     def subscribe_paid_plan(self, email, password):
@@ -36,9 +34,9 @@ class Subscription():
         password_field = self.driver.find_element(By.NAME, 'password')
         confirm_password_field = self.driver.find_element(By.NAME, 'password_confirmation')
 
-        email_field.send_keys(hanzilarafiq2@gmail.com)
-        password_field.send_keys(Hanzila*183258)
-        confirm_password_field.send_keys(Hanzila*183258)
+        email_field.send_keys(email)
+        password_field.send_keys(password)
+        confirm_password_field.send_keys(password)
 
         # Simulate the register button click
         register_button = self.driver.find_element(By.ID, 'register-button')
@@ -96,10 +94,7 @@ class Subscription():
         df.to_csv(filename, index=False)
 
 # pytest function for running the test
+@pytest.mark.usefixtures("setup_method", "teardown_method")
 def test_subscription():
     subscription_test = Subscription()
-    subscription_test.setup_method()
-    try:
-        subscription_test.subscribe_paid_plan("dummy_user@example.com", "TestPassword123")
-    finally:
-        subscription_test.teardown_method()
+    subscription_test.subscribe_paid_plan("dummy_user@example.com", "TestPassword123")
