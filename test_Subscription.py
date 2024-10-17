@@ -94,7 +94,10 @@ class Subscription:
         df.to_csv(filename, index=False)
 
 # pytest function for running the test
-@pytest.mark.usefixtures("setup_method", "teardown_method")
 def test_subscription():
     subscription_test = Subscription()
-    subscription_test.subscribe_paid_plan("dummy_user@example.com", "TestPassword123")
+    subscription_test.setup_method(None)
+    try:
+        subscription_test.subscribe_paid_plan("dummy_user@example.com", "TestPassword123")
+    finally:
+        subscription_test.teardown_method(None)
