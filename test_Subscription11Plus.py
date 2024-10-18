@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
@@ -49,8 +49,13 @@ class TestSubscription():
             self.driver.find_element(By.ID, "mepr_user_password1").send_keys("Hanzila*183258")
             self.driver.find_element(By.ID, "mepr_user_password_confirm1").send_keys("Hanzila*183258")
 
-            # Switch to payment iframe and fill in payment details
-            self.driver.switch_to.frame(4)
+            # Wait for iframe to be present and switch to it
+            WebDriverWait(self.driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[contains(@name, 'stripe_checkout')]")))
+
+            # Wait for the payment fields to be interactable
+            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.ID, "Field-numberInput")))
+
+            # Fill in the payment details
             self.driver.find_element(By.ID, "Field-numberInput").send_keys("4649 5102 1304 1970")
             self.driver.find_element(By.ID, "Field-cvcInput").send_keys("885")
             self.driver.find_element(By.ID, "Field-expiryInput").send_keys("08 / 27")
@@ -80,6 +85,9 @@ class TestSubscription():
             screenshot_path = f"screenshots/subscription_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
             print(f"Exception occurred: Timed out waiting for the Thank You message.")
+
+        except NoSuchElementException:
+            print("Payment fields not found, check if the iframe is loaded correctly.")
 
         finally:
             # Save the results in a CSV file
