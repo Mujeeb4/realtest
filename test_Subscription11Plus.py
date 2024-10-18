@@ -30,6 +30,8 @@ class TestSubscription():
 
     def test_subscription(self):
         start_time = time.time()
+        status = "Failed"  # Initialize status to "Failed"
+        screenshot_path = ""  # Initialize screenshot_path
         try:
             # Navigate to subscription page
             self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/")
@@ -67,7 +69,7 @@ class TestSubscription():
             # Take a screenshot of the checkout/payment page
             time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_1_{status}_{timestamp}.png"
+            screenshot_path = f"screenshots/plan_1_passed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
             status = "Passed"
@@ -78,7 +80,6 @@ class TestSubscription():
             screenshot_path = f"screenshots/subscription_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
             print(f"Exception occurred: Timed out waiting for the Thank You message.")
-            status = "Failed"
 
         finally:
             # Save the results in a CSV file
@@ -101,4 +102,3 @@ class TestSubscription():
             pd.DataFrame(results).to_csv(CSV_FILE_PATH, index=False)
         else:
             pd.DataFrame(results).to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
