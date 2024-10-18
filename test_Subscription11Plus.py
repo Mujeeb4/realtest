@@ -45,7 +45,7 @@ class TestSubscription():
             self.driver.find_element(By.ID, "mepr_full_name1").send_keys("Hanzila Rafiq")
             self.driver.find_element(By.NAME, "mepr-address-state").send_keys("Punjab")
             self.driver.find_element(By.ID, "mepr-address-zip").send_keys("590000")
-            self.driver.find_element(By.ID, "user_email1").send_keys("mujeebnawaz42@gmail.com")
+            self.driver.find_element(By.ID, "user_email1").send_keys("mujeebnawaz424@gmail.com")
             self.driver.find_element(By.ID, "mepr_user_password1").send_keys("Hanzila*183258")
             self.driver.find_element(By.ID, "mepr_user_password_confirm1").send_keys("Hanzila*183258")
 
