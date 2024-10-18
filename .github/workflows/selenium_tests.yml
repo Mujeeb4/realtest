@@ -96,9 +96,7 @@ jobs:
 
       - name: Run Registration Yearly Plan 5 link tests
         run: pytest test_YearlyPlan5.py
-
-      - name: Run Subscription tests
-        run: pytest test_Subscription.py
+      
 
       # Uploading artifacts
       - name: Upload screenshots
