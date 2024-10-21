@@ -15,10 +15,13 @@ CSV_FILE_PATH = "test_results.csv"
 class TestSubscription():
     def setup_method(self, method):
         chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering for headless
+        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--disable-software-rasterizer")
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_window_size(1920, 1080)
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -130,4 +133,3 @@ class TestSubscription():
             pd.DataFrame(results).to_csv(CSV_FILE_PATH, index=False)
         else:
             pd.DataFrame(results).to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-
