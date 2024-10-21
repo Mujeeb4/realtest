@@ -1,141 +1,132 @@
-import pytest
-import time
-import os
-import datetime
-import pandas as pd
-import random
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+name: Selenium Tests
 
-# CSV file path to store test results
-CSV_FILE_PATH = "test_results.csv"
+on:
+  schedule:
+    - cron: '0 * * * *'  # Run every 1 hour
+  push:
+    branches:
+      - main
 
-class TestSubscription():
-    def setup_method(self, method):
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering
-        chrome_options.add_argument("--window-size=1920,1080")  # Set window size
-        chrome_options.add_argument("--disable-software-rasterizer")  # Avoid software rendering
-        chrome_options.add_argument("--remote-debugging-port=9222")
-        self.driver = webdriver.Chrome(options=chrome_options)
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-        # Ensure screenshots directory exists
-        if not os.path.exists("screenshots"):
-            os.makedirs("screenshots")
+    steps:
+      - uses: actions/checkout@v4
 
-    def teardown_method(self, method):
-        self.driver.quit()
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    def test_subscription(self):
-        start_time = time.time()
-        status = "Failed"
-        screenshot_path = ""
-        try:
-            # Generate a random email address
-            random_number = random.randint(1000, 9999)
-            random_email = f"testing{random_number}@gmail.com"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium pytest webdriver-manager pandas
 
-            # Navigate to subscription page
-            self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/")
-            print("Navigating to the subscription page")
+      # Running all tests sequentially
+      - name: Run forgot password tests
+        run: pytest test_forgetPasswordTest1_2155.py --tb=short --junitxml=results.xml
 
-            # Fill in the form fields
-            self.driver.find_element(By.ID, "mepr-address-one").send_keys("Muslim road")
-            self.driver.find_element(By.ID, "mepr-address-city").send_keys("Lahore")
-            dropdown = self.driver.find_element(By.ID, "mepr-address-country")
-            dropdown.find_element(By.XPATH, "//option[. = 'Pakistan']").click()
-            self.driver.find_element(By.ID, "mepr_full_name1").send_keys("Hanzila Rafiq")
-            self.driver.find_element(By.NAME, "mepr-address-state").send_keys("Punjab")
-            self.driver.find_element(By.ID, "mepr-address-zip").send_keys("590000")
-            self.driver.find_element(By.ID, "user_email1").send_keys(random_email)
-            self.driver.find_element(By.ID, "mepr_user_password1").send_keys("Hanzila*183258")
-            self.driver.find_element(By.ID, "mepr_user_password_confirm1").send_keys("Hanzila*183258")
+      - name: Run login tests
+        run: pytest test_Wordpresslogin1_2155.py --tb=short --junitxml=results.xml
 
-            # Scroll down to make the iframe visible
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+      - name: Run contact us tests
+        run: pytest test_contactus.py --tb=short --junitxml=results.xml
 
-            # Wait for the iframe to be present and switch to it (Stripe iframe)
-            stripe_iframe = WebDriverWait(self.driver, 30).until(
-                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
-            )
+      - name: Run privacy policy tests
+        run: pytest test_privacyPolicy.py --tb=short --junitxml=results.xml
 
-            # Switch to nested iframe for card number input
-            card_number_iframe = self.driver.find_element(By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]')
-            self.driver.switch_to.frame(card_number_iframe)
+      - name: Run terms & conditions tests
+        run: pytest test_termsConditions.py --tb=short --junitxml=results.xml
 
-            # Wait for the card number field to be interactable
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.NAME, "cardnumber")))
+      - name: Run FAQs tests
+        run: pytest test_fAQs.py --tb=short --junitxml=results.xml
 
-            # Fill in the payment details
-            self.driver.find_element(By.NAME, "cardnumber").send_keys("4242 4242 4242 4242")
-            self.driver.find_element(By.NAME, "exp-date").send_keys("08 / 27")
-            self.driver.find_element(By.NAME, "cvc").send_keys("885")
+      - name: Run feedback tests
+        run: pytest test_feedbackPage.py --tb=short --junitxml=results.xml
 
-            # Switch back to main content
-            self.driver.switch_to.default_content()
+      - name: Run 11 Plus link tests
+        run: pytest test_11Pluslinks.py --tb=short --junitxml=results.xml
 
-            # Scroll to the submit button
-            register_button = self.driver.find_element(By.CSS_SELECTOR, ".mepr-submit")
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+      - name: Run 13 Plus link tests
+        run: pytest test_13Pluslink.py --tb=short --junitxml=results.xml
 
-            # Submit the form
-            register_button.click()
+      - name: Run GCSE link tests
+        run: pytest test_GCSElink.py --tb=short --junitxml=results.xml
 
-            # Wait for 'Thank You' text to appear
-            thank_you_text = WebDriverWait(self.driver, 30).until(
-                EC.presence_of_element_located((By.XPATH, "//*[contains(text(),'Thank you')]"))
-            )
-            assert "Thank you" in thank_you_text.text
-            print("Form submitted successfully, 'Thank You' message found.")
+      - name: Run IGCSE link tests
+        run: pytest test_IGCSElink.py --tb=short --junitxml=results.xml
 
-            # Take a screenshot of the page
-            time.sleep(5)
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = os.path.abspath(f"screenshots/plan_1_passed_{timestamp}.png")
-            if self.driver.save_screenshot(screenshot_path):
-                print(f"Screenshot saved successfully: {screenshot_path}")
-            else:
-                print(f"Failed to save screenshot: {screenshot_path}")
+      - name: Run AS-Level link tests
+        run: pytest test_AS-Level.py --tb=short --junitxml=results.xml
 
-            status = "Passed"
+      - name: Run A-Level link tests
+        run: pytest test_A-Level.py --tb=short --junitxml=results.xml
 
-        except TimeoutException:
-            # Handle the exception and save a failure screenshot
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = os.path.abspath(f"screenshots/subscription_failed_{timestamp}.png")
-            if self.driver.save_screenshot(screenshot_path):
-                print(f"Failure screenshot saved: {screenshot_path}")
-            else:
-                print(f"Failed to save failure screenshot: {screenshot_path}")
-            print(f"Exception occurred: Timed out waiting for the Thank You message.")
+      - name: Run Pricing link tests
+        run: pytest test_pricing.py --tb=short --junitxml=results.xml
 
-        except NoSuchElementException:
-            print("Payment fields not found, check if the iframe is loaded correctly.")
+      - name: Run Registration Monthly Plan 1 link tests
+        run: pytest test_MonthlyPlan1.py --tb=short --junitxml=results.xml
 
-        finally:
-            # Save the results in a CSV file
-            end_time = time.time()
-            duration = round(end_time - start_time, 2)
-            self._store_test_results("Subscription Test", status, screenshot_path, duration)
-            print(f"Test completed in {duration} seconds.")
+      - name: Run Registration Monthly Plan 2 link tests
+        run: pytest test_MonthlyPlan2.py --tb=short --junitxml=results.xml
 
-    def _store_test_results(self, test_case, status, screenshot_path, duration):
-        # Prepare results for CSV
-        results = {
-            "Test Case": [test_case],
-            "Status": [status],
-            "Screenshot": [screenshot_path],
-            "Duration": [duration]
-        }
+      - name: Run Registration Monthly Plan 3 link tests
+        run: pytest test_MonthlyPlan3.py --tb=short --junitxml=results.xml
 
-        # Append results to the CSV file
-        if not os.path.exists(CSV_FILE_PATH):
-            pd.DataFrame(results).to_csv(CSV_FILE_PATH, index=False)
-        else:
-            pd.DataFrame(results).to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+      - name: Run Registration Monthly Plan 4 link tests
+        run: pytest test_MonthlyPlan4.py --tb=short --junitxml=results.xml
+
+      - name: Run Registration Monthly Plan 5 link tests
+        run: pytest test_MonthlyPlan5.py --tb=short --junitxml=results.xml
+
+      - name: Run Registration Yearly Plan 1 link tests
+        run: pytest test_YearlyPlan1.py --tb=short --junitxml=results.xml
+
+      - name: Run Registration Yearly Plan 2 link tests
+        run: pytest test_YearlyPlan2.py --tb=short --junitxml=results.xml
+
+      - name: Run Registration Yearly Plan 3 link tests
+        run: pytest test_YearlyPlan3.py --tb=short --junitxml=results.xml
+
+      - name: Run Registration Yearly Plan 4 link tests
+        run: pytest test_YearlyPlan4.py --tb=short --junitxml=results.xml
+
+      - name: Run Registration Yearly Plan 5 link tests
+        run: pytest test_YearlyPlan5.py --tb=short --junitxml=results.xml
+
+      - name: Run Subscription 11 Plus tests
+        run: pytest test_Subscription11Plus.py --tb=short --junitxml=results.xml
+
+      # Uploading artifacts
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: screenshots/*.png
+
+      - name: Upload test results
+        run: |
+          if [ -f test_results.csv ]; then
+            tail -n +2 results.xml >> test_results.csv
+          else
+            cp results.xml test_results.csv
+          fi
+        shell: bash
+
+      - name: Archive screenshots into a zip file
+        run: zip -r screenshots.zip screenshots/*.png
+
+      - name: Upload test results and screenshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test_results.csv
+          
+      - name: Upload archived screenshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: screenshots.zip
