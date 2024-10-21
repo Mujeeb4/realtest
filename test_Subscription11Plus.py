@@ -50,7 +50,7 @@ class TestSubscription():
             self.driver.find_element(By.ID, "mepr-address-city").send_keys("Lahore")
             dropdown = self.driver.find_element(By.ID, "mepr-address-country")
             dropdown.find_element(By.XPATH, "//option[. = 'Pakistan']").click()
-            self.driver.find_element(By.ID, "mepr_full_name1").send_keys("Hanzila Rafiq")
+            self.driver.find_element(By.ID, "mepr_full_name1").send_keys(f"test{random_number}")
             self.driver.find_element(By.NAME, "mepr-address-state").send_keys("Punjab")
             self.driver.find_element(By.ID, "mepr-address-zip").send_keys("590000")
             self.driver.find_element(By.ID, "user_email1").send_keys(random_email)
