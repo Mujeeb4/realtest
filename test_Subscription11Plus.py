@@ -15,13 +15,13 @@ CSV_FILE_PATH = "test_results.csv"
 class TestSubscription():
     def setup_method(self, method):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")  # Ensure headless mode
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--window-size=1920,1080")  # Set a fixed window size
-        chrome_options.add_argument("--disable-software-rasterizer")
-        chrome_options.add_argument("--remote-debugging-port=9222")  # Important for debugging in CI
+        chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering
+        chrome_options.add_argument("--window-size=1920,1080")  # Set window size
+        chrome_options.add_argument("--disable-software-rasterizer")  # Avoid software rendering
+        chrome_options.add_argument("--remote-debugging-port=9222")
         self.driver = webdriver.Chrome(options=chrome_options)
 
         # Ensure screenshots directory exists
@@ -33,8 +33,8 @@ class TestSubscription():
 
     def test_subscription(self):
         start_time = time.time()
-        status = "Failed"  # Initialize status to "Failed"
-        screenshot_path = ""  # Initialize screenshot_path
+        status = "Failed"
+        screenshot_path = ""
         try:
             # Navigate to subscription page
             self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/")
@@ -55,12 +55,12 @@ class TestSubscription():
             # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Wait for the iframe to be present and switch to it (This is the Stripe iframe)
+            # Wait for the iframe to be present and switch to it (Stripe iframe)
             stripe_iframe = WebDriverWait(self.driver, 30).until(
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
             )
 
-            # Now switch to the nested iframe inside the Stripe iframe for the card number input
+            # Switch to nested iframe for card number input
             card_number_iframe = self.driver.find_element(By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]')
             self.driver.switch_to.frame(card_number_iframe)
 
@@ -72,10 +72,10 @@ class TestSubscription():
             self.driver.find_element(By.NAME, "exp-date").send_keys("08 / 27")
             self.driver.find_element(By.NAME, "cvc").send_keys("885")
 
-            # Switch back to the main content
+            # Switch back to main content
             self.driver.switch_to.default_content()
 
-            # Scroll to the submit button to ensure it's in view
+            # Scroll to the submit button
             register_button = self.driver.find_element(By.CSS_SELECTOR, ".mepr-submit")
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
 
@@ -89,8 +89,8 @@ class TestSubscription():
             assert "Thank you" in thank_you_text.text
             print("Form submitted successfully, 'Thank You' message found.")
 
-            # Take a screenshot of the checkout/payment page
-            time.sleep(5)  # Increase wait time to ensure the page is fully loaded
+            # Take a screenshot of the page
+            time.sleep(5)
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = os.path.abspath(f"screenshots/plan_1_passed_{timestamp}.png")
             if self.driver.save_screenshot(screenshot_path):
