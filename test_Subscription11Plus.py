@@ -90,12 +90,16 @@ class TestSubscription():
             time.sleep(3)  # Increase wait time to ensure the page is fully loaded
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             screenshot_path = os.path.join("screenshots", f"plan_1_passed_{timestamp}.png")
-            saved = self.driver.save_screenshot(screenshot_path)
+            self.driver.save_screenshot(screenshot_path)
 
-             def save_screenshot(self, name):
-        timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-        screenshot_path = f"screenshots/{name}_{timestamp}.png"
-        self.driver.save_screenshot(screenshot_path)
+            status = "Passed"
+        
+        except TimeoutException:
+            # Handle the exception and save a failure screenshot
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot_path = os.path.join("screenshots", f"subscription_failed_{timestamp}.png")
+            self.driver.save_screenshot(screenshot_path)
+            print(f"Exception occurred: Timed out waiting for the Thank You message.")
 
         except NoSuchElementException:
             print("Payment fields not found, check if the iframe is loaded correctly.")
