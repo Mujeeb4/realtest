@@ -52,16 +52,18 @@ class TestSubscription():
             # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Wait for iframe to be present and switch to it
-            WebDriverWait(self.driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[contains(@name, 'stripe_checkout')]")))
+            # Wait for iframe to be present and switch to it (This is the Stripe iframe)
+            WebDriverWait(self.driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]')))
 
             # Wait for the payment fields to be interactable
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.ID, "Field-numberInput")))
+            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.NAME, "cardnumber")))
 
             # Fill in the payment details
-            self.driver.find_element(By.ID, "Field-numberInput").send_keys("4649 5102 1304 1970")
-            self.driver.find_element(By.ID, "Field-cvcInput").send_keys("885")
-            self.driver.find_element(By.ID, "Field-expiryInput").send_keys("08 / 27")
+            self.driver.find_element(By.NAME, "cardnumber").send_keys("4242 4242 4242 4242")
+            self.driver.find_element(By.NAME, "exp-date").send_keys("08 / 27")
+            self.driver.find_element(By.NAME, "cvc").send_keys("885")
+
+            # Switch back to the main content
             self.driver.switch_to.default_content()
 
             # Scroll to the submit button to ensure it's in view
