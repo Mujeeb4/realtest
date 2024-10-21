@@ -3,6 +3,7 @@ import time
 import os
 import datetime
 import pandas as pd
+import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -36,6 +37,10 @@ class TestSubscription():
         status = "Failed"
         screenshot_path = ""
         try:
+            # Generate a random email address
+            random_number = random.randint(1000, 9999)
+            random_email = f"testing{random_number}@gmail.com"
+
             # Navigate to subscription page
             self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/")
             print("Navigating to the subscription page")
@@ -48,7 +53,7 @@ class TestSubscription():
             self.driver.find_element(By.ID, "mepr_full_name1").send_keys("Hanzila Rafiq")
             self.driver.find_element(By.NAME, "mepr-address-state").send_keys("Punjab")
             self.driver.find_element(By.ID, "mepr-address-zip").send_keys("590000")
-            self.driver.find_element(By.ID, "user_email1").send_keys("mujeebnawaz424@gmail.com")
+            self.driver.find_element(By.ID, "user_email1").send_keys(random_email)
             self.driver.find_element(By.ID, "mepr_user_password1").send_keys("Hanzila*183258")
             self.driver.find_element(By.ID, "mepr_user_password_confirm1").send_keys("Hanzila*183258")
 
