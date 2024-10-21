@@ -87,17 +87,22 @@ class TestSubscription():
             print("Form submitted successfully, 'Thank You' message found.")
 
             # Take a screenshot of the checkout/payment page
-            time.sleep(2)  # Pause to allow the page to load fully
+            time.sleep(3)  # Increase wait time to ensure the page is fully loaded
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_1_passed_{timestamp}.png"
-            self.driver.save_screenshot(screenshot_path)
+            screenshot_path = os.path.join("screenshots", f"plan_1_passed_{timestamp}.png")
+            saved = self.driver.save_screenshot(screenshot_path)
+
+            if saved:
+                print(f"Screenshot saved at {screenshot_path}")
+            else:
+                print("Screenshot could not be saved.")
 
             status = "Passed"
         
         except TimeoutException:
             # Handle the exception and save a failure screenshot
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/subscription_failed_{timestamp}.png"
+            screenshot_path = os.path.join("screenshots", f"subscription_failed_{timestamp}.png")
             self.driver.save_screenshot(screenshot_path)
             print(f"Exception occurred: Timed out waiting for the Thank You message.")
 
