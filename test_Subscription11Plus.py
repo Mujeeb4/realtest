@@ -15,12 +15,13 @@ CSV_FILE_PATH = "test_results.csv"
 class TestSubscription():
     def setup_method(self, method):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")  # Ensure headless mode
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering for headless
-        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920,1080")  # Set a fixed window size
         chrome_options.add_argument("--disable-software-rasterizer")
+        chrome_options.add_argument("--remote-debugging-port=9222")  # Important for debugging in CI
         self.driver = webdriver.Chrome(options=chrome_options)
 
         # Ensure screenshots directory exists
@@ -98,7 +99,7 @@ class TestSubscription():
                 print(f"Failed to save screenshot: {screenshot_path}")
 
             status = "Passed"
-        
+
         except TimeoutException:
             # Handle the exception and save a failure screenshot
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
