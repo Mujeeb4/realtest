@@ -52,10 +52,16 @@ class TestSubscription():
             # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Wait for iframe to be present and switch to it (This is the Stripe iframe)
-            WebDriverWait(self.driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]')))
+            # Wait for the iframe to be present and switch to it (This is the Stripe iframe)
+            stripe_iframe = WebDriverWait(self.driver, 30).until(
+                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
+            )
 
-            # Wait for the payment fields to be interactable
+            # Now switch to the nested iframe inside the Stripe iframe for the card number input
+            card_number_iframe = self.driver.find_element(By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]')
+            self.driver.switch_to.frame(card_number_iframe)
+
+            # Wait for the card number field to be interactable
             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.NAME, "cardnumber")))
 
             # Fill in the payment details
