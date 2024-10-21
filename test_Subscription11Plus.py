@@ -87,18 +87,24 @@ class TestSubscription():
             print("Form submitted successfully, 'Thank You' message found.")
 
             # Take a screenshot of the checkout/payment page
-            time.sleep(3)  # Increase wait time to ensure the page is fully loaded
+            time.sleep(5)  # Increase wait time to ensure the page is fully loaded
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = os.path.join("screenshots", f"plan_1_passed_{timestamp}.png")
-            self.driver.save_screenshot(screenshot_path)
+            screenshot_path = os.path.abspath(f"screenshots/plan_1_passed_{timestamp}.png")
+            if self.driver.save_screenshot(screenshot_path):
+                print(f"Screenshot saved successfully: {screenshot_path}")
+            else:
+                print(f"Failed to save screenshot: {screenshot_path}")
 
             status = "Passed"
         
         except TimeoutException:
             # Handle the exception and save a failure screenshot
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = os.path.join("screenshots", f"subscription_failed_{timestamp}.png")
-            self.driver.save_screenshot(screenshot_path)
+            screenshot_path = os.path.abspath(f"screenshots/subscription_failed_{timestamp}.png")
+            if self.driver.save_screenshot(screenshot_path):
+                print(f"Failure screenshot saved: {screenshot_path}")
+            else:
+                print(f"Failed to save failure screenshot: {screenshot_path}")
             print(f"Exception occurred: Timed out waiting for the Thank You message.")
 
         except NoSuchElementException:
