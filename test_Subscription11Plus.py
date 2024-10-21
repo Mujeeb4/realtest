@@ -49,6 +49,9 @@ class TestSubscription():
             self.driver.find_element(By.ID, "mepr_user_password1").send_keys("Hanzila*183258")
             self.driver.find_element(By.ID, "mepr_user_password_confirm1").send_keys("Hanzila*183258")
 
+            # Scroll down to make the iframe visible
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
             # Wait for iframe to be present and switch to it
             WebDriverWait(self.driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[contains(@name, 'stripe_checkout')]")))
 
@@ -61,8 +64,12 @@ class TestSubscription():
             self.driver.find_element(By.ID, "Field-expiryInput").send_keys("08 / 27")
             self.driver.switch_to.default_content()
 
+            # Scroll to the submit button to ensure it's in view
+            register_button = self.driver.find_element(By.CSS_SELECTOR, ".mepr-submit")
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+
             # Submit the form
-            self.driver.find_element(By.CSS_SELECTOR, ".mepr-submit").click()
+            register_button.click()
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
