@@ -85,11 +85,13 @@ class TestSubscription:
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]'))
             )
 
-            # Fill in the payment details using XPath
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.XPATH, '//input[@name="cardnumber"]')))
-            self.driver.find_element(By.XPATH, '//input[@name="cardnumber"]').send_keys("4242 4242 4242 4242")
-            self.driver.find_element(By.XPATH, '//input[@name="exp-date"]').send_keys("08 / 27")
-            self.driver.find_element(By.XPATH, '//input[@name="cvc"]').send_keys("885")
+            # Ensure card input is visible and enter details
+            card_number_field = WebDriverWait(self.driver, 30).until(
+                EC.presence_of_element_located((By.NAME, 'cardnumber'))
+            )
+            card_number_field.send_keys("4242 4242 4242 4242")
+            self.driver.find_element(By.NAME, 'exp-date').send_keys("08 / 27")
+            self.driver.find_element(By.NAME, 'cvc').send_keys("885")
 
             # Switch back to the main content (leave both iframes)
             self.driver.switch_to.default_content()
