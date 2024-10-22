@@ -13,6 +13,37 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
+class TestSubscription:
+
+    @pytest.fixture(autouse=True)
+    def setup_method(self):
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--disable-software-rasterizer")
+        chrome_options.add_argument("--headless")
+        self.driver = webdriver.Chrome(options=chrome_options)
+
+        # Ensure screenshots directory exists
+        if not os.path.exists("screenshots"):
+            os.makedirs("screenshots")
+
+        yield
+        # Save screenshot before quitting the driver
+        self.capture_screenshot("final_screenshot")
+        self.driver.quit()
+
+    def capture_screenshot(self, name):
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        screenshot_path = os.path.abspath(f"screenshots/{name}_{timestamp}.png")
+        if self.driver.save_screenshot(screenshot_path):
+            print(f"Screenshot saved successfully: {screenshot_path}")
+        else:
+            print(f"Failed to save screenshot: {screenshot_path}")
+        return screenshot_path
+
     def test_subscription(self):
         start_time = time.time()
         status = "Failed"
@@ -100,3 +131,18 @@ CSV_FILE_PATH = "test_results.csv"
             duration = round(end_time - start_time, 2)
             self._store_test_results("Subscription Test", status, screenshot_path, duration)
             print(f"Test completed in {duration} seconds.")
+
+    def _store_test_results(self, test_case, status, screenshot_path, duration):
+        # Prepare results for CSV
+        results = {
+            "Test Case": [test_case],
+            "Status": [status],
+            "Screenshot": [screenshot_path],
+            "Duration": [duration]
+        }
+
+        # Append results to the CSV file
+        if not os.path.exists(CSV_FILE_PATH):
+            pd.DataFrame(results).to_csv(CSV_FILE_PATH, index=False)
+        else:
+            pd.DataFrame(results).to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
