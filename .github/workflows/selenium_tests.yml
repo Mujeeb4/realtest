@@ -100,18 +100,16 @@ jobs:
       - name: Run Subscription 11 Plus tests
         run: pytest test_Subscription11Plus.py --tb=short --junitxml=results.xml
 
-      # Uploading artifacts
+      # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
         with:
           name: screenshots
           path: screenshots/*.png
 
+      # Upload test results
       - name: Upload test results
-        run: |
-          if [ -f test_results.csv ]; then
-            tail -n +2 results.xml >> test_results.csv
-          else
-            cp results.xml test_results.csv
-          fi
-        shell: bash
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test_results.csv
