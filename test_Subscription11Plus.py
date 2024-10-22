@@ -75,12 +75,12 @@ class TestSubscription:
             # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Wait for the outer Stripe iframe
-            outer_iframe = WebDriverWait(self.driver, 30).until(
-                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
+            # Switch to the outer Stripe iframe
+            stripe_iframe = WebDriverWait(self.driver, 30).until(
+                EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//iframe[contains(@name, "privateStripeFrame")]'))
             )
 
-            # Inside outer Stripe iframe, switch to nested iframe for card number input
+            # Switch to the nested iframe inside Stripe
             nested_iframe = WebDriverWait(self.driver, 30).until(
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]'))
             )
