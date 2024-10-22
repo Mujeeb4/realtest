@@ -22,8 +22,7 @@ class TestSubscription():
         chrome_options.add_argument("--window-size=1920,1080")
         chrome_options.add_argument("--disable-software-rasterizer")
         chrome_options.add_argument("--remote-debugging-port=9222")
-        chrome_options.add_argument("--headless")  # Optionally remove for testing locally
-
+        chrome_options.add_argument("--headless")  # Use headless for GitHub Actions
         self.driver = webdriver.Chrome(options=chrome_options)
 
         # Ensure screenshots directory exists
@@ -31,7 +30,18 @@ class TestSubscription():
             os.makedirs("screenshots")
 
     def teardown_method(self, method):
+        # Save screenshot before quitting the driver
+        self.capture_screenshot("final_screenshot")
         self.driver.quit()
+
+    def capture_screenshot(self, name):
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        screenshot_path = os.path.abspath(f"screenshots/{name}_{timestamp}.png")
+        if self.driver.save_screenshot(screenshot_path):
+            print(f"Screenshot saved successfully: {screenshot_path}")
+        else:
+            print(f"Failed to save screenshot: {screenshot_path}")
+        return screenshot_path
 
     def test_subscription(self):
         start_time = time.time()
@@ -45,6 +55,9 @@ class TestSubscription():
             # Navigate to subscription page
             self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/")
             print("Navigating to the subscription page")
+            
+            # Capture screenshot after loading the page
+            self.capture_screenshot("subscription_page_loaded")
 
             # Fill in the form fields
             self.driver.find_element(By.ID, "mepr-address-one").send_keys("Muslim road")
@@ -85,6 +98,9 @@ class TestSubscription():
             register_button = self.driver.find_element(By.CSS_SELECTOR, ".mepr-submit")
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
 
+            # Capture screenshot before form submission
+            self.capture_screenshot("before_form_submission")
+
             # Submit the form
             register_button.click()
 
@@ -95,25 +111,14 @@ class TestSubscription():
             assert "Thank you" in thank_you_text.text
             print("Form submitted successfully, 'Thank You' message found.")
 
-            # Take a screenshot of the page
-            time.sleep(5)
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = os.path.abspath(f"screenshots/plan_1_passed_{timestamp}.png")
-            if self.driver.save_screenshot(screenshot_path):
-                print(f"Screenshot saved successfully: {screenshot_path}")
-            else:
-                print(f"Failed to save screenshot: {screenshot_path}")
+            # Capture screenshot after successful submission
+            self.capture_screenshot("thank_you_page")
 
             status = "Passed"
 
         except TimeoutException:
             # Handle the exception and save a failure screenshot
-            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = os.path.abspath(f"screenshots/subscription_failed_{timestamp}.png")
-            if self.driver.save_screenshot(screenshot_path):
-                print(f"Failure screenshot saved: {screenshot_path}")
-            else:
-                print(f"Failed to save failure screenshot: {screenshot_path}")
+            screenshot_path = self.capture_screenshot("subscription_failed")
             print(f"Exception occurred: Timed out waiting for the Thank You message.")
 
         except NoSuchElementException:
