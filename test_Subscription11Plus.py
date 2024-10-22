@@ -72,19 +72,6 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password1"]').send_keys("Hanzila*183258")
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password_confirm1"]').send_keys("Hanzila*183258")
 
-            # Scroll down to make the iframe visible
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-            # Switch to the outer Stripe iframe
-            stripe_iframe = WebDriverWait(self.driver, 30).until(
-                EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//iframe[contains(@name, "privateStripeFrame")]'))
-            )
-
-            # Switch to the nested iframe inside Stripe for card number input
-            nested_iframe = WebDriverWait(self.driver, 30).until(
-                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]'))
-            )
-
             # Ensure card input is visible and enter details
             card_number_field = WebDriverWait(self.driver, 30).until(
                 EC.presence_of_element_located((By.NAME, 'cardnumber'))
@@ -92,9 +79,6 @@ class TestSubscription:
             card_number_field.send_keys("4242 4242 4242 4242")
             self.driver.find_element(By.NAME, 'exp-date').send_keys("08 / 27")
             self.driver.find_element(By.NAME, 'cvc').send_keys("885")
-
-            # Switch back to the main content (leave both iframes)
-            self.driver.switch_to.default_content()
 
             # Scroll to the submit button
             register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
