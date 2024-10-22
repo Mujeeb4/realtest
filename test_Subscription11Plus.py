@@ -16,13 +16,14 @@ CSV_FILE_PATH = "test_results.csv"
 class TestSubscription():
     def setup_method(self, method):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering
         chrome_options.add_argument("--window-size=1920,1080")  # Set window size
         chrome_options.add_argument("--disable-software-rasterizer")  # Avoid software rendering
         chrome_options.add_argument("--remote-debugging-port=9222")
+        chrome_options.add_argument("--headless")  # You may try without headless mode if needed
+
         self.driver = webdriver.Chrome(options=chrome_options)
 
         # Ensure screenshots directory exists
