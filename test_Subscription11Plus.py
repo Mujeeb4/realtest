@@ -3,7 +3,7 @@ import time
 import os
 import datetime
 import random
-import pandas as pd  # Ensure pandas is imported
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -80,7 +80,7 @@ class TestSubscription:
                 EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//iframe[contains(@name, "privateStripeFrame")]'))
             )
 
-            # Switch to the nested iframe inside Stripe
+            # Switch to the nested iframe inside Stripe for card number input
             nested_iframe = WebDriverWait(self.driver, 30).until(
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]'))
             )
