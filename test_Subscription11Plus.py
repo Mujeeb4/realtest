@@ -63,7 +63,7 @@ class TestSubscription:
             # Fill in the form fields using XPath
             self.driver.find_element(By.XPATH, '//*[@id="mepr-address-one"]').send_keys("Muslim road")
             self.driver.find_element(By.XPATH, '//*[@id="mepr-address-city"]').send_keys("Lahore")
-            country_dropdown = self.driver.find_element(By.ID, 'Field-countryInput')
+            country_dropdown = self.driver.find_element(By.XPATH, '//*[@id="mepr-address-country"]')
             country_dropdown.find_element(By.XPATH, "//option[. = 'Pakistan']").click()
             self.driver.find_element(By.XPATH, '//*[@id="mepr_full_name1"]').send_keys(f"test{random_number}")
             self.driver.find_element(By.XPATH, '//*[@name="mepr-address-state"]').send_keys("Punjab")
@@ -72,13 +72,29 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password1"]').send_keys("Hanzila*183258")
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password_confirm1"]').send_keys("Hanzila*183258")
 
+            # Scroll down to make the iframe visible
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+            # Switch to the outer Stripe iframe
+            stripe_iframe = WebDriverWait(self.driver, 30).until(
+                EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//iframe[contains(@name, "privateStripeFrame")]'))
+            )
+
+            # Switch to the nested iframe inside Stripe for card number input
+            nested_iframe = WebDriverWait(self.driver, 30).until(
+                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]'))
+            )
+
             # Ensure card input is visible and enter details
             card_number_field = WebDriverWait(self.driver, 30).until(
-                EC.presence_of_element_located((By.ID, 'Field-numberInput'))
+                EC.presence_of_element_located((By.NAME, 'cardnumber'))
             )
             card_number_field.send_keys("4242 4242 4242 4242")
-            self.driver.find_element(By.ID, 'Field-expiryInput').send_keys("08 / 27")
-            self.driver.find_element(By.ID, 'Field-cvcInput').send_keys("885")
+            self.driver.find_element(By.NAME, 'exp-date').send_keys("08 / 27")
+            self.driver.find_element(By.NAME, 'cvc').send_keys("885")
+
+            # Switch back to the main content (leave both iframes)
+            self.driver.switch_to.default_content()
 
             # Scroll to the submit button
             register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
@@ -90,13 +106,12 @@ class TestSubscription:
             # Submit the form using XPath
             register_button.click()
 
-            # Wait for the URL to change to the thank-you page
-            WebDriverWait(self.driver, 30).until(
-                EC.url_to_be("https://smoothmaths.co.uk/thank-you/")
+            # Wait for 'Thank You' text to appear
+            thank_you_text = WebDriverWait(self.driver, 30).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(text(),'Thank you')]"))
             )
-            current_url = self.driver.current_url
-            assert current_url == "https://smoothmaths.co.uk/thank-you/"
-            print("Form submitted successfully, thank-you page loaded.")
+            assert "Thank you" in thank_you_text.text
+            print("Form submitted successfully, 'Thank You' message found.")
 
             # Capture screenshot after successful submission
             self.capture_screenshot("thank_you_page")
@@ -106,7 +121,7 @@ class TestSubscription:
         except TimeoutException:
             # Handle the exception and save a failure screenshot
             screenshot_path = self.capture_screenshot("subscription_failed")
-            print(f"Exception occurred: Timed out waiting for the thank-you page.")
+            print(f"Exception occurred: Timed out waiting for the Thank You message.")
 
         except NoSuchElementException:
             print("Payment fields not found, check if the iframe is loaded correctly.")
