@@ -115,18 +115,3 @@ jobs:
             cp results.xml test_results.csv
           fi
         shell: bash
-
-      - name: Archive screenshots into a zip file
-        run: zip -r screenshots.zip screenshots/*.png
-
-      - name: Upload test results and screenshots
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: test_results.csv
-          
-      - name: Upload archived screenshots
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshots
-          path: screenshots.zip
