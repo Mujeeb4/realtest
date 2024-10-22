@@ -63,7 +63,7 @@ class TestSubscription:
             # Fill in the form fields using XPath
             self.driver.find_element(By.XPATH, '//*[@id="mepr-address-one"]').send_keys("Muslim road")
             self.driver.find_element(By.XPATH, '//*[@id="mepr-address-city"]').send_keys("Lahore")
-            country_dropdown = self.driver.find_element(By.XPATH, '//*[@id="mepr-address-country"]')
+            country_dropdown = self.driver.find_element(By.ID, 'Field-countryInput')
             country_dropdown.find_element(By.XPATH, "//option[. = 'Pakistan']").click()
             self.driver.find_element(By.XPATH, '//*[@id="mepr_full_name1"]').send_keys(f"test{random_number}")
             self.driver.find_element(By.XPATH, '//*[@name="mepr-address-state"]').send_keys("Punjab")
@@ -74,11 +74,11 @@ class TestSubscription:
 
             # Ensure card input is visible and enter details
             card_number_field = WebDriverWait(self.driver, 30).until(
-                EC.presence_of_element_located((By.NAME, 'cardnumber'))
+                EC.presence_of_element_located((By.ID, 'Field-numberInput'))
             )
             card_number_field.send_keys("4242 4242 4242 4242")
-            self.driver.find_element(By.NAME, 'exp-date').send_keys("08 / 27")
-            self.driver.find_element(By.NAME, 'cvc').send_keys("885")
+            self.driver.find_element(By.ID, 'Field-expiryInput').send_keys("08 / 27")
+            self.driver.find_element(By.ID, 'Field-cvcInput').send_keys("885")
 
             # Scroll to the submit button
             register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
@@ -90,12 +90,13 @@ class TestSubscription:
             # Submit the form using XPath
             register_button.click()
 
-            # Wait for 'Thank You' text to appear
-            thank_you_text = WebDriverWait(self.driver, 30).until(
-                EC.presence_of_element_located((By.XPATH, "//*[contains(text(),'Thank you')]"))
+            # Wait for the URL to change to the thank-you page
+            WebDriverWait(self.driver, 30).until(
+                EC.url_to_be("https://smoothmaths.co.uk/thank-you/")
             )
-            assert "Thank you" in thank_you_text.text
-            print("Form submitted successfully, 'Thank You' message found.")
+            current_url = self.driver.current_url
+            assert current_url == "https://smoothmaths.co.uk/thank-you/"
+            print("Form submitted successfully, thank-you page loaded.")
 
             # Capture screenshot after successful submission
             self.capture_screenshot("thank_you_page")
@@ -105,7 +106,7 @@ class TestSubscription:
         except TimeoutException:
             # Handle the exception and save a failure screenshot
             screenshot_path = self.capture_screenshot("subscription_failed")
-            print(f"Exception occurred: Timed out waiting for the Thank You message.")
+            print(f"Exception occurred: Timed out waiting for the thank-you page.")
 
         except NoSuchElementException:
             print("Payment fields not found, check if the iframe is loaded correctly.")
