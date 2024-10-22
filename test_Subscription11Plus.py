@@ -80,16 +80,11 @@ class TestSubscription:
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
             )
 
-            # Switch to the nested iframe inside Stripe for card number input
-            nested_iframe = WebDriverWait(self.driver, 30).until(
-                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[title="Secure card number input frame"]'))
-            )
-
-            # Fill in the payment details using XPath
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.XPATH, '//input[@name="cardnumber"]')))
-            self.driver.find_element(By.XPATH, '//input[@name="cardnumber"]').send_keys("4242 4242 4242 4242")
-            self.driver.find_element(By.XPATH, '//input[@name="exp-date"]').send_keys("08 / 27")
-            self.driver.find_element(By.XPATH, '//input[@name="cvc"]').send_keys("885")
+            # Fill in the payment details using CSS selectors from the screenshot
+            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-numberInput')))
+            self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4242 4242 4242 4242")
+            self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
+            self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
             # Switch back to the main content (leave both iframes)
             self.driver.switch_to.default_content()
