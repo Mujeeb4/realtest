@@ -97,12 +97,12 @@ class TestSubscription:
             register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
 
-            # Capture screenshot before form submission
-            self.capture_screenshot("before_form_submission")
-
             # Submit the form using XPath
             WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@class="mepr-submit"]')))
             register_button.click()
+
+            # Capture screenshot **after** form submission
+            self.capture_screenshot("after_form_submission")
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
