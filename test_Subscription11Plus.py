@@ -72,35 +72,33 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password1"]').send_keys("Hanzila*183258")
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password_confirm1"]').send_keys("Hanzila*183258")
 
-            # Fill in the additional fields using CSS selectors
-            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
-            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
-
             # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Switch to the Stripe iframe for card number input
-            stripe_iframes = self.driver.find_elements(By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]')
+            # Locate all iframes (Stripe creates multiple)
+            stripe_iframes = self.driver.find_elements(By.CSS_SELECTOR, 'iframe')
 
-            # Switch to the iframe that contains the card number field
-            self.driver.switch_to.frame(stripe_iframes[0])
-
-            # Fill in the card number
+            # Switch to card number iframe and fill in the card details
+            self.driver.switch_to.frame(stripe_iframes[0])  # Adjust index as needed based on iframe order
             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-numberInput')))
             self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4242 4242 4242 4242")
 
-            # Switch to the expiry date iframe and fill it
+            # Switch back to the main content before switching to expiry date iframe
             self.driver.switch_to.default_content()
-            self.driver.switch_to.frame(stripe_iframes[1])
+            self.driver.switch_to.frame(stripe_iframes[1])  # Adjust index if necessary
             self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
 
-            # Switch to the CVC iframe and fill it
+            # Switch back to main content before switching to CVC iframe
             self.driver.switch_to.default_content()
-            self.driver.switch_to.frame(stripe_iframes[2])
+            self.driver.switch_to.frame(stripe_iframes[2])  # Adjust index if necessary
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
-            # Switch back to the main content (leave both iframes)
+            # Switch back to the main content
             self.driver.switch_to.default_content()
+
+            # Now fill in the additional fields using CSS selectors after card details
+            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
+            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
 
             # Scroll to the submit button
             register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
