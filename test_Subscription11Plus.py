@@ -72,26 +72,20 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password1"]').send_keys("Hanzila*183258")
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password_confirm1"]').send_keys("Hanzila*183258")
 
-            # Scroll down to make the iframe visible
+                        # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-            # Locate all iframes (Stripe creates multiple)
-            stripe_iframes = self.driver.find_elements(By.CSS_SELECTOR, 'iframe')
+            # Switch to the Stripe iframe for card number input
+            stripe_iframe = WebDriverWait(self.driver, 30).until(
+                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
+            )
 
-            # Switch to card number iframe and fill in the card details
-            self.driver.switch_to.frame(stripe_iframes[0])  # Adjust index as needed based on iframe order
+            # Fill in the payment details using CSS selectors from the screenshot
             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-numberInput')))
             self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4242 4242 4242 4242")
-
-            # Switch back to the main content before switching to expiry date iframe
-            self.driver.switch_to.default_content()
-            self.driver.switch_to.frame(stripe_iframes[1])  # Adjust index if necessary
             self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
-
-            # Switch back to main content before switching to CVC iframe
-            self.driver.switch_to.default_content()
-            self.driver.switch_to.frame(stripe_iframes[2])  # Adjust index if necessary
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
+
 
             # Switch back to the main content
             self.driver.switch_to.default_content()
