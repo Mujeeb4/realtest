@@ -2,7 +2,7 @@ name: Selenium Tests
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Run every 1 hour
+    - cron: '0 * * * *'  
   push:
     branches:
       - main
