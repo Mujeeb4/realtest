@@ -80,14 +80,23 @@ class TestSubscription:
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
             # Switch to the Stripe iframe for card number input
-            stripe_iframe = WebDriverWait(self.driver, 30).until(
-                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))
-            )
+            stripe_iframes = self.driver.find_elements(By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]')
 
-            # Fill in the payment details using CSS selectors
+            # Switch to the iframe that contains the card number field
+            self.driver.switch_to.frame(stripe_iframes[0])
+
+            # Fill in the card number
             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-numberInput')))
             self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4242 4242 4242 4242")
+
+            # Switch to the expiry date iframe and fill it
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(stripe_iframes[1])
             self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
+
+            # Switch to the CVC iframe and fill it
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(stripe_iframes[2])
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
             # Switch back to the main content (leave both iframes)
