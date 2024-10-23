@@ -87,6 +87,17 @@ class TestSubscription:
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
 
+            # Scroll to the submit button
+            register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+
+            # Capture screenshot before form submission
+            self.capture_screenshot("before_form_submission")
+
+            # Submit the form using XPath
+            register_button.click()
+
+
             # Switch back to the main content
             self.driver.switch_to.default_content()
 
