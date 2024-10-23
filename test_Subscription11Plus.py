@@ -76,7 +76,7 @@ class TestSubscription:
             # Switch to the Expiry Date iframe and fill it
             self.driver.switch_to.default_content()
             self.driver.switch_to.frame(stripe_iframes[1])  # Expiry Date iframe
-            self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("0827")
+            self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 27")
 
             # Switch to the CVC iframe and fill it
             self.driver.switch_to.default_content()
