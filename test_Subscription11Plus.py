@@ -71,7 +71,7 @@ class TestSubscription:
             # Switch to the Stripe iframe for card number input
             stripe_iframes = self.driver.find_elements(By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]')
             self.driver.switch_to.frame(stripe_iframes[0])  # Card number iframe
-            self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4242 4242 4242 4242")
+            self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4649 5102 1304 1970")
 
             # Switch to the Expiry Date iframe and fill it
             self.driver.switch_to.default_content()
