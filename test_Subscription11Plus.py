@@ -72,7 +72,7 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password1"]').send_keys("Hanzila*183258")
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password_confirm1"]').send_keys("Hanzila*183258")
 
-                        # Scroll down to make the iframe visible
+            # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
             # Switch to the Stripe iframe for card number input
@@ -86,19 +86,7 @@ class TestSubscription:
             self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
-
-            # Scroll to the submit button
-            register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-
-            # Capture screenshot before form submission
-            self.capture_screenshot("before_form_submission")
-
-            # Submit the form using XPath
-            register_button.click()
-
-
-            # Switch back to the main content
+            # Switch back to the main content after card details are filled
             self.driver.switch_to.default_content()
 
             # Now fill in the additional fields using CSS selectors after card details
@@ -113,6 +101,7 @@ class TestSubscription:
             self.capture_screenshot("before_form_submission")
 
             # Submit the form using XPath
+            WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, '//*[@class="mepr-submit"]')))
             register_button.click()
 
             # Wait for 'Thank You' text to appear
