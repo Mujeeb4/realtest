@@ -90,8 +90,8 @@ class TestSubscription:
 
             # Switch to the CVC iframe and fill it
             self.driver.switch_to.default_content()
-            self.driver.switch_to.frame(stripe_iframes[2])  # Adjusted to target the correct CVC iframe
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-cvcInput')))  # Ensure the field is visible
+            self.driver.switch_to.frame(stripe_iframes[2])
+            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-cvcInput')))
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
             # Switch back to the main content after card details are filled
