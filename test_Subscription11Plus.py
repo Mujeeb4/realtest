@@ -105,17 +105,24 @@ class TestSubscription:
             # Capture screenshot after form submission
             self.capture_screenshot("after_form_submission")
 
-            # Wait for the "Full name" field to be clickable
+            # Check if fields are inside an iframe and switch to it (adjust iframe CSS selector as necessary)
+            iframe = WebDriverWait(self.driver, 20).until(
+               EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name="your_iframe_name_or_css_selector"]'))
+            )
+
+            # Now interact with the fields as before
             full_name_field = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkLegalNameInput'))
+               EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkLegalNameInput'))
             )
             full_name_field.send_keys(f"Test {random_number}")
 
-            # Wait for the "Phone number" field to be clickable
             phone_number_field = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput'))
+               EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput'))
             )
             phone_number_field.send_keys("03025265090")
+
+            # Don't forget to switch back to the main content after interacting with the iframe
+            self.driver.switch_to.default_content()
 
              # Capture screenshot after form submission
             self.capture_screenshot("Additional_fields_submission")
