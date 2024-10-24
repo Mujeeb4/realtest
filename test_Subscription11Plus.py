@@ -105,8 +105,17 @@ class TestSubscription:
             # Capture screenshot after form submission
             self.capture_screenshot("after_form_submission")
 
-            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
-            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
+            # Wait for the "Full name" field to be clickable
+            full_name_field = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkLegalNameInput'))
+            )
+            full_name_field.send_keys(f"Test {random_number}")
+
+            # Wait for the "Phone number" field to be clickable
+            phone_number_field = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput'))
+            )
+            phone_number_field.send_keys("03025265090")
 
              # Capture screenshot after form submission
             self.capture_screenshot("Additional_fields_submission")
