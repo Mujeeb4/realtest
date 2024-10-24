@@ -105,6 +105,13 @@ class TestSubscription:
 
             # Capture screenshot after form submission
             self.capture_screenshot("after_form_submission")
+
+            # Now fill in the additional fields using CSS selectors after card details
+            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
+            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
+
+            # Click the submit button using JavaScript executor if direct click doesn't work
+            self.driver.execute_script("arguments[0].click();", register_button)
             
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
