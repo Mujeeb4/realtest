@@ -82,7 +82,7 @@ class TestSubscription:
 
             # Fill in the payment details using CSS selectors from the screenshot
             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-numberInput')))
-            self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4242 4242 4242 4242")
+            self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4649 5102 1304 1970")
             self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
@@ -97,23 +97,9 @@ class TestSubscription:
             # Submit the form using XPath
             register_button.click()
 
-
-            # Switch back to the main content
-            self.driver.switch_to.default_content()
-
-            # Now fill in the additional fields using CSS selectors after card details
-            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
-            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
-
-            # Scroll to the submit button
-            register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-
-            # Capture screenshot before form submission
-            self.capture_screenshot("before_form_submission")
-
-            # Submit the form using XPath
-            register_button.click()
+            # Capture screenshot after form submission
+            self.capture_screenshot("After_form_submission")
+            
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
