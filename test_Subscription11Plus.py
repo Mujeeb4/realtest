@@ -83,16 +83,17 @@ class TestSubscription:
             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-numberInput')))
             self.driver.find_element(By.CSS_SELECTOR, '#Field-numberInput').send_keys("4649 5102 1304 1970")
 
-            # Switch to the expiry date iframe and fill it
+            # Switch to the expiry date iframe and fill it (using secondary CSS selector)
             self.driver.switch_to.default_content()
             self.driver.switch_to.frame(stripe_iframes[1])
-            self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
+            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input.p-Input-input')))
+            self.driver.find_element(By.CSS_SELECTOR, 'input.p-Input-input').send_keys("08 / 27")
 
-            # Switch to the CVC iframe and fill it
+            # Switch to the CVC iframe and fill it (using secondary CSS selector)
             self.driver.switch_to.default_content()
             self.driver.switch_to.frame(stripe_iframes[2])
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#Field-cvcInput')))
-            self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
+            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input.p-Input-input')))
+            self.driver.find_element(By.CSS_SELECTOR, 'input.p-Input-input').send_keys("885")
 
             # Switch back to the main content after card details are filled
             self.driver.switch_to.default_content()
