@@ -72,7 +72,7 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password1"]').send_keys("Hanzila*183258")
             self.driver.find_element(By.XPATH, '//*[@id="mepr_user_password_confirm1"]').send_keys("Hanzila*183258")
 
-                        # Scroll down to make the iframe visible
+            # Scroll down to make the iframe visible
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
             # Switch to the Stripe iframe for card number input
@@ -86,21 +86,26 @@ class TestSubscription:
             self.driver.find_element(By.CSS_SELECTOR, '#Field-expiryInput').send_keys("08 / 27")
             self.driver.find_element(By.CSS_SELECTOR, '#Field-cvcInput').send_keys("885")
 
+            # Switch back to the main content after card details are filled
+            self.driver.switch_to.default_content()
 
-            # Scroll to the submit button
-            register_button = self.driver.find_element(By.XPATH, '//*[@class="mepr-submit"]')
+            # Scroll to the submit button and ensure it is clickable
+            register_button = WebDriverWait(self.driver, 30).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.mepr-submit'))
+            )
+
+            # Ensure the element is interactable and visible
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
 
             # Capture screenshot before form submission
             self.capture_screenshot("before_form_submission")
 
-            # Submit the form using XPath
-            register_button.click()
+            # Click the submit button using JavaScript executor if direct click doesn't work
+            self.driver.execute_script("arguments[0].click();", register_button)
 
             # Capture screenshot after form submission
-            self.capture_screenshot("After_form_submission")
+            self.capture_screenshot("after_form_submission")
             
-
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
                 EC.presence_of_element_located((By.XPATH, "//*[contains(text(),'Thank you')]"))
