@@ -115,16 +115,19 @@ class TestSubscription:
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name="your_iframe_name_or_css_selector"]'))
             )
 
-            # Use secondary CSS selectors to target the full name field
+            # Use secondary CSS selectors to target the First and Last name field
             full_name_field = WebDriverWait(self.driver, 20).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.p-Input-input.p-FullNameField-inputPadding'))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.p-Input-input.p-FirstandlastnameNameField-inputPadding'))
             )
             full_name_field.send_keys(f"Test {random_number}")
 
-            # Use secondary CSS selectors to target the phone number field
+            # Scroll to the phone number field
             phone_number_field = WebDriverWait(self.driver, 20).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.p-Input-input.p-PhoneNumberInput-inputPadding'))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.p-Input-input.p-PhoneNumberInput-inputPadding'))
             )
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", phone_number_field)
+
+            # Wait for the phone number field to be clickable and enter the number
             phone_number_field.send_keys("03025265090")
 
             # Don't forget to switch back to the main content after interacting with the iframe
