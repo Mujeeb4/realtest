@@ -110,14 +110,20 @@ class TestSubscription:
                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name="your_iframe_name_or_css_selector"]'))
             )
 
-            # Now interact with the fields as before
+            # Check if fields are inside an iframe and switch to it (adjust iframe CSS selector as necessary)
+            iframe = WebDriverWait(self.driver, 20).until(
+                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name="your_iframe_name_or_css_selector"]'))
+            )
+
+            # Use secondary CSS selectors to target the full name field
             full_name_field = WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkLegalNameInput'))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.p-Input-input.p-FullNameField-inputPadding'))
             )
             full_name_field.send_keys(f"Test {random_number}")
 
+            # Use secondary CSS selectors to target the phone number field
             phone_number_field = WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput'))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'input.p-Input-input.p-PhoneNumberInput-inputPadding'))
             )
             phone_number_field.send_keys("03025265090")
 
