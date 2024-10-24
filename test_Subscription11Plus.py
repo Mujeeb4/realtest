@@ -105,24 +105,16 @@ class TestSubscription:
             # Capture screenshot after form submission
             self.capture_screenshot("after_form_submission")
 
-            # Check if additional fields appear and fill them in
-            try:
-                # Wait for the additional fields to load (phone number and legal name)
-                additional_fields_loaded = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, 'input#Field-linkLegalNameInput'))
-                )
-                # If additional fields are found, fill them out
-                if additional_fields_loaded:
-                    print("Additional fields appeared, filling them out...")
-                    self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
-                    self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
+            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkLegalNameInput').send_keys(f"Test {random_number}")  # Full name field
+            self.driver.find_element(By.CSS_SELECTOR, 'input#Field-linkMobilePhoneInput').send_keys("03025265090")  # Phone number field
 
-                    # Click the submit button again after filling the additional fields
-                    self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-                    self.driver.execute_script("arguments[0].click();", register_button)
+             # Capture screenshot after form submission
+            self.capture_screenshot("Additional_fields_submission")
 
-            except TimeoutException:
-                print("No additional fields appeared, proceeding without them.")
+            # Click the submit button again after filling the additional fields
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+            self.driver.execute_script("arguments[0].click();", register_button)
+
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
