@@ -9,7 +9,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
-# CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
 class TestSubscription:
