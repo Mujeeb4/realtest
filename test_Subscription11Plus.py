@@ -105,19 +105,11 @@ class TestSubscription:
                EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe"))  # Adjust this if needed
             )
 
-            # Wait for the phone number input field to be clickable, then click and send keys
-            phone_number_field = WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
-            )
-            phone_number_field.click()
-            phone_number_field.send_keys("0302 5265090")
-
-            # Wait for the full name input field to be clickable, then click and send keys
-            full_name_field = WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
-            )
-            full_name_field.click()
-            full_name_field.send_keys(f"Test {random_number}")
+            self.driver.switch_to.frame(4)
+            self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").click()
+            self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").send_keys("0302 5265090")
+            self.driver.find_element(By.ID, "Field-linkLegalNameInput").click()
+            self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Test {random_number}")
 
             # Don't forget to switch back to the main content after interacting with the iframe
             self.driver.switch_to.default_content()
