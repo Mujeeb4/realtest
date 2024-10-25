@@ -100,32 +100,11 @@ class TestSubscription:
             self.capture_screenshot("before_form_submission")
 
         
-            # Locate the phone number field
-            phone_number_field = WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
-            )
-
-            # Scroll to the phone number field
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", phone_number_field)
-
-            # Clear the phone number field first (optional, but good to do)
-            phone_number_field.clear()
-
-            # Send the phone number one digit at a time with a slight pause
-            for digit in "3025265090":
-                phone_number_field.send_keys(digit)
-                time.sleep(0.1)  # Simulate typing delay for better handling of masked input fields
-
-            # Locate and fill the full name field (using same approach, clearing it first)
-            full_name_field = WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
-            )
-
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", full_name_field)
-
-            # Clear and then fill the full name field
-            full_name_field.clear()
-            full_name_field.send_keys(f"Test {random_number}")
+            self.driver.switch_to.frame(4)
+            self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").click()
+            self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").send_keys("0302 5265090")
+            self.driver.find_element(By.ID, "Field-linkLegalNameInput").click()
+            self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Test {random_number}")
 
             # Don't forget to switch back to the main content after interacting with the iframe
             self.driver.switch_to.default_content()
@@ -136,6 +115,9 @@ class TestSubscription:
             # Click the submit button again after filling the additional fields
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
             self.driver.execute_script("arguments[0].click();", register_button)
+
+            # Capture screenshot after successful submission
+            self.capture_screenshot("Register_Button_Again")
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
