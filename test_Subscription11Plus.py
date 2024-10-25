@@ -63,7 +63,7 @@ class TestSubscription:
             self.driver.find_element(By.XPATH, '//*[@id="mepr-address-city"]').send_keys("Lahore")
             country_dropdown = self.driver.find_element(By.XPATH, '//*[@id="mepr-address-country"]')
             country_dropdown.find_element(By.XPATH, "//option[. = 'Pakistan']").click()
-            self.driver.find_element(By.XPATH, '//*[@id="mepr_full_name1"]').send_keys(f"test{random_number}")
+            self.driver.find_element(By.XPATH, '//*[@id="mepr_full_name1"]').send_keys(f"Hanzila{random_number}")
             self.driver.find_element(By.XPATH, '//*[@name="mepr-address-state"]').send_keys("Punjab")
             self.driver.find_element(By.XPATH, '//*[@id="mepr-address-zip"]').send_keys("590000")
             self.driver.find_element(By.XPATH, '//*[@id="user_email1"]').send_keys(random_email)
@@ -121,7 +121,7 @@ class TestSubscription:
                EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
             ).click()
 
-            self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Test {random_number}")
+            self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Hanzila {random_number}")
 
             # Switch back to the main content
             self.driver.switch_to.default_content()
