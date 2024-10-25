@@ -24,7 +24,7 @@ class TestSubscription:
         chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
 
-        # Ensure screenshots directory exists
+        # Ensure SS directory exists
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
 
