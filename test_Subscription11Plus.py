@@ -99,30 +99,17 @@ class TestSubscription:
             # Capture screenshot before form submission
             self.capture_screenshot("before_form_submission")
 
-            # Click the submit button using JavaScript executor if direct click doesn't work
-            self.driver.execute_script("arguments[0].click();", register_button)
-
-            # Capture screenshot after form submission
-            self.capture_screenshot("after_form_submission")
-
-            # Check if fields are inside an iframe and switch to it (adjust iframe CSS selector as necessary)
-            iframe = WebDriverWait(self.driver, 20).until(
-               EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name="your_iframe_name_or_css_selector"]'))
-            )
-
-            # Scroll to the phone number field
+        
+            # Locate and fill the phone number field
             phone_number_field = WebDriverWait(self.driver, 20).until(
-                EC.element_to_be_clickable((By.XPATH, "//input[contains(@class, 'p-PhoneNumberInput-inputPadding')]"))
+               EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
             )
-
             self.driver.execute_script("arguments[0].scrollIntoView(true);", phone_number_field)
-
-            # Wait for the phone number field to be clickable and enter the number
             phone_number_field.send_keys("3025265090")
 
-            # Use secondary CSS selectors to target the First and Last name field
+            # Locate and fill the full name field
             full_name_field = WebDriverWait(self.driver, 20).until(
-                EC.element_to_be_clickable((By.XPATH, "//input[contains(@class, 'p-FullNameField-inputPadding')]"))
+               EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
             )
             full_name_field.send_keys(f"Test {random_number}")
 
