@@ -100,17 +100,31 @@ class TestSubscription:
             self.capture_screenshot("before_form_submission")
 
         
-            # Locate and fill the phone number field
+            # Locate the phone number field
             phone_number_field = WebDriverWait(self.driver, 20).until(
                EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
             )
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", phone_number_field)
-            phone_number_field.send_keys("3025265090")
 
-            # Locate and fill the full name field
+            # Scroll to the phone number field
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", phone_number_field)
+
+            # Clear the phone number field first (optional, but good to do)
+            phone_number_field.clear()
+
+            # Send the phone number one digit at a time with a slight pause
+            for digit in "3025265090":
+                phone_number_field.send_keys(digit)
+                time.sleep(0.1)  # Simulate typing delay for better handling of masked input fields
+
+            # Locate and fill the full name field (using same approach, clearing it first)
             full_name_field = WebDriverWait(self.driver, 20).until(
                EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
             )
+
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", full_name_field)
+
+            # Clear and then fill the full name field
+            full_name_field.clear()
             full_name_field.send_keys(f"Test {random_number}")
 
             # Don't forget to switch back to the main content after interacting with the iframe
