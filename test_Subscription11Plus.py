@@ -101,18 +101,32 @@ class TestSubscription:
 
         
             # Wait for the iframe to be available and switch to it
-            WebDriverWait(self.driver, 20).until(
-               EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe"))  # Adjust this if needed
+            iframe_element = WebDriverWait(self.driver, 20).until(
+                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))  # Adjust if needed
             )
 
-            self.driver.switch_to.frame(4)
-            self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").click()
+            # Alternatively, if you know it's the 4th iframe, you can use the index
+            # WebDriverWait(self.driver, 20).until(
+            #     EC.frame_to_be_available_and_switch_to_it(4)  # Switch to iframe by index
+            # )
+
+            # Now within the iframe, proceed with finding elements
+            WebDriverWait(self.driver, 20).until(
+             EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
+            ).click()
+
             self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").send_keys("0302 5265090")
-            self.driver.find_element(By.ID, "Field-linkLegalNameInput").click()
+
+            #  Wait for and interact with the full name field
+            WebDriverWait(self.driver, 20).until(
+               EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
+            ).click()
+
             self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Test {random_number}")
 
-            # Don't forget to switch back to the main content after interacting with the iframe
+            # Switch back to the main content
             self.driver.switch_to.default_content()
+
 
             # Capture screenshot after form submission
             self.capture_screenshot("Additional_fields_submission")
