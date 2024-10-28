@@ -3,7 +3,6 @@ import time
 import os
 import random
 import pandas as pd
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -42,23 +41,6 @@ class TestSubscription:
         else:
             print(f"Failed to save screenshot: {screenshot_path}")
         return screenshot_path
-
-    def solve_hcaptcha(self, site_key, page_url, api_key):
-        # Submit hCaptcha challenge to 2Captcha
-        captcha_id = requests.post("http://2captcha.com/in.php", data={
-            'key': api_key,
-            'method': 'hcaptcha',
-            'sitekey': site_key,
-            'pageurl': page_url
-        }).text.split('|')[1]
-
-        # Poll for the solution
-        solution_url = f"http://2captcha.com/res.php?key={api_key}&action=get&id={captcha_id}"
-        for _ in range(30):
-            response = requests.get(solution_url).text
-            if 'CAPCHA_NOT_READY' not in response:
-                return response.split('|')[1]
-            time.sleep(5)
 
     def test_subscription(self):
         start_time = time.time()
@@ -116,34 +98,41 @@ class TestSubscription:
             # Capture screenshot before form submission
             self.capture_screenshot("before_form_submission")
 
-            # Click the register button
-            register_button.click()
+        
+            # Wait for the iframe to be available and switch to it
+            iframe_element = WebDriverWait(self.driver, 20).until(
+                EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))  # Adjust if needed
+            )
 
-            # Check if hCaptcha appears and solve it
-            try:
-                hcaptcha_frame = WebDriverWait(self.driver, 10).until(
-                    EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[src*="hcaptcha.com"]'))
-                )
-                print("hCaptcha detected. Attempting to solve...")
+            # Alternatively, if you know it's the 4th iframe, you can use the index
+            # WebDriverWait(self.driver, 20).until(
+            #     EC.frame_to_be_available_and_switch_to_it(4)  # Switch to iframe by index
+            # )
 
-                # Replace with your 2Captcha API key and the site key from the hCaptcha
-                api_key = "YOUR_2CAPTCHA_API_KEY"
-                site_key = "YOUR_HCAPTCHA_SITE_KEY"  # Obtain the site key from the hCaptcha iframe's data-sitekey attribute
-                page_url = "https://smoothmaths.co.uk/register/11-plus-subscription-plan/"
+            # Now within the iframe, proceed with finding elements
+            WebDriverWait(self.driver, 20).until(
+             EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
+            ).click()
 
-                hcaptcha_token = self.solve_hcaptcha(site_key, page_url, api_key)
+            self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").send_keys("0302 5265090")
 
-                # Fill hCaptcha response
-                self.driver.execute_script("document.getElementById('h-captcha-response').value = arguments[0];", hcaptcha_token)
+            #  Wait for and interact with the full name field
+            WebDriverWait(self.driver, 20).until(
+               EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
+            ).click()
 
-                # Switch back to the main content
-                self.driver.switch_to.default_content()
-                
-                # Click the register button again
-                register_button.click()
+            self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Hanzila {random_number}")
 
-            except TimeoutException:
-                print("No hCaptcha detected; proceeding without solving.")
+            # Switch back to the main content
+            self.driver.switch_to.default_content()
+
+
+            # Capture screenshot after form submission
+            self.capture_screenshot("Additional_fields_submission")
+
+            # Click the submit button again after filling the additional fields
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+            self.driver.execute_script("arguments[0].click();", register_button)
 
             # Capture screenshot after successful submission
             self.capture_screenshot("Register_Button_Again")
