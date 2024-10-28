@@ -23,9 +23,14 @@ class TestSubscription:
         chrome_options.add_argument("--disable-software-rasterizer")
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+
+        # Add the extension for CAPTCHA bypass
+        extension_path = "/MPBJKEJCLGFGADIEMMEFGEBJFOOFLFHL_3_1_0_0.crx"
+        chrome_options.add_extension(extension_path)
+
         self.driver = webdriver.Chrome(options=chrome_options)
 
-        # Ensure SS directory exists
+        # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
 
