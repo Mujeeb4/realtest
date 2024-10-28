@@ -15,14 +15,14 @@ class TestSubscription:
 
     @pytest.fixture(autouse=True)
     def setup_method(self):chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument("--window-size=1920,1080")
-chrome_options.add_argument("--disable-software-rasterizer")
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-self.driver = webdriver.Chrome(options=chrome_options)
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--disable-software-rasterizer")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        self.driver = webdriver.Chrome(options=chrome_options)
 
         # Ensure SS directory exists
         if not os.path.exists("screenshots"):
