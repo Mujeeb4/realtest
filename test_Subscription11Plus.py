@@ -127,15 +127,35 @@ class TestSubscription:
             self.driver.switch_to.default_content()
 
 
-            # Capture screenshot after form submission
-            self.capture_screenshot("Additional_fields_submission")
-
             # Click the submit button again after filling the additional fields
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
             self.driver.execute_script("arguments[0].click();", register_button)
 
             # Capture screenshot after successful submission
             self.capture_screenshot("Register_Button_Again")
+
+            try:
+            # Locate the "Close" button within the CAPTCHA modal
+            # Update this selector based on the actual HTML structure
+            close_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Close')]")
+
+            # Click the "Close" button
+            ActionChains(driver).move_to_element(close_button).click().perform()
+            print("Close button clicked.")
+
+            except Exception as e:
+            print("Close button not found:", e)
+
+           # Continue with further actions or close the browser
+           time.sleep(10)  # Adjust as needed
+
+           # Click the submit button again after filling the additional fields
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
+            self.driver.execute_script("arguments[0].click();", register_button)
+
+            # Capture screenshot after successful submission
+            self.capture_screenshot("Register_Button_Again")
+          
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
