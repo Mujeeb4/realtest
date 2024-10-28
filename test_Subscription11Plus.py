@@ -14,7 +14,8 @@ CSV_FILE_PATH = "test_results.csv"
 class TestSubscription:
 
     @pytest.fixture(autouse=True)
-    def setup_method(self):chrome_options = webdriver.ChromeOptions()
+    def setup_method(self):
+        chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
@@ -98,34 +99,27 @@ class TestSubscription:
             # Capture screenshot before form submission
             self.capture_screenshot("before_form_submission")
 
-        
             # Wait for the iframe to be available and switch to it
             iframe_element = WebDriverWait(self.driver, 20).until(
                 EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, 'iframe[name^="__privateStripeFrame"]'))  # Adjust if needed
             )
 
-            # Alternatively, if you know it's the 4th iframe, you can use the index
-            # WebDriverWait(self.driver, 20).until(
-            #     EC.frame_to_be_available_and_switch_to_it(4)  # Switch to iframe by index
-            # )
-
             # Now within the iframe, proceed with finding elements
             WebDriverWait(self.driver, 20).until(
-             EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
+                EC.element_to_be_clickable((By.ID, "Field-linkMobilePhoneInput"))
             ).click()
 
             self.driver.find_element(By.ID, "Field-linkMobilePhoneInput").send_keys("0302 5265090")
 
-            #  Wait for and interact with the full name field
+            # Wait for and interact with the full name field
             WebDriverWait(self.driver, 20).until(
-               EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
+                EC.element_to_be_clickable((By.ID, "Field-linkLegalNameInput"))
             ).click()
 
             self.driver.find_element(By.ID, "Field-linkLegalNameInput").send_keys(f"Hanzila {random_number}")
 
             # Switch back to the main content
             self.driver.switch_to.default_content()
-
 
             # Click the submit button again after filling the additional fields
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
@@ -135,26 +129,26 @@ class TestSubscription:
             self.capture_screenshot("Register_Button_Again")
 
             try:
-              # Locate the "Close" button within the CAPTCHA modal
-              close_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Close')]")
+                # Locate the "Close" button within the CAPTCHA modal
+                close_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'Close')]")
 
-              # Click the "Close" button
-              ActionChains(driver).move_to_element(close_button).click().perform()
-              print("Close button clicked.")
+                # Click the "Close" button
+                from selenium.webdriver.common.action_chains import ActionChains
+                ActionChains(self.driver).move_to_element(close_button).click().perform()
+                print("Close button clicked.")
 
             except Exception as e:
-               print("Close button not found:", e)
+                print("Close button not found:", e)
 
             # Continue with further actions or close the browser
             time.sleep(10)  # Adjust as needed
 
-           # Click the submit button again after filling the additional fields
+            # Click the submit button again after filling the additional fields
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
             self.driver.execute_script("arguments[0].click();", register_button)
 
             # Capture screenshot after successful submission
             self.capture_screenshot("Register_Button_Again")
-          
 
             # Wait for 'Thank You' text to appear
             thank_you_text = WebDriverWait(self.driver, 30).until(
