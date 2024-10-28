@@ -52,7 +52,7 @@ class TestSubscription:
             random_email = f"testing{random_number}@gmail.com"
 
             # Navigate to subscription page
-            self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/")
+            self.driver.get("https://smoothmaths.co.uk/register/11-plus-subscription-plan/?testnitro=1 ")
             print("Navigating to the subscription page")
             
             # Capture screenshot after loading the page
