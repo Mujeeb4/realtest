@@ -136,7 +136,6 @@ class TestSubscription:
 
             try:
             # Locate the "Close" button within the CAPTCHA modal
-            # Update this selector based on the actual HTML structure
             close_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Close')]")
 
             # Click the "Close" button
@@ -146,8 +145,8 @@ class TestSubscription:
             except Exception as e:
             print("Close button not found:", e)
 
-           # Continue with further actions or close the browser
-           time.sleep(10)  # Adjust as needed
+            # Continue with further actions or close the browser
+            time.sleep(10)  # Adjust as needed
 
            # Click the submit button again after filling the additional fields
             self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
