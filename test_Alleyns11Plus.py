@@ -62,6 +62,9 @@ class TestWordpressLogin:
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/alleyns-school/")
         
         try:
+            # Scroll down a bit after landing on the page
+            self.driver.execute_script("window.scrollBy(0, 300);")  # Adjust 300 to scroll by the desired amount
+            
             # Click on the "Answer Paper" link
             self.driver.find_element(By.LINK_TEXT, "Answer Paper").click()
             
