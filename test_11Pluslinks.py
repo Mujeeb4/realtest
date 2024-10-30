@@ -9,7 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 class Test11Plus():
     def setup_method(self, method):
-        # Set up Chrome options for headless execution (suitable for GitHub Actions)
+    
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
