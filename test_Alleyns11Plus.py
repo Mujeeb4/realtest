@@ -82,9 +82,8 @@ class TestWordpressLogin:
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_7"))
             )
             
-            # Take a screenshot of the displayed structure
-            screenshot_path = "screenshots/screenshot_of_structure.png"
-            self.driver.save_screenshot(screenshot_path)
+             # Capture screenshot before form submission
+            self.capture_screenshot("First_Paper")
             
             # Go back to the previous page
             self.driver.back()
@@ -104,9 +103,8 @@ class TestWordpressLogin:
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_7"))
             )
             
-            # Take a screenshot of the displayed structure
-            screenshot_path = "screenshots/screenshot_of_second_structure.png"
-            self.driver.save_screenshot(screenshot_path)
+             # Capture screenshot before form submission
+            self.capture_screenshot("Second_Paper")
             
             # Set test status to pass
             status = "Pass"
