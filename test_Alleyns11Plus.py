@@ -75,31 +75,31 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/alleyns-11-maths-sample-examination-paper-2-online-quiz"
         ]
         
-        # Updated XPaths for each answer paper
-        answer_paper_xpaths = [
-            "//a[@href='https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-answer-paper/']",
-            "//a[@href='https://smoothmaths.co.uk/11-plus-schools/alleyns-school/alleyns-11-maths-sample-examination-paper-2-answer-paper/']",
-            "//a[@href='https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-answer-paper-1-2023/']",
-            "//a[@href='https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-answer-paper-2-2023/']"
+        # CSS selectors for each answer paper
+        answer_paper_selectors = [
+            ".et_pb_blurb_4 .et_pb_module_header a",
+            ".et_pb_blurb_6 .et_pb_module_header a",
+            ".et_pb_blurb_8 .et_pb_module_header a",
+            ".et_pb_blurb_9 .et_pb_module_header a"
         ]
 
-        # Updated XPaths for each quiz
-        quiz_xpaths = [
-            "//a[@href='https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-online-quiz/']",
-            "//a[@href='https://smoothmaths.co.uk/11-plus-schools/alleyns-school/alleyns-11-maths-sample-examination-paper-2-online-quiz/']"
+        # CSS selectors for each quiz
+        quiz_selectors = [
+            ".et_pb_blurb_5 .et_pb_module_header a",
+            ".et_pb_blurb_7 .et_pb_module_header a"
         ]
 
         results = []
 
         # Test each Answer Paper link
-        for i, xpath in enumerate(answer_paper_xpaths):
+        for i, selector in enumerate(answer_paper_selectors):
             try:
-                # Scroll down further each time it goes back
+                # Scroll down gradually to make each answer paper link visible
                 self.driver.execute_script(f"window.scrollTo(0, {500 * (i + 1)});")
 
                 # Click on the answer paper link
                 answer_paper_link = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.XPATH, xpath))
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
                 )
                 answer_paper_link.click()
                 
@@ -140,14 +140,14 @@ class TestWordpressLogin:
             time.sleep(2)
 
         # Test each Quiz link
-        for i, xpath in enumerate(quiz_xpaths):
+        for i, selector in enumerate(quiz_selectors):
             try:
-                # Scroll down further each time it goes back
+                # Scroll down gradually to make each quiz link visible
                 self.driver.execute_script(f"window.scrollTo(0, {600 + (i * 300)});")
 
                 # Click on the quiz link
                 quiz_link = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.XPATH, xpath))
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
                 )
                 quiz_link.click()
                 
