@@ -14,29 +14,28 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up headless Chrome options for CI
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--disable-extensions")
-        chrome_options.add_argument("--disable-infobars")
-        chrome_options.add_argument("--disable-popup-blocking")
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_argument("--incognito")
-        self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_window_size(1296, 696)
-        self.driver.set_page_load_timeout(60)
-        self.driver.set_script_timeout(30)
-        self.driver.implicitly_wait(10)
+       chrome_options = Options()
+       chrome_options.add_argument("--headless")
+       chrome_options.add_argument("--no-sandbox")
+       chrome_options.add_argument("--disable-dev-shm-usage")
+       chrome_options.add_argument("--disable-gpu")
+       chrome_options.add_argument("--disable-extensions")
+       chrome_options.add_argument("--disable-infobars")
+       chrome_options.add_argument("--disable-popup-blocking")
+       chrome_options.add_argument("--disable-notifications")
+       chrome_options.add_argument("--incognito")
+       chrome_options.add_argument("window-size=1296,696")
+    
+       self.driver = webdriver.Chrome(options=chrome_options)
+       self.driver.set_page_load_timeout(60)
+       self.driver.set_script_timeout(30)
+       self.driver.implicitly_wait(10)
 
-        # Ensure screenshots directory exists
-        if not os.path.exists("screenshots"):
-            os.makedirs("screenshots")
+    # Ensure screenshots directory exists
+    if not os.path.exists("screenshots"):
+        os.makedirs("screenshots")
 
-        self.driver = webdriver.Chrome()
-        self.vars = {}
+    self.vars = {}
   
     def teardown_method(self, method):
         self.driver.quit()
@@ -50,15 +49,7 @@ class TestWordpressLogin:
         self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
         self.driver.find_element(By.ID, "wp-submit").click()
       
-class Test11Plus():
-    def setup_method(self, method):
-        self.driver = webdriver.Chrome()
-        self.vars = {}
   
-    def teardown_method(self, method):
-        self.driver.quit()
-  
-    def test_11Plus(self):
         # Open the target page
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/alleyns-school/")
         
