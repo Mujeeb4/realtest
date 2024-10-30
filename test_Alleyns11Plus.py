@@ -60,50 +60,74 @@ class TestWordpressLogin:
         # Open the target page
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/alleyns-school/")
         
-        try:
-            # Scroll down a bit after landing on the page
-            self.driver.execute_script("window.scrollBy(0, 300);")  # Adjust 300 to scroll by the desired amount
-            
-            # Click on the "Answer Paper" link
-            self.driver.find_element(By.LINK_TEXT, "Answer Paper").click()
-            
-            # Wait for the first answer paper link to appear and click it
-            first_answer_paper = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_4 .et_pb_blurb_container a"))
-            )
-            first_answer_paper.click()
-            
-            # Verify the current URL after clicking the answer paper link
-            expected_url = "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-answer-paper/"
-            WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_url))
-            
-            # Assert the URL is correct, if not, raise an AssertionError
-            assert self.driver.current_url == expected_url, f"Expected URL to be {expected_url}, but got {self.driver.current_url}"
-            
-            # Capture screenshot
-            screenshot_path = "screenshots/First_Paper.png"
-            self.driver.save_screenshot(screenshot_path)
-
-            # Set test status to pass
-            status = "Pass"
-
-        except Exception as e:
-            # Capture any errors
-            status = f"Fail: {str(e)}"
-            screenshot_path = "screenshots/error_screenshot.png"
-            self.driver.save_screenshot(screenshot_path)
+        # Expected URLs for each answer paper
+        expected_urls = [
+            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-2-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-2023-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-2-2023-answer-paper/"
+        ]
         
-        # Calculate duration and log results
+        # XPaths for each answer paper
+        answer_paper_xpaths = [
+            "(//div[contains(@class, 'et_pb_blurb') and .//a[contains(text(), 'Answer Paper')]])[1]//a",
+            "(//div[contains(@class, 'et_pb_blurb') and .//a[contains(text(), 'Answer Paper')]])[2]//a",
+            "(//div[contains(@class, 'et_pb_blurb') and .//a[contains(text(), 'Answer Paper')]])[3]//a",
+            "(//div[contains(@class, 'et_pb_blurb') and .//a[contains(text(), 'Answer Paper')]])[4]//a"
+        ]
+
+        results = []
+
+        for i, xpath in enumerate(answer_paper_xpaths):
+            try:
+                # Scroll down a bit to ensure visibility of the link
+                self.driver.execute_script("window.scrollBy(0, 300);")
+                
+                # Click on the answer paper link
+                answer_paper_link = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, xpath))
+                )
+                answer_paper_link.click()
+                
+                # Verify the current URL
+                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_urls[i]))
+                
+                # Assert the URL is correct, if not, raise an AssertionError
+                assert self.driver.current_url == expected_urls[i], f"Expected URL to be {expected_urls[i]}, but got {self.driver.current_url}"
+                
+                # Capture screenshot
+                screenshot_path = f"screenshots/Answer_Paper_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                
+                # Log success status
+                results.append({
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
+                    "Status": "Pass",
+                    "Expected URL": expected_urls[i],
+                    "Actual URL": self.driver.current_url,
+                    "Screenshot": screenshot_path
+                })
+
+            except Exception as e:
+                # Capture any errors and log failure status
+                screenshot_path = f"screenshots/error_Answer_Paper_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                
+                results.append({
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
+                    "Status": f"Fail: {str(e)}",
+                    "Expected URL": expected_urls[i],
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
+                    "Screenshot": screenshot_path
+                })
+
+            # Go back to the main page for the next link
+            self.driver.back()
+        
+        # Log results to CSV
+        self.append_to_csv(results)
+
+        # Calculate duration
         end_time = time.time()
         duration = end_time - start_time
-
-        # Prepare results for CSV
-        results = {
-            "Test Case": ["Test Login and 11+ Paper Navigation"],
-            "Status": [status],
-            "Duration (seconds)": [round(duration, 2)],
-            "Screenshot": [screenshot_path]
-        }
-
-        # Append results to the CSV file
-        self.append_to_csv(results)
+        print(f"Total test duration: {round(duration, 2)} seconds")
