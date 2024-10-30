@@ -97,6 +97,9 @@ jobs:
       - name: Run Registration Yearly Plan 5 link tests
         run: pytest test_YearlyPlan5.py --tb=short --junitxml=results.xml
 
+      - name: Run Alleyn answers tests
+        run: pytest test_Alleyns11Plus.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
