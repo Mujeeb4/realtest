@@ -47,12 +47,12 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
   
-    def scroll_to_element(self, selector):
+    def scroll_to_element(self, by, value):
         """Scroll incrementally until the element is in view and clickable."""
         for _ in range(10):  # Try scrolling up to 10 times
             try:
                 element = WebDriverWait(self.driver, 2).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                    EC.element_to_be_clickable((by, value))
                 )
                 return element
             except:
@@ -88,12 +88,12 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/alleyns-11-maths-sample-examination-paper-2-online-quiz"
         ]
         
-        # CSS selectors for each answer paper
-        answer_paper_selectors = [
-            ".et_pb_blurb_1 .et_pb_module_header a",  # Selector for the first answer paper
-            ".et_pb_blurb_4 .et_pb_module_header a",  # Selector for the second answer paper
-            ".et_pb_blurb_7 .et_pb_module_header a",  # Selector for the third answer paper
-            ".et_pb_blurb_9 .et_pb_module_header a"   # Updated selector for the fourth answer paper based on the screenshot
+        # Locators for each answer paper, using XPath for the fourth answer paper
+        answer_paper_locators = [
+            (By.CSS_SELECTOR, ".et_pb_blurb_1 .et_pb_module_header a"),  # First answer paper
+            (By.CSS_SELECTOR, ".et_pb_blurb_4 .et_pb_module_header a"),  # Second answer paper
+            (By.CSS_SELECTOR, ".et_pb_blurb_7 .et_pb_module_header a"),  # Third answer paper
+            (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
 
         # CSS selectors for each quiz
@@ -105,10 +105,10 @@ class TestWordpressLogin:
         results = []
 
         # Test each Answer Paper link
-        for i, selector in enumerate(answer_paper_selectors):
+        for i, (by, value) in enumerate(answer_paper_locators):
             try:
                 # Scroll to the element and get the clickable element
-                answer_paper_link = self.scroll_to_element(selector)
+                answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
                 # Verify the current URL
@@ -151,7 +151,7 @@ class TestWordpressLogin:
         for i, selector in enumerate(quiz_selectors):
             try:
                 # Scroll to each quiz link incrementally
-                quiz_link = self.scroll_to_element(selector)
+                quiz_link = self.scroll_to_element(By.CSS_SELECTOR, selector)
                 quiz_link.click()
                 
                 # Verify the current URL
