@@ -100,6 +100,9 @@ jobs:
       - name: Run Alleyn answers tests
         run: pytest test_Alleyns11Plus.py --tb=short --junitxml=results.xml
 
+      - name: Run Bancroft answers tests
+        run: pytest test_Bancroft11Plus.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
