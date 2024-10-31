@@ -80,7 +80,7 @@ class TestWordpressLogin:
             ".et_pb_blurb_1 .et_pb_module_header a",  # Selector for the first answer paper
             ".et_pb_blurb_4 .et_pb_module_header a",  # Selector for the second answer paper
             ".et_pb_blurb_7 .et_pb_module_header a",  # Selector for the third answer paper
-            ".et_pb_blurb_10 .et_pb_module_header a"  # Updated selector for the fourth answer paper
+            ".et_pb_blurb_10 .et_pb_module_header a"  # Selector for the fourth answer paper
         ]
 
         # CSS selectors for each quiz
@@ -94,8 +94,9 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, selector in enumerate(answer_paper_selectors):
             try:
-                # Scroll down gradually to make each answer paper link visible
-                self.driver.execute_script(f"window.scrollTo(0, {500 * (i + 1)});")
+                # Adjusted scroll amount for each specific answer paper
+                scroll_amount = {0: 500, 1: 800, 2: 1200, 3: 1600}.get(i, 500)
+                self.driver.execute_script(f"window.scrollTo(0, {scroll_amount});")
 
                 # Click on the answer paper link
                 answer_paper_link = WebDriverWait(self.driver, 10).until(
