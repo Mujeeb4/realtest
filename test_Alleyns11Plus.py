@@ -77,16 +77,16 @@ class TestWordpressLogin:
         
         # CSS selectors for each answer paper
         answer_paper_selectors = [
-            ".et_pb_blurb_4 .et_pb_module_header a",
-            ".et_pb_blurb_6 .et_pb_module_header a",
-            ".et_pb_blurb_8 .et_pb_module_header a",
-            ".et_pb_blurb_9 .et_pb_module_header a"
+            ".et_pb_blurb_1 .et_pb_module_header a",  # Selector for the first answer paper
+            ".et_pb_blurb_4 .et_pb_module_header a",  # Selector for the second answer paper
+            ".et_pb_blurb_7 .et_pb_module_header a",  # Selector for the third answer paper
+            ".et_pb_blurb_10 .et_pb_module_header a"  # Updated selector for the fourth answer paper
         ]
 
         # CSS selectors for each quiz
         quiz_selectors = [
-            ".et_pb_blurb_5 .et_pb_module_header a",
-            ".et_pb_blurb_7 .et_pb_module_header a"
+            ".et_pb_blurb_2 .et_pb_module_header a",  # Selector for the first quiz
+            ".et_pb_blurb_5 .et_pb_module_header a"   # Selector for the second quiz
         ]
 
         results = []
