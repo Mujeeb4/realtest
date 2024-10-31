@@ -47,6 +47,19 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
   
+    def scroll_to_element(self, selector):
+        """Scroll incrementally until the element is in view and clickable."""
+        for _ in range(10):  # Try scrolling up to 10 times
+            try:
+                element = WebDriverWait(self.driver, 2).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                )
+                return element
+            except:
+                # Incrementally scroll down by 200px if the element is not yet clickable
+                self.driver.execute_script("window.scrollBy(0, 200);")
+        raise Exception("Element not found or not clickable")
+
     def test_11Plus(self):
         # Start time to calculate test duration
         start_time = time.time()
@@ -80,7 +93,7 @@ class TestWordpressLogin:
             ".et_pb_blurb_1 .et_pb_module_header a",  # Selector for the first answer paper
             ".et_pb_blurb_4 .et_pb_module_header a",  # Selector for the second answer paper
             ".et_pb_blurb_7 .et_pb_module_header a",  # Selector for the third answer paper
-            ".et_pb_blurb_10 .et_pb_module_header a"  # Selector for the fourth answer paper
+            ".et_pb_blurb_9 .et_pb_module_header a"   # Updated selector for the fourth answer paper based on the screenshot
         ]
 
         # CSS selectors for each quiz
@@ -94,14 +107,8 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, selector in enumerate(answer_paper_selectors):
             try:
-                # Adjusted scroll amount for each specific answer paper
-                scroll_amount = {0: 500, 1: 800, 2: 1200, 3: 1600}.get(i, 500)
-                self.driver.execute_script(f"window.scrollTo(0, {scroll_amount});")
-
-                # Click on the answer paper link
-                answer_paper_link = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
-                )
+                # Scroll to the element and get the clickable element
+                answer_paper_link = self.scroll_to_element(selector)
                 answer_paper_link.click()
                 
                 # Verify the current URL
@@ -143,13 +150,8 @@ class TestWordpressLogin:
         # Test each Quiz link
         for i, selector in enumerate(quiz_selectors):
             try:
-                # Scroll down gradually to make each quiz link visible
-                self.driver.execute_script(f"window.scrollTo(0, {600 + (i * 300)});")
-
-                # Click on the quiz link
-                quiz_link = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
-                )
+                # Scroll to each quiz link incrementally
+                quiz_link = self.scroll_to_element(selector)
                 quiz_link.click()
                 
                 # Verify the current URL
