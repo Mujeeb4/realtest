@@ -96,14 +96,14 @@ class TestWordpressLogin:
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
 
-        # CSS selectors for each quiz
-        quiz_selectors = [
-            ".et_pb_blurb_2 .et_pb_module_header a",  # Selector for the first quiz
-            ".et_pb_blurb_5 .et_pb_module_header a"   # Selector for the second quiz
+        # Locators for each quiz, using XPath based on screenshots
+        quiz_locators = [
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"),  # First quiz
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   # Second quiz
         ]
 
         results = []
-        
+
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
