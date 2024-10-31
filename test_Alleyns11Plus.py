@@ -96,10 +96,10 @@ class TestWordpressLogin:
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
 
-        # Updated CSS selectors for each quiz based on screenshots
-        quiz_selectors = [
-            ".et_pb_blurb_3 .et_pb_module_header a",  # Corrected selector for the first quiz
-            ".et_pb_blurb_5 .et_pb_module_header a"   # Corrected selector for the second quiz
+        # XPath selectors for each quiz based on screenshots
+        quiz_locators = [
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"),  # First quiz
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   # Second quiz
         ]
 
         results = []
@@ -148,10 +148,10 @@ class TestWordpressLogin:
             time.sleep(2)
 
         # Test each Quiz link
-        for i, selector in enumerate(quiz_selectors):
+        for i, (by, value) in enumerate(quiz_locators):
             try:
                 # Scroll to each quiz link incrementally
-                quiz_link = self.scroll_to_element(By.CSS_SELECTOR, selector)
+                quiz_link = self.scroll_to_element(by, value)
                 quiz_link.click()
                 
                 # Verify the current URL
