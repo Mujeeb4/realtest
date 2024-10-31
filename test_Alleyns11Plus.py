@@ -96,10 +96,10 @@ class TestWordpressLogin:
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
 
-        # CSS selectors for each quiz
+        # Updated CSS selectors for each quiz based on screenshots
         quiz_selectors = [
-            ".et_pb_blurb_2 .et_pb_module_header a",  # Selector for the first quiz
-            ".et_pb_blurb_5 .et_pb_module_header a"   # Selector for the second quiz
+            ".et_pb_blurb_3 .et_pb_module_header a",  # Corrected selector for the first quiz
+            ".et_pb_blurb_5 .et_pb_module_header a"   # Corrected selector for the second quiz
         ]
 
         results = []
