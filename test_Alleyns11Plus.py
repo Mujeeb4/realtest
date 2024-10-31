@@ -111,6 +111,10 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
+                # Scroll down slightly after clicking
+                self.driver.execute_script("window.scrollBy(0, 500);")
+                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
+                
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
                 
@@ -155,6 +159,10 @@ class TestWordpressLogin:
                 
                 # Use JavaScript to click the quiz link
                 self.driver.execute_script("arguments[0].click();", quiz_link)
+                
+                # Scroll down slightly after clicking the quiz link
+                self.driver.execute_script("window.scrollBy(0, 500);")
+                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
                 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
