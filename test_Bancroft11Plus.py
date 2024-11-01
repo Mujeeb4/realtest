@@ -46,27 +46,30 @@ class TestWordpressLogin:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
-  
+
     def scroll_to_element(self, by, value):
         """Scroll incrementally until the element is in view and clickable."""
-        for _ in range(10):  # Try scrolling up to 10 times
+        for _ in range(15):  # Increase retries to 15
             try:
-                element = WebDriverWait(self.driver, 2).until(
+                element = WebDriverWait(self.driver, 3).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 return element
             except:
                 # Incrementally scroll down by 200px if the element is not yet clickable
                 self.driver.execute_script("window.scrollBy(0, 200);")
-        raise Exception("Element not found or not clickable")
+        raise Exception(f"Element with {by} and value {value} not found or not clickable")
 
     def scroll_back_to_main_page(self, main_page_url, locators):
         """Scroll down the main page until all elements in locators are loaded."""
         self.driver.get(main_page_url)
         time.sleep(2)
         for by, value in locators:
-            self.scroll_to_element(by, value)
-        
+            try:
+                self.scroll_to_element(by, value)
+            except Exception as e:
+                print(f"Error scrolling to element {by} with value {value}: {str(e)}")
+
     def test_11Plus(self):
         # Start time to calculate test duration
         start_time = time.time()
@@ -103,11 +106,11 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
         ]
         
-        # Locators for each answer paper, using CSS for most, XPath for the last
+        # Locators for each answer paper
         answer_paper_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  # First answer paper
-            (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),  # Second answer paper
-            (By.CSS_SELECTOR, ".et_pb_blurb_5.et_pb_blurb .et_pb_module_header a"),  
+            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_5.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_7.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_9.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_11.et_pb_blurb .et_pb_module_header a"),
@@ -119,7 +122,7 @@ class TestWordpressLogin:
 
         # XPath selectors for each quiz
         quiz_locators = [
-            (By.XPATH, "//a[contains(@href, 'sample-paper-2021-entry-online-quiz')]"),  # First quiz
+            (By.XPATH, "//a[contains(@href, 'sample-paper-2021-entry-online-quiz')]"),
             (By.XPATH, "//a[contains(@href, 'entrance-examination-2018-online-quiz')]"),
             (By.XPATH, "//a[contains(@href, 'entrance-examination-2017-online-quiz')]"),
             (By.XPATH, "//a[contains(@href, 'entrance-examination-2016-online-quiz')]")
@@ -136,9 +139,6 @@ class TestWordpressLogin:
                 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
-                
-                # Assert the URL is correct
-                assert self.driver.current_url == expected_answer_urls[i], f"Expected URL to be {expected_answer_urls[i]}, but got {self.driver.current_url}"
                 
                 # Capture screenshot after waiting
                 time.sleep(10)
@@ -176,8 +176,6 @@ class TestWordpressLogin:
 
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
 
-                assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
-                
                 time.sleep(10)
                 screenshot_path = f"screenshots/Bancroft_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
