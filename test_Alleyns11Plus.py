@@ -206,4 +206,4 @@ class TestWordpressLogin:
         # Calculate duration
         end_time = time.time()
         duration = end_time - start_time
-        print(f"Total test duration: {round(duration, 2)} seconds")
+        print(f"Total test duration: {round(duration, 2)} seconds")
