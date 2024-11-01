@@ -13,18 +13,11 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up headless Chrome options for CI
+        # Set up headless Chrome options
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--disable-extensions")
-        chrome_options.add_argument("--disable-infobars")
-        chrome_options.add_argument("--disable-popup-blocking")
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_argument("--incognito")
-        chrome_options.add_argument("window-size=1296,696")
         
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.set_page_load_timeout(60)
@@ -56,7 +49,6 @@ class TestWordpressLogin:
                 )
                 return element
             except:
-                # Incrementally scroll down by 200px if the element is not yet clickable
                 self.driver.execute_script("window.scrollBy(0, 200);")
         raise Exception(f"Element with {by} and value {value} not found or not clickable")
 
@@ -71,7 +63,6 @@ class TestWordpressLogin:
                 print(f"Error scrolling to element {by} with value {value}: {str(e)}")
 
     def test_11Plus(self):
-        # Start time to calculate test duration
         start_time = time.time()
 
         # Log in to WordPress
@@ -84,7 +75,6 @@ class TestWordpressLogin:
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/"
         self.driver.get(main_page_url)
         
-        # Expected URLs for each answer paper
         expected_answer_urls = [
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-maths-sample-entrance-answer-paper-2024/",
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-sample-maths-paper-2023-answer-paper/",
@@ -98,7 +88,6 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroft-s-school-sample-11-plus-maths-paper-2-2016-answers-paper"
         ]
         
-        # Expected URLs for each quiz
         expected_quiz_urls = [
             "https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2",
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz",
@@ -106,7 +95,6 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
         ]
         
-        # Locators for each answer paper
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
@@ -120,7 +108,6 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # XPath selectors for each quiz
         quiz_locators = [
             (By.XPATH, "//a[contains(@href, 'sample-paper-2021-entry-online-quiz')]"),
             (By.XPATH, "//a[contains(@href, 'entrance-examination-2018-online-quiz')]"),
@@ -133,14 +120,10 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                # Scroll to the element and get the clickable element
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
-                # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
-                
-                # Capture screenshot after waiting
                 time.sleep(10)
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
@@ -165,7 +148,6 @@ class TestWordpressLogin:
                     "Screenshot": screenshot_path
                 })
 
-            # Scroll back on the main page
             self.scroll_back_to_main_page(main_page_url, answer_paper_locators + quiz_locators)
 
         # Test each Quiz link
@@ -200,7 +182,6 @@ class TestWordpressLogin:
                     "Screenshot": screenshot_path
                 })
 
-            # Scroll back on the main page
             self.scroll_back_to_main_page(main_page_url, answer_paper_locators + quiz_locators)
         
         self.append_to_csv(results)
