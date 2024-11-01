@@ -90,8 +90,8 @@ class TestWordpressLogin:
         
         # Locators for each answer paper, using XPath for the fourth answer paper
         answer_paper_locators = [
-            (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-1')]"),  # First answer paper
-            (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2')]"),  # Second answer paper
+            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  # First answer paper
+            (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"),  # Second answer paper
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-1-2023')]"),  # Third answer paper
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
