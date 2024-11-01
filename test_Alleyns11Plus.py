@@ -81,6 +81,12 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-1-2023",
             "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-2-2023"
         ]
+
+        # Expected URLs for each quiz
+        expected_quiz_urls = [
+            "https://smoothmaths.co.uk/allyens-11-maths-sample-examination-paper-1-online-quiz",
+            "https://smoothmaths.co.uk/alleyns-11-maths-sample-examination-paper-2-online-quiz"
+        ]
         
         # Locators for each answer paper, using XPath for the fourth answer paper
         answer_paper_locators = [
@@ -88,6 +94,12 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_4 .et_pb_module_header a"),  # Second answer paper
             (By.CSS_SELECTOR, ".et_pb_blurb_7 .et_pb_module_header a"),  # Third answer paper
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
+        ]
+
+         # XPath selectors for each quiz based on screenshots
+        quiz_locators = [
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"),  # First quiz
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   # Second quiz
         ]
 
         results = []
@@ -100,7 +112,7 @@ class TestWordpressLogin:
                 answer_paper_link.click()
                 
                 # Scroll down slightly after clicking
-                self.driver.execute_script("window.scrollBy(0, 500);")
+                self.driver.execute_script("window.scrollBy(0, 200);")
                 time.sleep(1)  # Brief pause to allow the page to settle after scrolling
 
                 # Verify the current URL
@@ -123,10 +135,6 @@ class TestWordpressLogin:
                     "Screenshot": screenshot_path
                 })
 
-            except Exception as e:
-                # Capture any errors and log failure status
-                screenshot_path = f"screenshots/error_Answer_Paper_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
                     "Test Case": f"Answer Paper {i+1} Link Verification",
