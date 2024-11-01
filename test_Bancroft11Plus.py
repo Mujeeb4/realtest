@@ -60,6 +60,13 @@ class TestWordpressLogin:
                 self.driver.execute_script("window.scrollBy(0, 200);")
         raise Exception("Element not found or not clickable")
 
+    def scroll_back_to_main_page(self, main_page_url, locators):
+        """Scroll down the main page until all elements in locators are loaded."""
+        self.driver.get(main_page_url)
+        time.sleep(2)
+        for by, value in locators:
+            self.scroll_to_element(by, value)
+        
     def test_11Plus(self):
         # Start time to calculate test duration
         start_time = time.time()
@@ -96,7 +103,7 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
         ]
         
-        # Locators for each answer paper, using XPath for the fourth answer paper
+        # Locators for each answer paper, using CSS for most, XPath for the last
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  # First answer paper
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),  # Second answer paper
@@ -110,7 +117,7 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # XPath selectors for each quiz based on screenshots
+        # XPath selectors for each quiz
         quiz_locators = [
             (By.XPATH, "//a[contains(@href, 'sample-paper-2021-entry-online-quiz')]"),  # First quiz
             (By.XPATH, "//a[contains(@href, 'entrance-examination-2018-online-quiz')]"),
@@ -127,21 +134,17 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
-                # Scroll down slightly after clicking
-                self.driver.execute_script("window.scrollBy(0, 500);")
-                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
-                
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
                 
-                # Assert the URL is correct, if not, raise an AssertionError
+                # Assert the URL is correct
                 assert self.driver.current_url == expected_answer_urls[i], f"Expected URL to be {expected_answer_urls[i]}, but got {self.driver.current_url}"
                 
-                # Capture screenshot
-                screenshot_path = f"screenshots/Answer_Paper_{i+1}.png"
+                # Capture screenshot after waiting
+                time.sleep(10)
+                screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
-                # Log success status
                 results.append({
                     "Test Case": f"Answer Paper {i+1} Link Verification",
                     "Status": "Pass",
@@ -151,8 +154,7 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
-                # Capture any errors and log failure status
-                screenshot_path = f"screenshots/error_Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Bancroft_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
@@ -163,34 +165,23 @@ class TestWordpressLogin:
                     "Screenshot": screenshot_path
                 })
 
-            # Go back to the main page for the next link
-            self.driver.get(main_page_url)
-            time.sleep(2)
+            # Scroll back on the main page
+            self.scroll_back_to_main_page(main_page_url, answer_paper_locators + quiz_locators)
 
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                # Scroll to each quiz link incrementally
                 quiz_link = self.scroll_to_element(by, value)
-                
-                # Use JavaScript to click the quiz link
                 self.driver.execute_script("arguments[0].click();", quiz_link)
-                
-                # Scroll down slightly after clicking the quiz link
-                self.driver.execute_script("window.scrollBy(0, 500);")
-                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
-                
-                # Verify the current URL
+
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
-                
-                # Assert the URL is correct, if not, raise an AssertionError
+
                 assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
                 
-                # Capture screenshot
-                screenshot_path = f"screenshots/Quiz_{i+1}.png"
+                time.sleep(10)
+                screenshot_path = f"screenshots/Bancroft_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
-                # Log success status
                 results.append({
                     "Test Case": f"Quiz {i+1} Link Verification",
                     "Status": "Pass",
@@ -200,8 +191,7 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
-                # Capture any errors and log failure status
-                screenshot_path = f"screenshots/error_Quiz_{i+1}.png"
+                screenshot_path = f"screenshots/Bancroft_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
@@ -212,14 +202,11 @@ class TestWordpressLogin:
                     "Screenshot": screenshot_path
                 })
 
-            # Go back to the main page for the next link
-            self.driver.get(main_page_url)
-            time.sleep(2)
+            # Scroll back on the main page
+            self.scroll_back_to_main_page(main_page_url, answer_paper_locators + quiz_locators)
         
-        # Log results to CSV
         self.append_to_csv(results)
 
-        # Calculate duration
         end_time = time.time()
         duration = end_time - start_time
         print(f"Total test duration: {round(duration, 2)} seconds")
