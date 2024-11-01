@@ -81,7 +81,7 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-1-2023",
             "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-2-2023"
         ]
-
+        
         # Expected URLs for each quiz
         expected_quiz_urls = [
             "https://smoothmaths.co.uk/allyens-11-maths-sample-examination-paper-1-online-quiz",
@@ -96,7 +96,7 @@ class TestWordpressLogin:
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
 
-         # XPath selectors for each quiz based on screenshots
+        # XPath selectors for each quiz based on screenshots
         quiz_locators = [
             (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"),  # First quiz
             (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   # Second quiz
@@ -112,7 +112,7 @@ class TestWordpressLogin:
                 answer_paper_link.click()
                 
                 # Scroll down slightly after clicking
-                self.driver.execute_script("window.scrollBy(0, 200);")
+                self.driver.execute_script("window.scrollBy(0, 500);")
                 time.sleep(1)  # Brief pause to allow the page to settle after scrolling
 
                 # Verify the current URL
@@ -135,6 +135,10 @@ class TestWordpressLogin:
                     "Screenshot": screenshot_path
                 })
 
+            except Exception as e:
+                # Capture any errors and log failure status
+                screenshot_path = f"screenshots/error_Answer_Paper_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
                     "Test Case": f"Answer Paper {i+1} Link Verification",
@@ -148,6 +152,56 @@ class TestWordpressLogin:
             self.driver.get(main_page_url)
             time.sleep(2)
 
+        # Test each Quiz link
+        for i, (by, value) in enumerate(quiz_locators):
+            try:
+                # Scroll to each quiz link incrementally
+                quiz_link = self.scroll_to_element(by, value)
+                
+                # Use JavaScript to click the quiz link
+                self.driver.execute_script("arguments[0].click();", quiz_link)
+                
+                # Scroll down slightly after clicking the quiz link
+                self.driver.execute_script("window.scrollBy(0, 200);")
+                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
+                
+                # Verify the current URL
+                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
+                
+                # Assert the URL is correct, if not, raise an AssertionError
+                assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
+                
+                # Wait 10 seconds before taking a screenshot
+                time.sleep(10)
+                screenshot_path = f"screenshots/Quiz_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                
+                # Log success status
+                results.append({
+                    "Test Case": f"Quiz {i+1} Link Verification",
+                    "Status": "Pass",
+                    "Expected URL": expected_quiz_urls[i],
+                    "Actual URL": self.driver.current_url,
+                    "Screenshot": screenshot_path
+                })
+
+            except Exception as e:
+                # Capture any errors and log failure status
+                screenshot_path = f"screenshots/error_Quiz_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                
+                results.append({
+                    "Test Case": f"Quiz {i+1} Link Verification",
+                    "Status": f"Fail: {str(e)}",
+                    "Expected URL": expected_quiz_urls[i],
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
+                    "Screenshot": screenshot_path
+                })
+
+            # Go back to the main page for the next link
+            self.driver.get(main_page_url)
+            time.sleep(2)
+        
         # Log results to CSV
         self.append_to_csv(results)
 
