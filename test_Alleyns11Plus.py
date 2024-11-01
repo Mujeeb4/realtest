@@ -90,9 +90,9 @@ class TestWordpressLogin:
         
         # Locators for each answer paper, using XPath for the fourth answer paper
         answer_paper_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_1 .et_pb_module_header a"),  # First answer paper
-            (By.CSS_SELECTOR, ".et_pb_blurb_4 .et_pb_module_header a"),  # Second answer paper
-            (By.CSS_SELECTOR, ".et_pb_blurb_7 .et_pb_module_header a"),  # Third answer paper
+            (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-1')]"),  # First answer paper
+            (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2')]"),  # Second answer paper
+            (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-1-2023')]"),  # Third answer paper
             (By.XPATH, "//a[contains(@href, 'sample-examination-answer-paper-2-2023')]")  # Fourth answer paper using XPath
         ]
 
@@ -111,9 +111,6 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
-                # Scroll down slightly after clicking
-                self.driver.execute_script("window.scrollBy(0, 50);")
-                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
@@ -123,7 +120,7 @@ class TestWordpressLogin:
                 
                 # Wait 10 seconds before taking a screenshot
                 time.sleep(10)
-                screenshot_path = f"screenshots/Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Alleyns_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 # Log success status
@@ -137,7 +134,7 @@ class TestWordpressLogin:
 
             except Exception as e:
                 # Capture any errors and log failure status
-                screenshot_path = f"screenshots/error_Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Alleyns_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
@@ -172,7 +169,7 @@ class TestWordpressLogin:
                 assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
                 
                 # Wait 10 seconds before taking a screenshot
-                time.sleep(10)
+                time.sleep(20)
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -187,7 +184,7 @@ class TestWordpressLogin:
 
             except Exception as e:
                 # Capture any errors and log failure status
-                screenshot_path = f"screenshots/error_Quiz_{i+1}.png"
+                screenshot_path = f"screenshots/Alleyns_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
