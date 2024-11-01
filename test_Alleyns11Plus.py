@@ -112,7 +112,7 @@ class TestWordpressLogin:
                 answer_paper_link.click()
                 
                 # Scroll down slightly after clicking
-                self.driver.execute_script("window.scrollBy(0, 200);")
+                self.driver.execute_script("window.scrollBy(0, 50);")
                 time.sleep(1)  # Brief pause to allow the page to settle after scrolling
 
                 # Verify the current URL
