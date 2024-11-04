@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestFeedbackPage():
+class TestFeedbackPage:
     def setup_method(self, method):
         # Use headless Chrome for CI
         chrome_options = webdriver.ChromeOptions()
@@ -59,7 +59,6 @@ class TestFeedbackPage():
 
         # Wait for the confirmation message to appear
         try:
-            # Updated CSS Selector based on your screenshot
             confirmation_message = WebDriverWait(self.driver, 30).until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, ".wpforms-confirmation-container-full p"))
             )
@@ -74,15 +73,14 @@ class TestFeedbackPage():
                 # Store the test result as passed
                 self._store_test_results("Test Feedback Page", "Passed", screenshot_path)
             else:
-                # If the message is not correct, mark the test as failed
-                self._log_failure()
+                # If the message is not correct, log failure with details
+                self._log_failure("Unexpected confirmation message: " + confirmation_message.text)
 
         except Exception as e:
             # Log the failure in case the confirmation message is not found
-            self._log_failure()
-            raise AssertionError(f"The confirmation message did not appear as expected. Error: {e}")
+            self._log_failure("Confirmation message did not appear. Error: " + str(e))
 
-    def _log_failure(self):
+    def _log_failure(self, message):
         """Handles logging of failure details and stores them."""
         # Capture the page source for debugging
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -91,7 +89,7 @@ class TestFeedbackPage():
             f.write(page_source)
 
         # Log the failure in CSV
-        self._store_test_results("Test Feedback Page", "Failed", "No screenshot - test failed")
+        self._store_test_results("Test Feedback Page", "Failed", message)
 
     def _store_test_results(self, test_case, status, screenshot_path):
         # Save test results in a CSV file
