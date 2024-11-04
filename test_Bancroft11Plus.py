@@ -44,7 +44,7 @@ class TestWordpressLogin:
         """Scroll incrementally until the element is in view and clickable."""
         for _ in range(15):  # Increase retries to 15
             try:
-                element = WebDriverWait(self.driver, 3).until(
+                element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 return element
@@ -123,8 +123,8 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
-                time.sleep(10)
+                WebDriverWait(self.driver, 20).until(EC.url_to_be(expected_answer_urls[i]))
+                time.sleep(2)
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -156,9 +156,9 @@ class TestWordpressLogin:
                 quiz_link = self.scroll_to_element(by, value)
                 self.driver.execute_script("arguments[0].click();", quiz_link)
 
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
+                WebDriverWait(self.driver, 20).until(EC.url_to_be(expected_quiz_urls[i]))
 
-                time.sleep(10)
+                time.sleep(2)
                 screenshot_path = f"screenshots/Bancroft_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
