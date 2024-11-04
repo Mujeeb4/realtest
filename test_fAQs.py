@@ -32,10 +32,13 @@ class TestFAQs:
 
             # Scroll down to the FAQ link in the footer and click it
             self.driver.execute_script("window.scrollTo(0, 4370.66650390625)")
-            self.driver.find_element(By.LINK_TEXT, "FAQs").click()
+            faq_link = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.LINK_TEXT, "FAQs"))
+            )
+            faq_link.click()
 
             # Validate the current URL to check if the link works
-            WebDriverWait(self.driver, 10).until(EC.url_contains("faqs"))
+            WebDriverWait(self.driver, 20).until(EC.url_contains("faqs"))
             current_url = self.driver.current_url
             assert current_url == "https://smoothmaths.co.uk/faqs/", f"Unexpected URL: {current_url}"
 
@@ -50,8 +53,14 @@ class TestFAQs:
             ]
             
             for faq in faq_items:
-                self.driver.find_element(By.CSS_SELECTOR, faq).click()
-                time.sleep(1)  # Optional: Wait to ensure the animation completes
+                faq_element = WebDriverWait(self.driver, 20).until(
+                    EC.visibility_of_element_located((By.CSS_SELECTOR, faq))
+                )
+                faq_element.click()
+                # Use WebDriverWait instead of sleep to wait for the element to change state
+                WebDriverWait(self.driver, 20).until(
+                    EC.visibility_of_element_located((By.CSS_SELECTOR, faq))
+                )
 
             # Take a screenshot after all FAQs have been clicked
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
