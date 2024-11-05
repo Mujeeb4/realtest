@@ -40,7 +40,18 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
 
-    def scroll_to_element(self, by, value, max_attempts=10):
+    def close_chat_widget(self):
+        """Close the chat widget if it appears on the page."""
+        try:
+            chat_widget = WebDriverWait(self.driver, 5).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, "chat-widget-close-button"))
+            )
+            chat_widget.click()
+        except Exception:
+            # Chat widget not found or couldn't be closed
+            pass
+
+    def scroll_to_element(self, by, value, max_attempts=15):
         """Scroll incrementally until the element is in view and clickable, with a maximum number of attempts."""
         attempts = 0
         while attempts < max_attempts:
@@ -50,7 +61,7 @@ class TestWordpressLogin:
                 )
                 return element
             except Exception:
-                self.driver.execute_script("window.scrollBy(0, 200);")
+                self.driver.execute_script("window.scrollBy(0, 300);")
                 time.sleep(0.5)  # Short wait to allow the page to load more content
                 attempts += 1
         raise Exception(f"Failed to find and click the element after {max_attempts} scroll attempts")
@@ -102,20 +113,17 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
+                # Close chat widget if it appears
+                self.close_chat_widget()
+
+                # Scroll to and click on the answer paper link
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
 
                 # Wait for the URL to be the expected answer URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
 
-                # Wait for a specific element that should be visible on the fully loaded page
-                # Example: the "View the Paper" button on the Alleyn’s screenshot
-                WebDriverWait(self.driver, 10).until(
-                    EC.visibility_of_element_located((By.XPATH, "//button[contains(text(),'View the Paper')]"))
-                )
-
-                # Scroll to the top to ensure full page capture and take screenshot
-                self.driver.execute_script("window.scrollTo(0, 0);")
+                # Take screenshot after loading the page
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
 
