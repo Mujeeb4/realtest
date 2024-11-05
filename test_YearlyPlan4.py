@@ -64,8 +64,7 @@ class TestPlan4():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Click the "Yearly" button and retry if necessary
-            yearly_locator = (By.XPATH, "//button/span[contains(text(),'Yearly')]/..")
+            yearly_locator = (By.XPATH, "//span[@class='title' and contains(text(),'Yearly')]")
             if not self.click_with_retry(yearly_locator):
                 raise Exception("Failed to click the Yearly button after retries.")
 
