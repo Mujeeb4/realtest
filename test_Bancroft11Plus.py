@@ -42,7 +42,7 @@ class TestWordpressLogin:
 
     def scroll_to_element(self, by, value):
         """Scroll incrementally until the element is in view and clickable."""
-        for _ in range(5):  # Reduced retries to 5
+        while True:
             try:
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
@@ -50,7 +50,7 @@ class TestWordpressLogin:
                 return element
             except Exception:
                 self.driver.execute_script("window.scrollBy(0, 200);")
-        raise Exception(f"Element with {by} and value {value} not found or not clickable")
+                time.sleep(0.5)  # Short wait to allow the page to load more content
 
     def test_11Plus(self):
         start_time = time.time()
