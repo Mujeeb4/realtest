@@ -105,7 +105,17 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
 
+                # Wait for the URL to be the expected answer URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+
+                # Wait for a specific element that should be visible on the fully loaded page
+                # Example: the "View the Paper" button on the Alleyn’s screenshot
+                WebDriverWait(self.driver, 10).until(
+                    EC.visibility_of_element_located((By.XPATH, "//button[contains(text(),'View the Paper')]"))
+                )
+
+                # Scroll to the top to ensure full page capture and take screenshot
+                self.driver.execute_script("window.scrollTo(0, 0);")
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
 
