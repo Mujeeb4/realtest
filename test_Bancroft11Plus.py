@@ -40,9 +40,10 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
 
-    def scroll_to_element(self, by, value):
-        """Scroll incrementally until the element is in view and clickable."""
-        while True:
+    def scroll_to_element(self, by, value, max_attempts=10):
+        """Scroll incrementally until the element is in view and clickable, with a maximum number of attempts."""
+        attempts = 0
+        while attempts < max_attempts:
             try:
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
@@ -51,6 +52,8 @@ class TestWordpressLogin:
             except Exception:
                 self.driver.execute_script("window.scrollBy(0, 200);")
                 time.sleep(0.5)  # Short wait to allow the page to load more content
+                attempts += 1
+        raise Exception(f"Failed to find and click the element after {max_attempts} scroll attempts")
 
     def test_11Plus(self):
         start_time = time.time()
@@ -132,4 +135,4 @@ class TestWordpressLogin:
 
         end_time = time.time()
         duration = end_time - start_time
-        print(f"Total test duration: {round(duration, 2)} seconds")
+        print(f"Test duration: {duration} seconds")
