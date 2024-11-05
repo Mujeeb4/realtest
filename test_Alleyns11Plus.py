@@ -76,9 +76,9 @@ class TestWordpressLogin:
         start_time = time.time()
         results = []
 
-        # Prompt for credentials
-        username = input("Enter your username: ")
-        password = input("Enter your password: ")
+        # Hardcoded credentials (replace with your actual credentials)
+        username = "hanzila@dovidigital.com"
+        password = "Hanzila*183258"
 
         # Log in to WordPress
         try:
@@ -101,6 +101,7 @@ class TestWordpressLogin:
         except TimeoutException:
             logging.error("Login failed. Please check your credentials.")
             self.driver.quit()
+            pytest.fail("Login failed.")
             return
 
         # Open the target page
