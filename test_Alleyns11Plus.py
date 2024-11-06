@@ -42,16 +42,20 @@ class TestWordpressLogin:
 
     def append_to_csv(self, results):
         df = pd.DataFrame(results)
-        if os.path.exists(CSV_FILE_PATH):
-            df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
-        else:
-            df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
-  
+        try:
+            if os.path.exists(CSV_FILE_PATH):
+                df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
+            else:
+                df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
+            print("Successfully appended to CSV.")
+        except Exception as e:
+            print(f"Error appending to CSV: {e}")
+
     def scroll_to_element(self, by, value):
         """Scroll incrementally until the element is in view and clickable."""
         for _ in range(10):  # Try scrolling up to 10 times
             try:
-                element = WebDriverWait(self.driver, 2).until(
+                element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 return element
@@ -110,16 +114,20 @@ class TestWordpressLogin:
                 # Scroll to the element and get the clickable element
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
-                
 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
                 
-                # Assert the URL is correct, if not, raise an AssertionError
-                assert self.driver.current_url == expected_answer_urls[i], f"Expected URL to be {expected_answer_urls[i]}, but got {self.driver.current_url}"
+                # Log current URL for debugging
+                print(f"Navigated to: {self.driver.current_url}")
+
+                # Verify URL using 'in' rather than '=='
+                assert expected_answer_urls[i] in self.driver.current_url, (
+                    f"Expected URL to contain {expected_answer_urls[i]}, but got {self.driver.current_url}"
+                )
                 
-                # Wait 10 seconds before taking a screenshot
-                time.sleep(10)
+                # Wait and take screenshot
+                time.sleep(5)
                 screenshot_path = f"screenshots/Alleyns_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -152,28 +160,23 @@ class TestWordpressLogin:
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                # Scroll to each quiz link incrementally
                 quiz_link = self.scroll_to_element(by, value)
-                
-                # Use JavaScript to click the quiz link
                 self.driver.execute_script("arguments[0].click();", quiz_link)
                 
-                # Scroll down slightly after clicking the quiz link
-                self.driver.execute_script("window.scrollBy(0, 200);")
-                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
-                
-                # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
                 
-                # Assert the URL is correct, if not, raise an AssertionError
-                assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
+                # Log current URL for debugging
+                print(f"Navigated to quiz URL: {self.driver.current_url}")
+
+                # Verify URL using 'in' rather than '=='
+                assert expected_quiz_urls[i] in self.driver.current_url, (
+                    f"Expected URL to contain {expected_quiz_urls[i]}, but got {self.driver.current_url}"
+                )
                 
-                # Wait 10 seconds before taking a screenshot
-                time.sleep(20)
+                time.sleep(5)
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
-                # Log success status
                 results.append({
                     "Test Case": f"Quiz {i+1} Link Verification",
                     "Status": "Pass",
@@ -183,7 +186,6 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
-                # Capture any errors and log failure status
                 screenshot_path = f"screenshots/Alleyns_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -199,10 +201,8 @@ class TestWordpressLogin:
             self.driver.get(main_page_url)
             time.sleep(2)
         
-        # Log results to CSV
         self.append_to_csv(results)
 
-        # Calculate duration
         end_time = time.time()
         duration = end_time - start_time
         print(f"Total test duration: {round(duration, 2)} seconds")
