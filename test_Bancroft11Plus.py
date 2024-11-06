@@ -134,7 +134,7 @@ class TestWordpressLogin:
                 
                 # Wait 10 seconds before taking a screenshot
                 time.sleep(10)
-                screenshot_path = f"screenshots/Alleyns_Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 # Log success status
@@ -148,7 +148,7 @@ class TestWordpressLogin:
 
             except Exception as e:
                 # Capture any errors and log failure status
-                screenshot_path = f"screenshots/Alleyns_error_Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Bancroft_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
@@ -198,7 +198,7 @@ class TestWordpressLogin:
 
             except Exception as e:
                 # Capture any errors and log failure status
-                screenshot_path = f"screenshots/Alleyns_error_Quiz_{i+1}.png"
+                screenshot_path = f"screenshots/Bancroft_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
