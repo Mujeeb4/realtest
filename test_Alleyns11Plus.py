@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import pandas as pd
 
-# CSV file path to store all test results
+
 CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
