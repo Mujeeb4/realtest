@@ -87,6 +87,14 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroft-s-school-sample-11-plus-maths-paper-2-2016-answers-paper"
         ]
 
+        # Expected URLs for each quiz
+        expected_quiz_urls = [
+            "https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2",
+            "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz",
+            "https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz",
+            "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
+        ]
+
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
@@ -98,6 +106,14 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_16.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_19.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
+        ]
+
+        # XPath selectors for each quiz based on screenshots
+        quiz_locators = [
+            (By.XPATH, "//a[contains(@href, 'Maths-sample-paper-2021-online-quiz')]"),  
+            (By.XPATH, "//a[contains(@href, 'maths-entrance-examination-paper-2018-online-quiz')]"),
+            (By.XPATH, "//a[contains(@href, 'maths-entrance-examination-paper-2017-online-quiz')]"),  
+            (By.XPATH, "//a[contains(@href, 'maths-entrance-examination-paper-2016-online-quiz')]") 
         ]
 
         results = []
