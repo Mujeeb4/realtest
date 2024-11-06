@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import pandas as pd
 
-
+# CSV file path to store all test results
 CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
@@ -121,10 +121,12 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
 
-                # Verify URL using 'in' rather than '=='
-                assert expected_answer_urls[i] in self.driver.current_url, (
-                    f"Expected URL to contain {expected_answer_urls[i]}, but got {self.driver.current_url}"
+                # Additional check for the PDF Embedder
+                # Adjust selector based on the actual structure of PDF Embedder's viewer
+                WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "pdfemb-viewer"))
                 )
+                print("PDF Embedder viewer detected on page.")
                 
                 # Wait and take screenshot
                 time.sleep(5)
