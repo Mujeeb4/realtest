@@ -60,6 +60,12 @@ class TestWordpressLogin:
                 self.driver.execute_script("window.scrollBy(0, 200);")
         raise Exception("Element not found or not clickable")
 
+    def scroll_down(self, times=1):
+        """Scroll down the page a specified number of times."""
+        for _ in range(times):
+            self.driver.execute_script("window.scrollBy(0, 200);")
+            time.sleep(1)  # Pause briefly after scrolling
+
     def test_11Plus(self):
         # Start time to calculate test duration
         start_time = time.time()
@@ -83,11 +89,10 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-11-plus-maths-sample-paper-2021-entry2-answer-paper",
             "https://smoothmaths.co.uk/bancroft-school-11plus-sample-2019-answer-paper",
             "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-sample-11-plus-maths-paper-2018-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-sample-paper-11-maths-entrance-examination-answer-paper",
+            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroths-school-sample-paper-11-maths-entrance-examination-answer-paper",
             "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroft-s-school-sample-11-plus-maths-paper-2-2016-answers-paper"
         ]
 
-        # Expected URLs for each quiz
         expected_quiz_urls = [
             "https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2",
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz",
@@ -108,12 +113,11 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # XPath selectors for each quiz based on screenshots
         quiz_locators = [
-            (By.XPATH, "//a[contains(@href, 'Maths-sample-paper-2021-online-quiz')]"),  
-            (By.XPATH, "//a[contains(@href, 'maths-entrance-examination-paper-2018-online-quiz')]"),
-            (By.XPATH, "//a[contains(@href, 'maths-entrance-examination-paper-2017-online-quiz')]"),  
-            (By.XPATH, "//a[contains(@href, 'maths-entrance-examination-paper-2016-online-quiz')]") 
+            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a") 
         ]
 
         results = []
@@ -125,7 +129,6 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element(by, value)
                 answer_paper_link.click()
                 
-
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
                 
@@ -162,6 +165,7 @@ class TestWordpressLogin:
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(2)
+            self.scroll_down(2)  # Scroll down after returning to the main page
 
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
@@ -212,7 +216,8 @@ class TestWordpressLogin:
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(2)
-        
+            self.scroll_down(2)  # Scroll down after returning to the main page
+
         # Log results to CSV
         self.append_to_csv(results)
 
