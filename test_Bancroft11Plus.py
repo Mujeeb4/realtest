@@ -108,12 +108,12 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # Using XPath for Quiz locators
+        # CSS selectors for Quiz locators
         quiz_locators = [
-            (By.XPATH, "//a[contains(@href, 'bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2')]"),
-            (By.XPATH, "//a[contains(@href, 'bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz')]"),
-            (By.XPATH, "//a[contains(@href, 'bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz')]"),
-            (By.XPATH, "//a[contains(@href, 'bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz')]")
+            (By.CSS_SELECTOR, ".quiz-link[data-url*='online-quiz-2']"),
+            (By.CSS_SELECTOR, ".quiz-link[data-url*='online-quiz']"),
+            (By.CSS_SELECTOR, ".quiz-link[data-url*='entrance-examination-online-quiz']"),
+            (By.CSS_SELECTOR, ".quiz-link[data-url*='online-quiz']")
         ]
 
         results = []
