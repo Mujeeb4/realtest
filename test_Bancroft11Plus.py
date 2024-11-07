@@ -167,7 +167,8 @@ class TestWordpressLogin:
             try:
                 # Scroll to each quiz link incrementally
                 quiz_link = self.scroll_to_element(by, value)
-                quiz_link.click()
+                # Use JavaScript click to handle elements that may be difficult to click
+                self.driver.execute_script("arguments[0].click();", quiz_link)
                 
                 # Verify the current URL
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_quiz_urls[i]))
