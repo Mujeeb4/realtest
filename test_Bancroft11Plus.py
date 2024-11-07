@@ -51,20 +51,15 @@ class TestWordpressLogin:
         """Scroll incrementally until the element is in view and clickable."""
         for _ in range(10):  # Try scrolling up to 10 times
             try:
-                element = WebDriverWait(self.driver, 2).until(
+                element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 return element
             except:
                 # Incrementally scroll down by 200px if the element is not yet clickable
                 self.driver.execute_script("window.scrollBy(0, 200);")
+                time.sleep(0.5)  # Pause briefly after each scroll
         raise Exception("Element not found or not clickable")
-
-    def scroll_down(self, times=1):
-        """Scroll down the page a specified number of times."""
-        for _ in range(times):
-            self.driver.execute_script("window.scrollBy(0, 200);")
-            time.sleep(1)  # Pause briefly after scrolling
 
     def test_11Plus(self):
         # Start time to calculate test duration
@@ -165,20 +160,13 @@ class TestWordpressLogin:
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(2)
-            self.scroll_down(2)  # Scroll down after returning to the main page
 
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
                 # Scroll to each quiz link incrementally
                 quiz_link = self.scroll_to_element(by, value)
-                
-                # Use JavaScript to click the quiz link
-                self.driver.execute_script("arguments[0].click();", quiz_link)
-                
-                # Scroll down slightly after clicking the quiz link
-                self.driver.execute_script("window.scrollBy(0, 200);")
-                time.sleep(1)  # Brief pause to allow the page to settle after scrolling
+                quiz_link.click()
                 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
@@ -187,7 +175,7 @@ class TestWordpressLogin:
                 assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
                 
                 # Wait 10 seconds before taking a screenshot
-                time.sleep(20)
+                time.sleep(10)
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -216,7 +204,6 @@ class TestWordpressLogin:
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(2)
-            self.scroll_down(2)  # Scroll down after returning to the main page
 
         # Log results to CSV
         self.append_to_csv(results)
