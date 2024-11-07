@@ -110,10 +110,10 @@ class TestWordpressLogin:
 
         # CSS selectors for Quiz locators
         quiz_locators = [
-            (By.CSS_SELECTOR, ".quiz-link[data-url*='online-quiz-2']"),
-            (By.CSS_SELECTOR, ".quiz-link[data-url*='online-quiz']"),
-            (By.CSS_SELECTOR, ".quiz-link[data-url*='entrance-examination-online-quiz']"),
-            (By.CSS_SELECTOR, ".quiz-link[data-url*='online-quiz']")
+            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a")
         ]
 
         results = []
