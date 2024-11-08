@@ -47,26 +47,24 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
 
-    def scroll_to_element(self, by, value):
-        """Scroll to an element incrementally until it's in view and clickable."""
-        for _ in range(10):
+    def scroll_and_click(self, by, value):
+        """Scrolls to an element incrementally until it's in view and clicks it."""
+        max_attempts = 10
+        for attempt in range(max_attempts):
             try:
+                # Try to find and click the element
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
-                return element
-            except:
-                # Scroll down slightly if the element is not in view
+                self.driver.execute_script("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", element)
+                time.sleep(1)
+                self.driver.execute_script("arguments[0].click();", element)
+                return
+            except Exception as e:
+                # If not found, scroll further and retry
                 self.driver.execute_script("window.scrollBy(0, 200);")
                 time.sleep(1)
-        raise Exception("Element not found or not clickable after scrolling")
-
-    def click_element(self, by, value):
-        """Clicks an element after scrolling into view."""
-        element = self.scroll_to_element(by, value)
-        # Click the element using JavaScript
-        self.driver.execute_script("arguments[0].click();", element)
-        time.sleep(1)  # Wait to ensure the page loads
+        raise Exception("Element not found or not clickable after scrolling and multiple attempts")
 
     def test_11Plus(self):
         start_time = time.time()
@@ -129,7 +127,7 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                self.click_element(by, value)
+                self.scroll_and_click(by, value)
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_answer_urls[i]))
                 
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
@@ -145,7 +143,7 @@ class TestWordpressLogin:
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                self.click_element(by, value)
+                self.scroll_and_click(by, value)
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_quiz_urls[i]))
                 
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
@@ -159,4 +157,3 @@ class TestWordpressLogin:
             time.sleep(3)
 
         self.append_to_csv(results)
-
