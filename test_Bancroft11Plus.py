@@ -47,18 +47,24 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
   
-    def scroll_to_element(self, by, value):
-        """Scroll incrementally until the element is in view and clickable."""
-        for _ in range(15):
+    def click_element_with_retry(self, by, value, retries=3):
+        """Attempts to click an element multiple times with JavaScript if standard clicking fails."""
+        for attempt in range(retries):
             try:
-                element = WebDriverWait(self.driver, 5).until(
+                element = WebDriverWait(self.driver, 10).until(
                     EC.element_to_be_clickable((by, value))
                 )
-                return element
-            except:
-                self.driver.execute_script("window.scrollBy(0, 300);")
-                time.sleep(1)
-        raise Exception("Element not found or not clickable")
+                # Scroll into view to make sure the element is visible
+                self.driver.execute_script("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", element)
+                time.sleep(1)  # Give time for scroll to complete
+
+                # Attempt to click the element using JavaScript
+                self.driver.execute_script("arguments[0].click();", element)
+                return True  # Exit if successful
+            except Exception as e:
+                print(f"Attempt {attempt + 1} failed with error: {e}")
+                time.sleep(2)  # Wait before retrying
+        raise Exception("Element could not be clicked after multiple attempts")
 
     def test_11Plus(self):
         start_time = time.time()
@@ -121,79 +127,33 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                answer_paper_link = self.scroll_to_element(by, value)
-                self.driver.execute_script("arguments[0].click();", answer_paper_link)
-                
+                self.click_element_with_retry(by, value)
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_answer_urls[i]))
                 
-                assert self.driver.current_url == expected_answer_urls[i], f"Expected URL to be {expected_answer_urls[i]}, but got {self.driver.current_url}"
-                
-                time.sleep(5)
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Answer Paper {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
+                results.append({"Test Case": f"Answer Paper {i+1}", "Status": "Pass", "Screenshot": screenshot_path})
             except Exception as e:
                 screenshot_path = f"screenshots/Bancroft_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Answer Paper {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
-
+                results.append({"Test Case": f"Answer Paper {i+1}", "Status": f"Fail: {str(e)}", "Screenshot": screenshot_path})
             self.driver.get(main_page_url)
             time.sleep(3)
 
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                quiz_link = self.scroll_to_element(by, value)
-                self.driver.execute_script("arguments[0].click();", quiz_link)
-                
+                self.click_element_with_retry(by, value)
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_quiz_urls[i]))
                 
-                assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
-                
-                time.sleep(5)
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
+                results.append({"Test Case": f"Quiz {i+1}", "Status": "Pass", "Screenshot": screenshot_path})
             except Exception as e:
                 screenshot_path = f"screenshots/Bancroft_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
-
+                results.append({"Test Case": f"Quiz {i+1}", "Status": f"Fail: {str(e)}", "Screenshot": screenshot_path})
             self.driver.get(main_page_url)
             time.sleep(3)
 
         self.append_to_csv(results)
-
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f"Total test duration: {round(duration, 2)} seconds")
