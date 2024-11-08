@@ -116,9 +116,9 @@ class TestWordpressLogin:
 
         # CSS locators for Quiz links based on screenshots
         quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_2.et_pb_blurb .et_pb_module_header a"),  # Quiz 1
-            (By.CSS_SELECTOR, ".et_pb_blurb_6.et_pb_blurb .et_pb_module_header a"),  # Quiz 2
-            (By.CSS_SELECTOR, ".et_pb_blurb_10.et_pb_blurb .et_pb_module_header a"), # Quiz 3
+            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),  # Quiz 1
+            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),  # Quiz 2
+            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"), # Quiz 3
             (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a")  # Quiz 4
         ]
 
