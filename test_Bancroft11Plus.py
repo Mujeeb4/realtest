@@ -49,20 +49,18 @@ class TestWordpressLogin:
   
     def scroll_to_element(self, by, value):
         """Scroll incrementally until the element is in view and clickable."""
-        for _ in range(15):  # Increase the number of scroll attempts
+        for _ in range(15):
             try:
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 return element
             except:
-                # Incrementally scroll down by 300px if the element is not yet clickable
                 self.driver.execute_script("window.scrollBy(0, 300);")
-                time.sleep(1)  # Pause briefly after each scroll
+                time.sleep(1)
         raise Exception("Element not found or not clickable")
 
     def test_11Plus(self):
-        # Start time to calculate test duration
         start_time = time.time()
 
         # Log in to WordPress
@@ -95,6 +93,7 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
         ]
 
+        # XPath locators for Answer Paper links based on screenshots
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
@@ -108,11 +107,12 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
+        # XPath locators for Quiz links based on screenshots
         quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a")
+            (By.XPATH, "//a[@href='https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2']"),
+            (By.XPATH, "//a[@href='https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz']"),
+            (By.XPATH, "//a[@href='https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz']"),
+            (By.XPATH, "//a[@href='https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz']")
         ]
 
         results = []
