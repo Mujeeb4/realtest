@@ -73,6 +73,7 @@ class TestWordpressLogin:
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/"
         self.driver.get(main_page_url)
 
+        # List of expected URLs for answer papers and quizzes
         expected_answer_urls = [
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-maths-sample-entrance-answer-paper-2024/",
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-sample-maths-paper-2023-answer-paper/",
@@ -93,7 +94,7 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
         ]
 
-        # XPath locators for Answer Paper links based on screenshots
+        # CSS locators for Answer Paper links
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
@@ -107,7 +108,7 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # XPath locators for Quiz links based on screenshots
+        # XPath locators for Quiz links
         quiz_locators = [
             (By.XPATH, "//a[@href='https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2']"),
             (By.XPATH, "//a[@href='https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz']"),
