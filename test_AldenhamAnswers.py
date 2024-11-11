@@ -51,18 +51,13 @@ class TestWordpressLogin:
         except Exception as e:
             print(f"Error appending to CSV: {e}")
 
-    def scroll_to_element(self, by, value):
-        """Scroll incrementally until the element is in view and clickable."""
-        for _ in range(10):  # Try scrolling up to 10 times
-            try:
-                element = WebDriverWait(self.driver, 5).until(
-                    EC.element_to_be_clickable((by, value))
-                )
-                return element
-            except:
-                # Incrementally scroll down by 200px if the element is not yet clickable
-                self.driver.execute_script("window.scrollBy(0, 200);")
-        raise Exception("Element not found or not clickable")
+    def scroll_and_click(self, by, value):
+        """Scroll to an element using JavaScript and click."""
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((by, value)))
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value)))
+        self.driver.execute_script("arguments[0].click();", element)
+        return element
 
     def test_11Plus(self):
         # Start time to calculate test duration
@@ -91,14 +86,14 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/aldenham-school-11-entrance-paper-sample-paper-1-mathematics-online-quiz"
         ]
         
-        # Locators for each answer paper, using XPath for the fourth answer paper
+        # Locators for each answer paper
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),  
             (By.CSS_SELECTOR, ".et_pb_blurb_6.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # XPath selectors for each quiz based on screenshots
+        # XPath selectors for each quiz
         quiz_locators = [
             (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"), 
             (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   
@@ -109,9 +104,8 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                # Scroll to the element and get the clickable element
-                answer_paper_link = self.scroll_to_element(by, value)
-                answer_paper_link.click()
+                # Scroll to the element and click
+                self.scroll_and_click(by, value)
 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
@@ -158,8 +152,8 @@ class TestWordpressLogin:
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                quiz_link = self.scroll_to_element(by, value)
-                self.driver.execute_script("arguments[0].click();", quiz_link)
+                # Scroll to the quiz element and click
+                self.scroll_and_click(by, value)
                 
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
                 
