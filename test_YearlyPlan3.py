@@ -74,7 +74,7 @@ class TestPlan3():
 
             time.sleep(2)
             WebDriverWait(self.driver, 30).until(
-                EC.visibility_of_element_located((By.XPATH, "//a[contains(text(), 'Register') and contains(@href, 'yearly')]"))
+                EC.visibility_of_element_located((By.XPATH, "//span[@class='title' and contains(text(),'Yearly')]"))
             )
 
             register_locator = (By.XPATH, "(//a[contains(text(),'Register') and contains(@href, 'yearly')])[3]")
