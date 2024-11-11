@@ -100,8 +100,8 @@ class TestWordpressLogin:
 
         # XPath selectors for each quiz based on screenshots
         quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"),  
-            (By.CSS_SELECTOR, ".et_pb_blurb_7.et_pb_blurb .et_pb_module_header a") 
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"), 
+            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   
         ]
 
         results = []
@@ -120,7 +120,6 @@ class TestWordpressLogin:
                 print(f"Navigated to: {self.driver.current_url}")
 
                 # Additional check for the PDF Embedder
-                # Adjust selector based on the actual structure of PDF Embedder's viewer
                 WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "pdfemb-viewer"))
                 )
@@ -141,7 +140,6 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
-                # Capture any errors and log failure status
                 screenshot_path = f"screenshots/Aldenham_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -168,7 +166,7 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to quiz URL: {self.driver.current_url}")
 
-                # Verify URL using 'in' rather than '=='
+                # Verify URL
                 assert expected_quiz_urls[i] in self.driver.current_url, (
                     f"Expected URL to contain {expected_quiz_urls[i]}, but got {self.driver.current_url}"
                 )
@@ -200,9 +198,3 @@ class TestWordpressLogin:
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(2)
-        
-        self.append_to_csv(results)
-
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f"Total test duration: {round(duration, 2)} seconds")
