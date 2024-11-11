@@ -12,7 +12,7 @@ from selenium.common.exceptions import TimeoutException, ElementClickIntercepted
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestPlan5():
+class TestPlan2():
     def setup_method(self, method):
         # Use headless Chrome for CI
         chrome_options = webdriver.ChromeOptions()
@@ -50,10 +50,10 @@ class TestPlan5():
         print(f"Failed to click element after {retries} retries.")
         return False
 
-    def test_plan_5(self):
+    def test_plan_2(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
-        expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics-plan-yearly"
+        expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics-plan-yearly/"
 
         try:
             # Navigate directly to the pricing page
@@ -75,7 +75,7 @@ class TestPlan5():
                 EC.visibility_of_element_located((By.XPATH, "//span[@class='title' and contains(text(),'Yearly')]"))
             )
 
-            # Locate and click the "Register" button for the fifth yearly plan (Plan 5)
+            # Locate and click the "Register" button for the second yearly plan (Plan 2)
             register_locator = (By.XPATH, "(//a[contains(text(),'Register') and contains(@href, 'yearly')])[5]")
             if not self.click_with_retry(register_locator):
                 raise Exception("Failed to click the Register button for Plan 5 after retries.")
@@ -100,19 +100,19 @@ class TestPlan5():
             # Take a screenshot of the checkout/payment page
             time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_5_{status}_{timestamp}.png"
+            screenshot_path = f"screenshots/Yearly_plan_5_{status}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
             # Record the test result
-            self._store_test_results("Plan 5 Registration", status, screenshot_path)
+            self._store_test_results("Yearly Plan 5 Registration", status, screenshot_path)
 
         except Exception as e:
             # Log the exception and save a failure screenshot
             print(f"Exception occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_5_failed_{timestamp}.png"
+            screenshot_path = f"screenshots/Yearly_plan_5_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
-            self._store_test_results("Plan 5 Registration", "Failed", screenshot_path)
+            self._store_test_results("Yearly Plan 5 Registration", "Failed", screenshot_path)
 
         finally:
             # Record end time and calculate duration
