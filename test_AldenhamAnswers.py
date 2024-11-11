@@ -51,12 +51,21 @@ class TestWordpressLogin:
         except Exception as e:
             print(f"Error appending to CSV: {e}")
 
-    def scroll_and_click(self, by, value):
-        """Scroll to an element using JavaScript and click."""
-        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((by, value)))
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value)))
-        self.driver.execute_script("arguments[0].click();", element)
+    def scroll_to_element_incrementally(self, by, value):
+        """Incrementally scroll down until the element is clickable."""
+        element = None
+        for _ in range(20):  # Try scrolling up to 20 times
+            try:
+                element = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((by, value))
+                )
+                break  # Exit if the element becomes clickable
+            except:
+                # Scroll down by 300px if the element is not yet clickable
+                self.driver.execute_script("window.scrollBy(0, 300);")
+                time.sleep(0.5)  # Allow time for scroll to take effect
+        if not element:
+            raise Exception("Element not found or not clickable after scrolling.")
         return element
 
     def test_11Plus(self):
@@ -105,7 +114,8 @@ class TestWordpressLogin:
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
                 # Scroll to the element and click
-                self.scroll_and_click(by, value)
+                answer_paper_link = self.scroll_to_element_incrementally(by, value)
+                self.driver.execute_script("arguments[0].click();", answer_paper_link)
 
                 # Verify the current URL
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
@@ -152,19 +162,17 @@ class TestWordpressLogin:
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                # Scroll to the quiz element and click
-                self.scroll_and_click(by, value)
+                # Scroll incrementally to find and click the quiz link
+                quiz_link = self.scroll_to_element_incrementally(by, value)
+                self.driver.execute_script("arguments[0].click();", quiz_link)
                 
+                # Wait for URL to match expected
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
                 
                 # Log current URL for debugging
                 print(f"Navigated to quiz URL: {self.driver.current_url}")
 
-                # Verify URL
-                assert expected_quiz_urls[i] in self.driver.current_url, (
-                    f"Expected URL to contain {expected_quiz_urls[i]}, but got {self.driver.current_url}"
-                )
-                
+                # Wait, take screenshot, and store it
                 time.sleep(5)
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
@@ -178,6 +186,7 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
+                # Capture any errors and log failure status
                 screenshot_path = f"screenshots/Aldenham_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
@@ -192,3 +201,6 @@ class TestWordpressLogin:
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(2)
+
+        # Append results to CSV
+        self.append_to_csv(results)
