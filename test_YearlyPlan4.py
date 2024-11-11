@@ -72,7 +72,7 @@ class TestPlan4():
 
             # Ensure the page switches to yearly plans before interacting with the Register button
             WebDriverWait(self.driver, 30).until(
-                EC.visibility_of_element_located((By.XPATH, "//a[contains(text(), 'Register') and contains(@href, 'yearly')]"))
+                EC.visibility_of_element_located((By.XPATH, "//span[@class='title' and contains(text(),'Yearly')]"))
             )
 
             # Locate and click the "Register" button for the fourth yearly plan (Plan 4)
