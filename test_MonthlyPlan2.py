@@ -66,7 +66,7 @@ class TestPlan2():
 
             
             # Locate and click the "Register" button for the second yearly plan (Plan 2)
-            register_locator = (By.XPATH, "(//a[contains(text(), 'Register')])[2]"))
+            register_locator = (By.XPATH, "(//a[contains(text(), 'Register')])[2]")
             if not self.click_with_retry(register_locator):
                 raise Exception("Failed to click the Register button for Plan 2 after retries.")
 
