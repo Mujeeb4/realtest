@@ -2,17 +2,17 @@ import pytest
 import time
 import os
 import datetime
-import pandas as pd  # Ensure pandas is imported
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, WebDriverException
 
 # CSV file path to store test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestPlan5():
+class TestPlan2():
     def setup_method(self, method):
         # Use headless Chrome for CI
         chrome_options = webdriver.ChromeOptions()
@@ -29,10 +29,31 @@ class TestPlan5():
     def teardown_method(self, method):
         self.driver.quit()
 
+    def click_with_retry(self, locator, retries=3):
+        """Clicks an element with retry mechanism"""
+        attempts = 0
+        while attempts < retries:
+            try:
+                element = WebDriverWait(self.driver, 30).until(
+                    EC.presence_of_element_located(locator)
+                )
+                # Scroll the element into view
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+                # Use JavaScript to ensure it's clickable
+                self.driver.execute_script("arguments[0].click();", element)
+                print(f"Element clicked successfully on attempt {attempts + 1}")
+                return True
+            except (TimeoutException, ElementClickInterceptedException, WebDriverException) as e:
+                print(f"Failed to click element on attempt {attempts + 1}: {e}")
+                attempts += 1
+                time.sleep(2)  # Wait before retrying
+        print(f"Failed to click element after {retries} retries.")
+        return False
+
     def test_plan_2(self):
         start_time = time.time()
         pricing_page = "https://smoothmaths.co.uk/pricing/"
-        expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics"
+        expected_url = "https://smoothmaths.co.uk/register/gcse-igcse-mathematics/"
 
         try:
             # Navigate directly to the pricing page
@@ -43,24 +64,11 @@ class TestPlan5():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 2 using an XPath locator
-            # This is specifically targeting the second register button using XPath indexing
-            register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[5]"))
-            )
-
-            # Scroll into view and click the button using JavaScript in case of issues
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
-            time.sleep(1)  # Small pause to ensure the page scrolls
-
-            # Attempt to click the button
-            try:
-                WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable(register_button))
-                print("Trying to click the 'Register' button using JavaScript.")
-                self.driver.execute_script("arguments[0].click();", register_button)
-            except (TimeoutException, ElementClickInterceptedException) as e:
-                print(f"Failed to click the 'Register' button: {str(e)}")
-                raise
+            
+            # Locate and click the "Register" button for the second yearly plan (Plan 2)
+            register_locator = (By.XPATH, "(//a[contains(text(), 'Register')])[5]")
+            if not self.click_with_retry(register_locator):
+                raise Exception("Failed to click the Register button for Plan 5 after retries.")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
@@ -82,25 +90,25 @@ class TestPlan5():
             # Take a screenshot of the checkout/payment page
             time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_5_{status}_{timestamp}.png"
+            screenshot_path = f"screenshots/Monthly_plan_5_{status}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
             # Record the test result
-            self._store_test_results("Plan 5 Registration", status, screenshot_path)
+            self._store_test_results("Monthly Plan 5 Registration", status, screenshot_path)
 
         except Exception as e:
             # Log the exception and save a failure screenshot
             print(f"Exception occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_5_failed_{timestamp}.png"
+            screenshot_path = f"screenshots/Monthly_plan_5_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
-            self._store_test_results("Plan 5 Registration", "Failed", screenshot_path)
+            self._store_test_results("Monthly Plan 5 Registration", "Failed", screenshot_path)
 
         finally:
             # Record end time and calculate duration
             end_time = time.time()
             duration = end_time - start_time
-            print(f"Test duration for Plan 5: {round(duration, 2)} seconds")
+            print(f"Test duration for Plan 2: {round(duration, 2)} seconds")
 
     def _store_test_results(self, test_case, status, screenshot_path):
         # Prepare results for CSV
