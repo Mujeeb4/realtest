@@ -103,6 +103,9 @@ jobs:
       - name: Run Bancroft answers tests
         run: pytest test_Bancroft11Plus.py --tb=short --junitxml=results.xml
 
+      - name: Run Bancroft quizzes tests
+        run: pytest test_BancroftQuizzes.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
