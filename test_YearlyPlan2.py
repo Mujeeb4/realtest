@@ -100,19 +100,19 @@ class TestPlan2():
             # Take a screenshot of the checkout/payment page
             time.sleep(2)  # Pause to allow the page to load fully
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_2_{status}_{timestamp}.png"
+            screenshot_path = f"screenshots/Yearly_plan_2_{status}_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
 
             # Record the test result
-            self._store_test_results("Plan 2 Registration", status, screenshot_path)
+            self._store_test_results("Yearly Plan 2 Registration", status, screenshot_path)
 
         except Exception as e:
             # Log the exception and save a failure screenshot
             print(f"Exception occurred: {str(e)}")
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            screenshot_path = f"screenshots/plan_2_failed_{timestamp}.png"
+            screenshot_path = f"screenshots/Yearly_plan_2_failed_{timestamp}.png"
             self.driver.save_screenshot(screenshot_path)
-            self._store_test_results("Plan 2 Registration", "Failed", screenshot_path)
+            self._store_test_results("Yearly Plan 2 Registration", "Failed", screenshot_path)
 
         finally:
             # Record end time and calculate duration
