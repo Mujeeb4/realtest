@@ -13,10 +13,9 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up Chrome options for debugging (headless mode removed)
+        # Set up Chrome options for CI
         chrome_options = Options()
-        # Remove headless mode for debugging
-        # chrome_options.add_argument("--headless")  # Comment this line out
+        chrome_options.add_argument("--headless=new")  # Use the new headless mode for CI
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
@@ -26,7 +25,8 @@ class TestWordpressLogin:
         chrome_options.add_argument("--disable-notifications")
         chrome_options.add_argument("--incognito")
         chrome_options.add_argument("window-size=1296,696")
-        
+        chrome_options.add_argument("--remote-debugging-port=9222")  # For headless stability
+
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.set_page_load_timeout(60)
         self.driver.set_script_timeout(30)
