@@ -13,9 +13,10 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up headless Chrome options for CI
+        # Set up Chrome options for debugging (headless mode removed)
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        # Remove headless mode for debugging
+        # chrome_options.add_argument("--headless")  # Comment this line out
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
@@ -99,7 +100,8 @@ class TestWordpressLogin:
                 # Wait briefly to ensure the page loads completely before taking a screenshot
                 time.sleep(5)
                 screenshot_path = f"screenshots/quiz_{i}.png"
-                self.driver.save_screenshot(screenshot_path)
+                if self.driver.save_screenshot(screenshot_path):
+                    print(f"Screenshot saved for Quiz {i}: {screenshot_path}")  # Confirmation print
 
                 # Store test results for this quiz
                 result = {
@@ -117,7 +119,8 @@ class TestWordpressLogin:
             except Exception as e:
                 # Capture a screenshot in case of failure
                 screenshot_path = f"screenshots/quiz_{i}_error.png"
-                self.driver.save_screenshot(screenshot_path)
+                if self.driver.save_screenshot(screenshot_path):
+                    print(f"Error screenshot saved for Quiz {i}: {screenshot_path}")  # Confirmation print
 
                 # If any error occurs, log it
                 result = {
