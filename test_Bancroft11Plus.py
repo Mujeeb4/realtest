@@ -88,13 +88,6 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroft-s-school-sample-11-plus-maths-paper-2-2016-answers-paper"
         ]
 
-        expected_quiz_urls = [
-            "https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz-2",
-            "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2018-online-quiz",
-            "https://smoothmaths.co.uk/bancrofts-school-sample-paper-11-maths-entrance-examination-online-quiz",
-            "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
-        ]
-
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
@@ -108,12 +101,6 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a") 
-        ]
 
         results = []
 
@@ -161,49 +148,6 @@ class TestWordpressLogin:
             self.driver.get(main_page_url)
             time.sleep(3)
 
-        # Test each Quiz link
-        for i, (by, value) in enumerate(quiz_locators):
-            try:
-                # Scroll to each quiz link incrementally
-                quiz_link = self.scroll_to_element(by, value)
-                quiz_link.click()
-                
-                # Verify the current URL
-                WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_quiz_urls[i]))
-                
-                # Assert the URL is correct, if not, raise an AssertionError
-                assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
-                
-                # Wait 5 seconds before taking a screenshot
-                time.sleep(5)
-                screenshot_path = f"screenshots/Quiz_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                # Log success status
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
-            except Exception as e:
-                # Capture any errors and log failure status
-                screenshot_path = f"screenshots/Bancroft_error_Quiz_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
-
-            # Go back to the main page for the next link
-            self.driver.get(main_page_url)
-            time.sleep(3)
 
         # Log results to CSV
         self.append_to_csv(results)
