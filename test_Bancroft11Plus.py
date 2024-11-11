@@ -46,27 +46,23 @@ class TestWordpressLogin:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
-
-    def scroll_and_click(self, by, value):
-        """Scrolls to an element incrementally until it's in view and clicks it."""
-        max_attempts = 10
-        for attempt in range(max_attempts):
+  
+    def scroll_to_element(self, by, value):
+        """Scroll incrementally until the element is in view and clickable."""
+        for _ in range(15):  # Increase the number of scroll attempts
             try:
-                # Try to find and click the element
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
-                self.driver.execute_script("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", element)
-                time.sleep(1)
-                self.driver.execute_script("arguments[0].click();", element)
-                return
-            except Exception as e:
-                # If not found, scroll further and retry
-                self.driver.execute_script("window.scrollBy(0, 200);")
-                time.sleep(1)
-        raise Exception("Element not found or not clickable after scrolling and multiple attempts")
+                return element
+            except:
+                # Incrementally scroll down by 300px if the element is not yet clickable
+                self.driver.execute_script("window.scrollBy(0, 300);")
+                time.sleep(1)  # Pause briefly after each scroll
+        raise Exception("Element not found or not clickable")
 
     def test_11Plus(self):
+        # Start time to calculate test duration
         start_time = time.time()
 
         # Log in to WordPress
@@ -79,7 +75,6 @@ class TestWordpressLogin:
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/"
         self.driver.get(main_page_url)
 
-        # List of expected URLs for answer papers and quizzes
         expected_answer_urls = [
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-maths-sample-entrance-answer-paper-2024/",
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-sample-maths-paper-2023-answer-paper/",
@@ -100,7 +95,6 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-maths-paper-2-2016-online-quiz"
         ]
 
-        # CSS locators for Answer Paper links
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a"),
@@ -114,12 +108,11 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_22.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # CSS locators for Quiz links based on screenshots
         quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),  # Quiz 1
-            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),  # Quiz 2
-            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"), # Quiz 3
-            (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a")  # Quiz 4
+            (By.CSS_SELECTOR, ".et_pb_blurb_12.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_17.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_20.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_23.et_pb_blurb .et_pb_module_header a") 
         ]
 
         results = []
@@ -127,33 +120,95 @@ class TestWordpressLogin:
         # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                self.scroll_and_click(by, value)
+                # Scroll to the element and get the clickable element
+                answer_paper_link = self.scroll_to_element(by, value)
+                answer_paper_link.click()
+                
+                # Verify the current URL
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_answer_urls[i]))
                 
+                # Assert the URL is correct, if not, raise an AssertionError
+                assert self.driver.current_url == expected_answer_urls[i], f"Expected URL to be {expected_answer_urls[i]}, but got {self.driver.current_url}"
+                
+                # Wait 5 seconds before taking a screenshot
+                time.sleep(5)
                 screenshot_path = f"screenshots/Bancroft_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                results.append({"Test Case": f"Answer Paper {i+1}", "Status": "Pass", "Screenshot": screenshot_path})
+                
+                # Log success status
+                results.append({
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
+                    "Status": "Pass",
+                    "Expected URL": expected_answer_urls[i],
+                    "Actual URL": self.driver.current_url,
+                    "Screenshot": screenshot_path
+                })
+
             except Exception as e:
+                # Capture any errors and log failure status
                 screenshot_path = f"screenshots/Bancroft_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                results.append({"Test Case": f"Answer Paper {i+1}", "Status": f"Fail: {str(e)}", "Screenshot": screenshot_path})
+                
+                results.append({
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
+                    "Status": f"Fail: {str(e)}",
+                    "Expected URL": expected_answer_urls[i],
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
+                    "Screenshot": screenshot_path
+                })
+
+            # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(3)
 
         # Test each Quiz link
         for i, (by, value) in enumerate(quiz_locators):
             try:
-                self.scroll_and_click(by, value)
+                # Scroll to each quiz link incrementally
+                quiz_link = self.scroll_to_element(by, value)
+                quiz_link.click()
+                
+                # Verify the current URL
                 WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_quiz_urls[i]))
                 
+                # Assert the URL is correct, if not, raise an AssertionError
+                assert self.driver.current_url == expected_quiz_urls[i], f"Expected URL to be {expected_quiz_urls[i]}, but got {self.driver.current_url}"
+                
+                # Wait 5 seconds before taking a screenshot
+                time.sleep(5)
                 screenshot_path = f"screenshots/Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                results.append({"Test Case": f"Quiz {i+1}", "Status": "Pass", "Screenshot": screenshot_path})
+                
+                # Log success status
+                results.append({
+                    "Test Case": f"Quiz {i+1} Link Verification",
+                    "Status": "Pass",
+                    "Expected URL": expected_quiz_urls[i],
+                    "Actual URL": self.driver.current_url,
+                    "Screenshot": screenshot_path
+                })
+
             except Exception as e:
+                # Capture any errors and log failure status
                 screenshot_path = f"screenshots/Bancroft_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-                results.append({"Test Case": f"Quiz {i+1}", "Status": f"Fail: {str(e)}", "Screenshot": screenshot_path})
+                
+                results.append({
+                    "Test Case": f"Quiz {i+1} Link Verification",
+                    "Status": f"Fail: {str(e)}",
+                    "Expected URL": expected_quiz_urls[i],
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
+                    "Screenshot": screenshot_path
+                })
+
+            # Go back to the main page for the next link
             self.driver.get(main_page_url)
             time.sleep(3)
 
+        # Log results to CSV
         self.append_to_csv(results)
+
+        # Calculate duration
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"Total test duration: {round(duration, 2)} seconds")
