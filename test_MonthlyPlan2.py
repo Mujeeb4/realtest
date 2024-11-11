@@ -56,8 +56,7 @@ class TestPlan2():
         expected_url = "https://smoothmaths.co.uk/register/11-plus-answers-and-quizzes/"
 
         try:
-
-           # Navigate directly to the pricing page
+            # Navigate directly to the pricing page
             self.driver.get(pricing_page)
             print("Navigating to the pricing page for Plan 2")
 
@@ -65,11 +64,11 @@ class TestPlan2():
             WebDriverWait(self.driver, 60).until(EC.url_to_be(pricing_page))
             print("Successfully navigated to pricing page")
 
-            # Locate the "Register" button for Plan 2 using an XPath locator
-            # This is specifically targeting the second register button using XPath indexing
-            register_button = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, "(//a[contains(text(), 'Register')])[2]"))
-            )
+            
+            # Locate and click the "Register" button for the second yearly plan (Plan 2)
+            register_locator = (By.XPATH, "(//a[contains(text(), 'Register')])[2]"))
+            if not self.click_with_retry(register_locator):
+                raise Exception("Failed to click the Register button for Plan 2 after retries.")
 
             # Log the current URL for debugging purposes
             print(f"Current URL after clicking the register button: {self.driver.current_url}")
@@ -109,7 +108,7 @@ class TestPlan2():
             # Record end time and calculate duration
             end_time = time.time()
             duration = end_time - start_time
-            print(f"Test duration for Plan 1: {round(duration, 2)} seconds")
+            print(f"Test duration for Plan 2: {round(duration, 2)} seconds")
 
     def _store_test_results(self, test_case, status, screenshot_path):
         # Prepare results for CSV
