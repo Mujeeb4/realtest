@@ -11,7 +11,7 @@ import os
 import datetime
 import time
 
-# CSV file path to store all test results
+
 CSV_FILE_PATH = "test_results.csv"
 
 @pytest.fixture
