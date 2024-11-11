@@ -35,6 +35,7 @@ class TestWordpressLogin:
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
         
+        # Initialize results list
         self.results = []
   
     def teardown_method(self, method):
