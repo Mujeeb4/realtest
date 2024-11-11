@@ -35,7 +35,6 @@ class TestWordpressLogin:
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
         
-        # Initialize results list
         self.results = []
   
     def teardown_method(self, method):
@@ -97,7 +96,8 @@ class TestWordpressLogin:
                 WebDriverWait(self.driver, 10).until(EC.number_of_windows_to_be(2))
                 self.driver.switch_to.window(self.driver.window_handles[1])
 
-                # Take screenshot and save it with the quiz number
+                # Wait briefly to ensure the page loads completely before taking a screenshot
+                time.sleep(5)
                 screenshot_path = f"screenshots/quiz_{i}.png"
                 self.driver.save_screenshot(screenshot_path)
 
@@ -115,11 +115,15 @@ class TestWordpressLogin:
                 self.driver.switch_to.window(self.driver.window_handles[0])
 
             except Exception as e:
+                # Capture a screenshot in case of failure
+                screenshot_path = f"screenshots/quiz_{i}_error.png"
+                self.driver.save_screenshot(screenshot_path)
+
                 # If any error occurs, log it
                 result = {
                     "Quiz": f"Quiz {i}",
                     "Link": None,
-                    "Screenshot": None,
+                    "Screenshot": screenshot_path,
                     "Status": f"Failed - {str(e)}"
                 }
                 self.results.append(result)
