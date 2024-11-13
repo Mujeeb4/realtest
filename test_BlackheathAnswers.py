@@ -117,14 +117,9 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
 
-                # Additional check for the PDF Embedder
-                WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, "pdfemb-viewer"))
-                )
-                print("PDF Embedder viewer detected on page.")
                 
                 # Scroll slightly before taking a screenshot
-                self.driver.execute_script("window.scrollBy(0, -100);")
+                self.driver.execute_script("window.scrollBy(0, 200);")
                 
                 # Wait and take screenshot
                 time.sleep(5)
@@ -170,7 +165,7 @@ class TestWordpressLogin:
                 print(f"Navigated to: {self.driver.current_url}")
 
                 # Scroll slightly before taking a screenshot
-                self.driver.execute_script("window.scrollBy(0, -100);")
+                self.driver.execute_script("window.scrollBy(0, 300);")
                 
                 # Wait and take screenshot
                 time.sleep(5)
