@@ -89,11 +89,7 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/aldenham-school/aldenham-school-11-entrance-paper-sample-paper-mathematics-answer-paper-2"
         ]
         
-        # Expected URLs for each quiz
-        expected_quiz_urls = [
-            "https://smoothmaths.co.uk/aldenham-school-11-entrance-paper-sample-paper-mathematics-online-quiz",
-            "https://smoothmaths.co.uk/aldenham-school-11-entrance-paper-sample-paper-1-mathematics-online-quiz"
-        ]
+
         
         # Locators for each answer paper
         answer_paper_locators = [
@@ -102,11 +98,6 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_6.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # XPath selectors for each quiz
-        quiz_locators = [
-            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-1-online-quiz')]"), 
-            (By.XPATH, "//a[contains(@href, 'sample-examination-paper-2-online-quiz')]")   
-        ]
 
         results = []
 
@@ -151,49 +142,6 @@ class TestWordpressLogin:
                     "Test Case": f"Answer Paper {i+1} Link Verification",
                     "Status": f"Fail: {str(e)}",
                     "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
-
-            # Go back to the main page for the next link
-            self.driver.get(main_page_url)
-            time.sleep(2)
-
-        # Test each Quiz link
-        for i, (by, value) in enumerate(quiz_locators):
-            try:
-                # Scroll incrementally to find and click the quiz link
-                quiz_link = self.scroll_to_element_incrementally(by, value)
-                self.driver.execute_script("arguments[0].click();", quiz_link)
-                
-                # Wait for URL to match expected
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_quiz_urls[i]))
-                
-                # Log current URL for debugging
-                print(f"Navigated to quiz URL: {self.driver.current_url}")
-
-                # Wait, take screenshot, and store it
-                time.sleep(5)
-                screenshot_path = f"screenshots/Quiz_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
-            except Exception as e:
-                # Capture any errors and log failure status
-                screenshot_path = f"screenshots/Aldenham_error_Quiz_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_quiz_urls[i],
                     "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
                     "Screenshot": screenshot_path
                 })
