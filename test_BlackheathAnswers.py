@@ -123,6 +123,9 @@ class TestWordpressLogin:
                 )
                 print("PDF Embedder viewer detected on page.")
                 
+                # Scroll slightly before taking a screenshot
+                self.driver.execute_script("window.scrollBy(0, -100);")
+                
                 # Wait and take screenshot
                 time.sleep(5)
                 screenshot_path = f"screenshots/Blackheath_Answer_Paper_{i+1}.png"
@@ -166,6 +169,9 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
 
+                # Scroll slightly before taking a screenshot
+                self.driver.execute_script("window.scrollBy(0, -100);")
+                
                 # Wait and take screenshot
                 time.sleep(5)
                 screenshot_path = f"screenshots/Blackheath_Quiz_{i+1}.png"
