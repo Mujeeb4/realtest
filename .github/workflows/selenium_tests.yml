@@ -112,6 +112,9 @@ jobs:
       - name: Run Blackheath School tests
         run: pytest test_BlackheathAnswers.py --tb=short --junitxml=results.xml
 
+      - name: Run City of London School tests
+        run: pytest test_CityofLondonAnswers.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
