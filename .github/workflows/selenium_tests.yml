@@ -109,6 +109,9 @@ jobs:
       - name: Run Brentwood School tests
         run: pytest test_BrentwoodAnswers.py --tb=short --junitxml=results.xml
 
+      - name: Run Blackheath School tests
+        run: pytest test_BlackheathAnswers.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
