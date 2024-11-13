@@ -84,12 +84,12 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/brentwood-school-11-plus-maths-sample-paper-answers-paper-2"
+            "https://smoothmaths.co.uk/brentwood-school-11-plus-maths-sample-paper-answers-paper-2/"
         ]
 
         # Expected URLs for each quiz
         expected_quiz_urls = [
-            "https://smoothmaths.co.uk/brentwood-school-11-plus-maths-sample-paper-online-quiz"
+            "https://smoothmaths.co.uk/brentwood-school-11-plus-maths-sample-paper-online-quiz/"
         ]
 
         # Locators for each answer paper
@@ -116,16 +116,13 @@ class TestWordpressLogin:
                 
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
-
-                # Additional check for the PDF Embedder
-                WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, "pdfemb-viewer"))
-                )
-                print("PDF Embedder viewer detected on page.")
+                
+                # Scroll slightly before taking a screenshot
+                self.driver.execute_script("window.scrollBy(0, -100);")
                 
                 # Wait and take screenshot
                 time.sleep(5)
-                screenshot_path = f"screenshots/Aldenham_Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Brentwood_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 # Log success status
@@ -138,7 +135,7 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
-                screenshot_path = f"screenshots/Aldenham_error_Answer_Paper_{i+1}.png"
+                screenshot_path = f"screenshots/Brentwood_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
@@ -166,9 +163,12 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
 
+                # Scroll slightly before taking a screenshot
+                self.driver.execute_script("window.scrollBy(0, -100);")
+                
                 # Wait and take screenshot
                 time.sleep(5)
-                screenshot_path = f"screenshots/Aldenham_Quiz_{i+1}.png"
+                screenshot_path = f"screenshots/Brentwood_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 # Log success status
@@ -181,7 +181,7 @@ class TestWordpressLogin:
                 })
 
             except Exception as e:
-                screenshot_path = f"screenshots/Aldenham_error_Quiz_{i+1}.png"
+                screenshot_path = f"screenshots/Brentwood_error_Quiz_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
                 
                 results.append({
