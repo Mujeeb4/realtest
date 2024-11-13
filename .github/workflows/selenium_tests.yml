@@ -106,6 +106,10 @@ jobs:
       - name: Run Bancroft quizzes tests
         run: pytest test_BancroftQuizzes.py --tb=short --junitxml=results.xml
 
+      # Running all tests sequentially
+      - name: Run Aldenham School tests
+        run: pytest test_AldenhamAnswers.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
