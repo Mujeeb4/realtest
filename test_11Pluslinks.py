@@ -17,7 +17,7 @@ class Test11Plus():
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.set_window_size(1296, 696)
 
-        # Create a folder for screenshots if it doesn't exist
+        
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
 
