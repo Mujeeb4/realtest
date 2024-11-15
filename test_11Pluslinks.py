@@ -31,9 +31,9 @@ class Test11Plus():
         # Hover over the "11 Plus" dropdown to reveal the links
         dropdown = self.driver.find_element(By.LINK_TEXT, "11 Plus")
         ActionChains(self.driver).move_to_element(dropdown).perform()
-        time.sleep(1)  # Adding a small pause to ensure the dropdown is fully revealed
+        time.sleep(1)
 
-        # Click on "11 Plus Independent Schools"
+        
         independent_link = self.driver.find_element(By.LINK_TEXT, "11 Plus Independent Schools")
         independent_link.click()
         
