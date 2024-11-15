@@ -25,7 +25,7 @@ class TestWordpressLogin:
         chrome_options.add_argument("--disable-notifications")
         chrome_options.add_argument("--incognito")
         chrome_options.add_argument("window-size=1296,696")
-        
+
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.set_page_load_timeout(60)
         self.driver.set_script_timeout(30)
@@ -34,9 +34,9 @@ class TestWordpressLogin:
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
-        
+
         self.vars = {}
-  
+
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -72,76 +72,82 @@ class TestWordpressLogin:
         # Start time to calculate test duration
         start_time = time.time()
 
-        # Log in to WordPress
-        self.driver.get("https://smoothmaths.co.uk/login/")
-        self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
-        self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
-        self.driver.find_element(By.ID, "wp-submit").click()
-        
-        # Open the target page
-        main_page_url = "https://smoothmaths.co.uk/11-plus-schools/city-of-london-freemens-school/"
-        self.driver.get(main_page_url)
-        
-        # Expected URLs for each answer paper
-        expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/city-of-london-freemens-school/city-of-london-freemens-school-11-maths-foundation-answers
-        ]
+        try:
+            # Log in to WordPress
+            self.driver.get("https://smoothmaths.co.uk/login/")
+            self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
+            self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
+            self.driver.find_element(By.ID, "wp-submit").click()
 
-
-        # Locators for each answer paper
-        answer_paper_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
-        ]
-
-
-        results = []
-
-        # Test each Answer Paper link
-        for i, (by, value) in enumerate(answer_paper_locators):
-            try:
-                # Scroll to the element and click
-                answer_paper_link = self.scroll_to_element_incrementally(by, value)
-                self.driver.execute_script("arguments[0].click();", answer_paper_link)
-
-                # Verify the current URL
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
-                
-                # Log current URL for debugging
-                print(f"Navigated to: {self.driver.current_url}")
-                
-                # Scroll slightly before taking a screenshot
-                self.driver.execute_script("window.scrollBy(0, 200);")
-                
-                # Wait and take screenshot
-                time.sleep(5)
-                screenshot_path = f"screenshots/City_of_London_Freemen_Answer_Paper_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                # Log success status
-                results.append({
-                    "Test Case": f"Answer Paper {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
-            except Exception as e:
-                screenshot_path = f"screenshots/City_of_London_Freemen_error_Answer_Paper_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Answer Paper {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
-
-            # Go back to the main page for the next link
+            # Open the target page
+            main_page_url = "https://smoothmaths.co.uk/11-plus-schools/city-of-london-freemens-school/"
             self.driver.get(main_page_url)
-            time.sleep(2)
 
+            # Expected URLs for each answer paper
+            expected_answer_urls = [
+                "https://smoothmaths.co.uk/11-plus-schools/city-of-london-freemens-school/city-of-london-freemens-school-11-maths-foundation-answers"
+            ]
 
-        # Append results to CSV
-        self.append_to_csv(results)
+            # Locators for each answer paper
+            answer_paper_locators = [
+                (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
+            ]
+
+            results = []
+
+            # Test each Answer Paper link
+            for i, (by, value) in enumerate(answer_paper_locators):
+                try:
+                    # Scroll to the element and click
+                    answer_paper_link = self.scroll_to_element_incrementally(by, value)
+                    self.driver.execute_script("arguments[0].click();", answer_paper_link)
+
+                    # Verify the current URL
+                    WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+
+                    # Log current URL for debugging
+                    print(f"Navigated to: {self.driver.current_url}")
+
+                    # Scroll slightly before taking a screenshot
+                    self.driver.execute_script("window.scrollBy(0, 200);")
+
+                    # Wait and take screenshot
+                    time.sleep(5)
+                    screenshot_path = f"screenshots/Freemen_Answer_Paper_{i+1}.png"
+                    self.driver.save_screenshot(screenshot_path)
+
+                    # Log success status
+                    results.append({
+                        "Test Case": f"Answer Paper {i+1} Link Verification",
+                        "Status": "Pass",
+                        "Expected URL": expected_answer_urls[i],
+                        "Actual URL": self.driver.current_url,
+                        "Screenshot": screenshot_path
+                    })
+
+                except Exception as e:
+                    screenshot_path = f"screenshots/Freemen_error_Answer_Paper_{i+1}.png"
+                    self.driver.save_screenshot(screenshot_path)
+
+                    results.append({
+                        "Test Case": f"Answer Paper {i+1} Link Verification",
+                        "Status": f"Fail: {str(e)}",
+                        "Expected URL": expected_answer_urls[i],
+                        "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
+                        "Screenshot": screenshot_path
+                    })
+
+                # Go back to the main page for the next link
+                self.driver.get(main_page_url)
+                time.sleep(2)
+
+            # Append results to CSV
+            self.append_to_csv(results)
+
+        except Exception as e:
+            print(f"Error encountered during test: {e}")
+
+        finally:
+            # End time and log test duration
+            end_time = time.time()
+            print(f"Test completed in {end_time - start_time:.2f} seconds.")
