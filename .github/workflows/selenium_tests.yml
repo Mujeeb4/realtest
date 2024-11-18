@@ -133,6 +133,9 @@ jobs:
       - name: Run Forest School tests
         run: pytest test_ForestAnswers11Plus.py --tb=short --junitxml=results.xml
 
+      - name: Run Emanuel School tests
+        run: pytest test_EmanuelAnswers11Plus.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
