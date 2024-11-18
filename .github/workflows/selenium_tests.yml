@@ -25,119 +25,119 @@ jobs:
           pip install selenium pytest webdriver-manager pandas
 
       # Running all tests sequentially
-      # - name: Run forgot password tests
-      #   run: pytest test_forgetPasswordTest1_2155.py --tb=short --junitxml=results.xml
+      - name: Run forgot password tests
+        run: pytest test_forgetPasswordTest1_2155.py --tb=short --junitxml=results.xml
 
-      # - name: Run login tests
-      #   run: pytest test_Wordpresslogin1_2155.py --tb=short --junitxml=results.xml
+      - name: Run login tests
+        run: pytest test_Wordpresslogin1_2155.py --tb=short --junitxml=results.xml
 
-      # - name: Run contact us tests
-      #   run: pytest test_contactus.py --tb=short --junitxml=results.xml
+      - name: Run contact us tests
+        run: pytest test_contactus.py --tb=short --junitxml=results.xml
 
-      # - name: Run privacy policy tests
-      #   run: pytest test_privacyPolicy.py --tb=short --junitxml=results.xml
+      - name: Run privacy policy tests
+        run: pytest test_privacyPolicy.py --tb=short --junitxml=results.xml
 
-      # - name: Run terms & conditions tests
-      #   run: pytest test_termsConditions.py --tb=short --junitxml=results.xml
+      - name: Run terms & conditions tests
+        run: pytest test_termsConditions.py --tb=short --junitxml=results.xml
 
-      # - name: Run FAQs tests
-      #   run: pytest test_fAQs.py --tb=short --junitxml=results.xml
+      - name: Run FAQs tests
+        run: pytest test_fAQs.py --tb=short --junitxml=results.xml
 
-      # - name: Run feedback tests
-      #   run: pytest test_feedbackPage.py --tb=short --junitxml=results.xml
+      - name: Run feedback tests
+        run: pytest test_feedbackPage.py --tb=short --junitxml=results.xml
 
-      # - name: Run 11 Plus link tests
-      #   run: pytest test_11Pluslinks.py --tb=short --junitxml=results.xml
+      - name: Run 11 Plus link tests
+        run: pytest test_11Pluslinks.py --tb=short --junitxml=results.xml
 
-      # - name: Run 13 Plus link tests
-      #   run: pytest test_13Pluslink.py --tb=short --junitxml=results.xml
+      - name: Run 13 Plus link tests
+        run: pytest test_13Pluslink.py --tb=short --junitxml=results.xml
 
-      # - name: Run GCSE link tests
-      #   run: pytest test_GCSElink.py --tb=short --junitxml=results.xml
+      - name: Run GCSE link tests
+        run: pytest test_GCSElink.py --tb=short --junitxml=results.xml
 
-      # - name: Run IGCSE link tests
-      #   run: pytest test_IGCSElink.py --tb=short --junitxml=results.xml
+      - name: Run IGCSE link tests
+        run: pytest test_IGCSElink.py --tb=short --junitxml=results.xml
 
-      # - name: Run AS-Level link tests
-      #   run: pytest test_AS-Level.py --tb=short --junitxml=results.xml
+      - name: Run AS-Level link tests
+        run: pytest test_AS-Level.py --tb=short --junitxml=results.xml
 
-      # - name: Run A-Level link tests
-      #   run: pytest test_A-Level.py --tb=short --junitxml=results.xml
+      - name: Run A-Level link tests
+        run: pytest test_A-Level.py --tb=short --junitxml=results.xml
 
-      # - name: Run Pricing link tests
-      #   run: pytest test_pricing.py --tb=short --junitxml=results.xml
+      - name: Run Pricing link tests
+        run: pytest test_pricing.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Monthly Plan 1 link tests
-      #   run: pytest test_MonthlyPlan1.py --tb=short --junitxml=results.xml
+      - name: Run Registration Monthly Plan 1 link tests
+        run: pytest test_MonthlyPlan1.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Monthly Plan 2 link tests
-      #   run: pytest test_MonthlyPlan2.py --tb=short --junitxml=results.xml
+      - name: Run Registration Monthly Plan 2 link tests
+        run: pytest test_MonthlyPlan2.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Monthly Plan 3 link tests
-      #   run: pytest test_MonthlyPlan3.py --tb=short --junitxml=results.xml
+      - name: Run Registration Monthly Plan 3 link tests
+        run: pytest test_MonthlyPlan3.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Monthly Plan 4 link tests
-      #   run: pytest test_MonthlyPlan4.py --tb=short --junitxml=results.xml
+      - name: Run Registration Monthly Plan 4 link tests
+        run: pytest test_MonthlyPlan4.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Monthly Plan 5 link tests
-      #   run: pytest test_MonthlyPlan5.py --tb=short --junitxml=results.xml
+      - name: Run Registration Monthly Plan 5 link tests
+        run: pytest test_MonthlyPlan5.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Yearly Plan 1 link tests
-      #   run: pytest test_YearlyPlan1.py --tb=short --junitxml=results.xml
+      - name: Run Registration Yearly Plan 1 link tests
+        run: pytest test_YearlyPlan1.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Yearly Plan 2 link tests
-      #   run: pytest test_YearlyPlan2.py --tb=short --junitxml=results.xml
+      - name: Run Registration Yearly Plan 2 link tests
+        run: pytest test_YearlyPlan2.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Yearly Plan 3 link tests
-      #   run: pytest test_YearlyPlan3.py --tb=short --junitxml=results.xml
+      - name: Run Registration Yearly Plan 3 link tests
+        run: pytest test_YearlyPlan3.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Yearly Plan 4 link tests
-      #   run: pytest test_YearlyPlan4.py --tb=short --junitxml=results.xml
+      - name: Run Registration Yearly Plan 4 link tests
+        run: pytest test_YearlyPlan4.py --tb=short --junitxml=results.xml
 
-      # - name: Run Registration Yearly Plan 5 link tests
-      #   run: pytest test_YearlyPlan5.py --tb=short --junitxml=results.xml
+      - name: Run Registration Yearly Plan 5 link tests
+        run: pytest test_YearlyPlan5.py --tb=short --junitxml=results.xml
 
-      # - name: Run Alleyn answers tests
-      #   run: pytest test_Alleyns11Plus.py --tb=short --junitxml=results.xml
+      - name: Run Alleyn answers tests
+        run: pytest test_Alleyns11Plus.py --tb=short --junitxml=results.xml
 
-      # - name: Run Bancroft answers tests
-      #   run: pytest test_Bancroft11Plus.py --tb=short --junitxml=results.xml
+      - name: Run Bancroft answers tests
+        run: pytest test_Bancroft11Plus.py --tb=short --junitxml=results.xml
 
-      # - name: Run Aldenham School tests
-      #   run: pytest test_AldenhamAnswers.py --tb=short --junitxml=results.xml
+      - name: Run Aldenham School tests
+        run: pytest test_AldenhamAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run Brentwood School tests
-      #   run: pytest test_BrentwoodAnswers.py --tb=short --junitxml=results.xml
+      - name: Run Brentwood School tests
+        run: pytest test_BrentwoodAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run Blackheath School tests
-      #   run: pytest test_BlackheathAnswers.py --tb=short --junitxml=results.xml
+      - name: Run Blackheath School tests
+        run: pytest test_BlackheathAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run City of London School tests
-      #   run: pytest test_CityofLondonAnswers.py --tb=short --junitxml=results.xml
+      - name: Run City of London School tests
+        run: pytest test_CityofLondonAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run Colfe School tests
-      #   run: pytest test_ColfesAnswers.py --tb=short --junitxml=results.xml
+      - name: Run Colfe School tests
+        run: pytest test_ColfesAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run City of London Freemen School tests
-      #   run: pytest test_CityofLondonFreemen.py --tb=short --junitxml=results.xml
+      - name: Run City of London Freemen School tests
+        run: pytest test_CityofLondonFreemen.py --tb=short --junitxml=results.xml
 
-      # - name: Run Chigwell School tests
-      #   run: pytest test_ChigwellAnswers.py --tb=short --junitxml=results.xml
+      - name: Run Chigwell School tests
+        run: pytest test_ChigwellAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run Christ School tests
-      #   run: pytest test_ChristAnswers.py --tb=short --junitxml=results.xml
+      - name: Run Christ School tests
+        run: pytest test_ChristAnswers.py --tb=short --junitxml=results.xml
 
-      # - name: Run Dulwich School tests
-      #   run: pytest test_DulwichAnswers11Plus.py --tb=short --junitxml=results.xml
+      - name: Run Dulwich School tests
+        run: pytest test_DulwichAnswers11Plus.py --tb=short --junitxml=results.xml
 
-      # - name: Run Forest School tests
-      #   run: pytest test_ForestAnswers11Plus.py --tb=short --junitxml=results.xml
+      - name: Run Forest School tests
+        run: pytest test_ForestAnswers11Plus.py --tb=short --junitxml=results.xml
 
-      # - name: Run Emanuel School tests
-      #   run: pytest test_EmanuelAnswers11Plus.py --tb=short --junitxml=results.xml
+      - name: Run Emanuel School tests
+        run: pytest test_EmanuelAnswers11Plus.py --tb=short --junitxml=results.xml
 
-      # - name: Run Eltham School tests
-      #   run: pytest test_ElthamAnswers11Plus.py --tb=short --junitxml=results.xml
+      - name: Run Eltham School tests
+        run: pytest test_ElthamAnswers11Plus.py --tb=short --junitxml=results.xml
 
       - name: Run Highgate School tests
         run: pytest test_HighGateAnswers11Plus.py --tb=short --junitxml=results.xml
