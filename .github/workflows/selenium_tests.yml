@@ -130,6 +130,9 @@ jobs:
       - name: Run Dulwich School tests
         run: pytest test_DulwichAnswers11Plus.py --tb=short --junitxml=results.xml
 
+      - name: Run Forest School tests
+        run: pytest test_ForestAnswers11Plus.py --tb=short --junitxml=results.xml
+
       # Upload screenshots
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
