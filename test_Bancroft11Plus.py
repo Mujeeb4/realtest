@@ -65,13 +65,11 @@ class TestWordpressLogin:
         # Start time to calculate test duration
         start_time = time.time()
 
-        # Log in to WordPress
         self.driver.get("https://smoothmaths.co.uk/login/")
         self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
         self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
         self.driver.find_element(By.ID, "wp-submit").click()
         
-        # Open the target page
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/"
         self.driver.get(main_page_url)
 
