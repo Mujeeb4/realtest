@@ -136,8 +136,11 @@ jobs:
       # - name: Run Emanuel School tests
       #   run: pytest test_EmanuelAnswers11Plus.py --tb=short --junitxml=results.xml
 
-      - name: Run Eltham School tests
-        run: pytest test_ElthamAnswers11Plus.py --tb=short --junitxml=results.xml
+      # - name: Run Eltham School tests
+      #   run: pytest test_ElthamAnswers11Plus.py --tb=short --junitxml=results.xml
+
+      - name: Run Highgate School tests
+        run: pytest test_HighGateAnswers11Plus.py --tb=short --junitxml=results.xml
 
       # Upload screenshots
       - name: Upload screenshots
