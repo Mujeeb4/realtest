@@ -178,8 +178,11 @@ jobs:
       # - name: Run Royal Russel School tests
       #   run: pytest test_RoyalRusselAnswers.py --tb=short --junitxml=results.xml
 
-      - name: Run Royal Russel School tests
-        run: pytest test_STPaulsAnswers.py --tb=short --junitxml=results.xml
+      # - name: Run ST Pauls School tests
+      #   run: pytest test_STPaulsAnswers.py --tb=short --junitxml=results.xml
+
+      - name: Run ST Albans School tests
+        run: pytest test_STAlbansAnswers.py --tb=short --junitxml=results.xml
             
       # Upload screenshots
       - name: Upload screenshots
