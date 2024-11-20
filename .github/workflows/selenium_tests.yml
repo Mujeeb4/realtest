@@ -181,8 +181,11 @@ jobs:
       # - name: Run ST Pauls School tests
       #   run: pytest test_STPaulsAnswers.py --tb=short --junitxml=results.xml
 
-      - name: Run ST Albans School tests
-        run: pytest test_STAlbansAnswers.py --tb=short --junitxml=results.xml
+      # - name: Run ST Albans School tests
+      #   run: pytest test_STAlbansAnswers.py --tb=short --junitxml=results.xml
+
+      - name: Run ST George School tests
+        run: pytest test_STGeorgeAnswers.py --tb=short --junitxml=results.xml
             
       # Upload screenshots
       - name: Upload screenshots
