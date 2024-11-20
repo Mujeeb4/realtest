@@ -211,8 +211,11 @@ jobs:
       # - name: Run Perse Upper School tests
       #   run: pytest test_PerseUpperAnswers.py --tb=short --junitxml=results.xml
 
-      - name: Run London Independent School tests
-        run: pytest test_LondonIndependentAnswers.py --tb=short --junitxml=results.xml
+      # - name: Run London Independent School tests
+      #   run: pytest test_LondonIndependentAnswers.py --tb=short --junitxml=results.xml
+
+      - name: Run Whitgift School tests
+        run: pytest test_WhitgiftAnswers.py --tb=short --junitxml=results.xml
             
       # Upload screenshots
       - name: Upload screenshots
