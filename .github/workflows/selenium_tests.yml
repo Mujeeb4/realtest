@@ -163,8 +163,11 @@ jobs:
       # - name: Run Magdalen College tests
       #   run: pytest test_MagdalenAnswers11Plus.py --tb=short --junitxml=results.xml
 
-      - name: Run North London tests
-        run: pytest test_NorthLondonAnswers11Plus.py --tb=short --junitxml=results.xml
+      # - name: Run North London tests
+      #   run: pytest test_NorthLondonAnswers11Plus.py --tb=short --junitxml=results.xml
+
+      - name: Run Oundle School tests
+        run: pytest test_OundleAnswers11Plus.py --tb=short --junitxml=results.xml
         
 
       # Upload screenshots
