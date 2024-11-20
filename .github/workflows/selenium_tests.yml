@@ -172,8 +172,11 @@ jobs:
       # - name: Run Queens School tests
       #   run: pytest test_QueensAnswers11Plus.py --tb=short --junitxml=results.xml
 
-      - name: Run Queens School tests
-        run: pytest test_ReigateAnswers.py --tb=short --junitxml=results.xml
+      # - name: Run Queens School tests
+      #   run: pytest test_ReigateAnswers.py --tb=short --junitxml=results.xml
+
+      - name: Run Royal Russel School tests
+        run: pytest test_RoyalRusselAnswers.py --tb=short --junitxml=results.xml
         
         
       # Upload screenshots
