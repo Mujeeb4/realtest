@@ -157,8 +157,11 @@ jobs:
       # - name: Run Kings College tests
       #   run: pytest test_KingsAnswers11PLus.py --tb=short --junitxml=results.xml
 
-      - name: Run Merchant Taylor School tests
-        run: pytest test_MerchantAnswers11Plus.py --tb=short --junitxml=results.xml
+      # - name: Run Merchant Taylor School tests
+      #   run: pytest test_MerchantAnswers11Plus.py --tb=short --junitxml=results.xml
+
+      - name: Run Magdalen College tests
+        run: pytest test_MagdalenAnswers11Plus.py --tb=short --junitxml=results.xml
 
       # Upload screenshots
       - name: Upload screenshots
