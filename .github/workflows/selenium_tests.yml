@@ -188,7 +188,7 @@ jobs:
       #   run: pytest test_STGeorgeAnswers.py --tb=short --junitxml=results.xml
 
       - name: Run Streatham & Clapham School tests
-        run: pytest test_Streatham&ClaphamAnswers.py --tb=short --junitxml=results.xml
+        run: pytest test_StreathamClaphamAnswers.py --tb=short --junitxml=results.xml
             
       # Upload screenshots
       - name: Upload screenshots
