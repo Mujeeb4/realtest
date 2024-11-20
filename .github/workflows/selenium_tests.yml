@@ -152,7 +152,7 @@ jobs:
       #   run: pytest test_JamesAllenAnswers11Plus.py --tb=short --junitxml=results.xml
 
       - name: Run Kent School tests
-        run: pytest test_test_KentAnswers11Plus.py.py --tb=short --junitxml=results.xml
+        run: pytest test_KentAnswers11Plus.py --tb=short --junitxml=results.xml
 
       # Upload screenshots
       - name: Upload screenshots
