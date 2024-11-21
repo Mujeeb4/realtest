@@ -24,7 +24,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager pandas
 
-      # Running all tests sequentially
       - name: Run forgot password tests
         run: pytest test_forgetPasswordTest1_2155.py --tb=short --junitxml=results.xml
 
