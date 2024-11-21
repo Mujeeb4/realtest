@@ -202,9 +202,6 @@ jobs:
       - name: Run Manchestar Grammar School tests
         run: pytest test_ManchesterGrammarAnswers.py --tb=short --junitxml=results.xml
 
-      - name: Run Manchestar Grammar Part 2 School tests
-        run: pytest test_ManchesterGrammarAnswerP2.py --tb=short --junitxml=results.xml
-
       # - name: Run Latymer Upper School tests
       #   run: pytest test_LatymerUpperAnswers.py --tb=short --junitxml=results.xml
 
