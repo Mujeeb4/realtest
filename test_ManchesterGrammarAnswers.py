@@ -13,7 +13,7 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up headless Chrome options for CI
+        # Set up headless Chrome options
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
@@ -36,7 +36,7 @@ class TestWordpressLogin:
             os.makedirs("screenshots")
         
         self.vars = {}
-  
+
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -51,65 +51,17 @@ class TestWordpressLogin:
         """Scroll to the bottom of the page."""
         last_height = self.driver.execute_script("return document.body.scrollHeight")
         while True:
-            # Scroll down to the bottom
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(2)  # Wait for the page to load
-            
-            # Calculate new scroll height and compare with the last height
             new_height = self.driver.execute_script("return document.body.scrollHeight")
             if new_height == last_height:
                 break
             last_height = new_height
 
-    def scroll_and_click_all_papers(self, paper_locators, expected_urls, main_page_url):
-        results = []
-
-        for i, (by, value) in enumerate(paper_locators):
-            try:
-                # Scroll to the bottom to ensure all elements are loaded
-                self.scroll_to_bottom()
-
-                # Find and click the paper link
-                answer_paper_link = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((by, value))
-                )
-                answer_paper_link.click()
-
-                # Verify the URL matches the expected URL
-                WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_urls[i]))
-                assert self.driver.current_url == expected_urls[i], \
-                    f"Expected URL {expected_urls[i]}, but got {self.driver.current_url}"
-
-                # Take a screenshot for verification
-                screenshot_path = f"screenshots/Paper_{i + 1}.png"
-                self.driver.save_screenshot(screenshot_path)
-
-                # Log the success
-                results.append({
-                    "Test Case": f"Paper {i + 1} Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
-            except Exception as e:
-                # Log the failure
-                screenshot_path = f"screenshots/Error_Paper_{i + 1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                results.append({
-                    "Test Case": f"Paper {i + 1} Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
-
-            # Return to the main page for the next paper
-            self.driver.get(main_page_url)
-            time.sleep(2)
-
-        return results
+    def scroll_to_element(self, element):
+        """Scroll to a specific element."""
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        time.sleep(1)  # Pause to allow scrolling animation
 
     def test_11Plus(self):
         # Start time to calculate test duration
@@ -123,6 +75,7 @@ class TestWordpressLogin:
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/"
         self.driver.get(main_page_url)
 
+        # List of expected URLs and their respective locators
         expected_answer_urls = [
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2019-arithmetic-section-a-answer-paper",
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2019-arithmetic-section-b-answer-paper",
@@ -171,12 +124,51 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_53.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_55.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_57.et_pb_blurb .et_pb_module_header a")
-
         ]
 
+        results = []
 
-        results = self.scroll_and_click_all_papers(answer_paper_locators, expected_answer_urls, main_page_url)
-        
+        for i, (by, value) in enumerate(answer_paper_locators):
+            try:
+                # Scroll to element
+                element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value)))
+                self.scroll_to_element(element)
+
+                # Click the link
+                element.click()
+
+                # Wait for the URL to match the expected one
+                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+                current_url = self.driver.current_url
+
+                # Take a screenshot
+                screenshot_path = f"screenshots/Paper_{i + 1}.png"
+                self.driver.save_screenshot(screenshot_path)
+
+                # Log result
+                results.append({
+                    "Test Case": f"Paper {i + 1} Verification",
+                    "Status": "Pass",
+                    "Expected URL": expected_answer_urls[i],
+                    "Actual URL": current_url,
+                    "Screenshot": screenshot_path
+                })
+
+            except Exception as e:
+                # Log failure
+                screenshot_path = f"screenshots/Error_Paper_{i + 1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                results.append({
+                    "Test Case": f"Paper {i + 1} Verification",
+                    "Status": f"Fail: {str(e)}",
+                    "Expected URL": expected_answer_urls[i],
+                    "Screenshot": screenshot_path
+                })
+
+            # Return to main page for the next paper
+            self.driver.get(main_page_url)
+            time.sleep(2)
+
         # Log results to CSV
         self.append_to_csv(results)
 
