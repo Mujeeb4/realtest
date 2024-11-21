@@ -55,12 +55,12 @@ class TestWordpressLogin:
                 element = WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((by, value))
                 )
-            return element
-        except:
-            # Incrementally scroll down by 500px (larger steps)
-            self.driver.execute_script("window.scrollBy(0, 500);")
-            time.sleep(0.5)  # Pause briefly after each scroll
-    raise Exception(f"Element {value} not found or not clickable after scrolling.")
+                return element
+            except:
+                # Incrementally scroll down by 500px (larger steps)
+                self.driver.execute_script("window.scrollBy(0, 500);")
+                time.sleep(0.5)  # Pause briefly after each scroll
+        raise Exception(f"Element {value} not found or not clickable after scrolling.")
 
     def test_11Plus(self):
         # Start time to calculate test duration
