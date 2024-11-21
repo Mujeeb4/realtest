@@ -47,21 +47,22 @@ class TestWordpressLogin:
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
 
-    def scroll_to_bottom(self):
-        """Scroll to the bottom of the page."""
-        last_height = self.driver.execute_script("return document.body.scrollHeight")
-        while True:
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)  # Wait for the page to load
-            new_height = self.driver.execute_script("return document.body.scrollHeight")
-            if new_height == last_height:
-                break
-            last_height = new_height
-
     def scroll_to_element(self, element):
         """Scroll to a specific element."""
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        time.sleep(1)  # Pause to allow scrolling animation
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        time.sleep(1)  # Pause for the scroll animation
+
+    def retry_click(self, locator):
+        """Retry clicking on an element if it fails."""
+        for _ in range(3):  # Retry up to 3 times
+            try:
+                element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(locator))
+                self.scroll_to_element(element)
+                element.click()
+                return
+            except Exception as e:
+                time.sleep(2)  # Wait before retrying
+        raise Exception(f"Failed to click on the element: {locator}")
 
     def test_11Plus(self):
         # Start time to calculate test duration
@@ -75,7 +76,7 @@ class TestWordpressLogin:
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/"
         self.driver.get(main_page_url)
 
-        # List of expected URLs and their respective locators
+        # List of expected URLs
         expected_answer_urls = [
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2019-arithmetic-section-a-answer-paper",
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2019-arithmetic-section-b-answer-paper",
@@ -98,9 +99,10 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-2009-entrance-examination-arithmetic-answer-paper",
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2009-section-2-answer-paper",
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-section-1-answer-paper",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-part-2-answer-paper/"
+            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-part-2-answer-paper"
         ]
 
+        # Corresponding locators
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"),
@@ -130,12 +132,8 @@ class TestWordpressLogin:
 
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                # Scroll to element
-                element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((by, value)))
-                self.scroll_to_element(element)
-
-                # Click the link
-                element.click()
+                # Retry clicking on the answer paper link
+                self.retry_click((by, value))
 
                 # Wait for the URL to match the expected one
                 WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
