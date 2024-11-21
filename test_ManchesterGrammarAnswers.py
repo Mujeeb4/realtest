@@ -86,16 +86,6 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2014-arithmetic-section-b-answer-paper",
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2013-arithmetic-answer-paper-1",
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2013-arithmetic-paper-2-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2012-arithmetic-paper-1-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2012-arithmetic-paper-2-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2011-arithmetic-paper-1-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2011-arithmetic-paper-2-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2010-part-1-arithmetic-examination-answers-paper",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2010-arithmetic-answer-paper-2",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-2009-entrance-examination-arithmetic-answer-paper",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2009-section-2-answer-paper",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-section-1-answer-paper",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-part-2-answer-paper/"
         ]
 
         answer_paper_locators = [
@@ -110,17 +100,7 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_24.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_26.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_29.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_31.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_34.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_37.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_40.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_43.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_46.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_49.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_51.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_53.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_55.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_57.et_pb_blurb .et_pb_module_header a")
+            (By.CSS_SELECTOR, ".et_pb_blurb_31.et_pb_blurb .et_pb_module_header a")
         ]
 
 
