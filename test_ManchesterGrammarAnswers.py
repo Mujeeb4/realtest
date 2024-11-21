@@ -13,7 +13,7 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up headless Chrome options
+        # Set up headless Chrome options for CI
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
@@ -36,7 +36,7 @@ class TestWordpressLogin:
             os.makedirs("screenshots")
         
         self.vars = {}
-
+  
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -46,23 +46,21 @@ class TestWordpressLogin:
             df.to_csv(CSV_FILE_PATH, mode='a', header=False, index=False)
         else:
             df.to_csv(CSV_FILE_PATH, mode='w', header=True, index=False)
-
-    def scroll_to_element(self, element):
-        """Scroll to a specific element."""
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-        time.sleep(1)  # Pause for the scroll animation
-
-    def retry_click(self, locator):
-        """Retry clicking on an element if it fails."""
-        for _ in range(3):  # Retry up to 3 times
+  
+    def scroll_to_element(self, by, value):
+        """Scroll incrementally until the element is in view and clickable."""
+        for _ in range(30):  # Increase the number of scroll attempts
             try:
-                element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(locator))
-                self.scroll_to_element(element)
-                element.click()
-                return
-            except Exception as e:
-                time.sleep(2)  # Wait before retrying
-        raise Exception(f"Failed to click on the element: {locator}")
+                # Try to find and click the element
+                element = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((by, value))
+                )
+            return element
+        except:
+            # Incrementally scroll down by 500px (larger steps)
+            self.driver.execute_script("window.scrollBy(0, 500);")
+            time.sleep(0.5)  # Pause briefly after each scroll
+    raise Exception(f"Element {value} not found or not clickable after scrolling.")
 
     def test_11Plus(self):
         # Start time to calculate test duration
@@ -76,7 +74,6 @@ class TestWordpressLogin:
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/"
         self.driver.get(main_page_url)
 
-        # List of expected URLs
         expected_answer_urls = [
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2019-arithmetic-section-a-answer-paper",
             "https://smoothmaths.co.uk/11-plus-schools/the-manchester-grammer-school/the-manchester-grammar-school-entrance-examination-2019-arithmetic-section-b-answer-paper",
@@ -99,10 +96,9 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-2009-entrance-examination-arithmetic-answer-paper",
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2009-section-2-answer-paper",
             "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-section-1-answer-paper",
-            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-part-2-answer-paper"
+            "https://smoothmaths.co.uk/the-manchester-grammar-school-11-plus-entrance-examination-2008-part-2-answer-paper/"
         ]
 
-        # Corresponding locators
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"),
@@ -126,46 +122,56 @@ class TestWordpressLogin:
             (By.CSS_SELECTOR, ".et_pb_blurb_53.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_55.et_pb_blurb .et_pb_module_header a"),
             (By.CSS_SELECTOR, ".et_pb_blurb_57.et_pb_blurb .et_pb_module_header a")
+
         ]
+
 
         results = []
 
+        # Test each Answer Paper link
         for i, (by, value) in enumerate(answer_paper_locators):
             try:
-                # Retry clicking on the answer paper link
-                self.retry_click((by, value))
-
-                # Wait for the URL to match the expected one
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
-                current_url = self.driver.current_url
-
-                # Take a screenshot
-                screenshot_path = f"screenshots/Paper_{i + 1}.png"
+                # Scroll to the element and get the clickable element
+                answer_paper_link = self.scroll_to_element(by, value)
+                answer_paper_link.click()
+                
+                # Verify the current URL
+                WebDriverWait(self.driver, 15).until(EC.url_to_be(expected_answer_urls[i]))
+                
+                # Assert the URL is correct, if not, raise an AssertionError
+                assert self.driver.current_url == expected_answer_urls[i], f"Expected URL to be {expected_answer_urls[i]}, but got {self.driver.current_url}"
+                
+                # Wait 5 seconds before taking a screenshot
+                time.sleep(5)
+                screenshot_path = f"screenshots/Manchester_Grammar_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
-
-                # Log result
+                
+                # Log success status
                 results.append({
-                    "Test Case": f"Paper {i + 1} Verification",
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
                     "Status": "Pass",
                     "Expected URL": expected_answer_urls[i],
-                    "Actual URL": current_url,
+                    "Actual URL": self.driver.current_url,
                     "Screenshot": screenshot_path
                 })
 
             except Exception as e:
-                # Log failure
-                screenshot_path = f"screenshots/Error_Paper_{i + 1}.png"
+                # Capture any errors and log failure status
+                screenshot_path = f"screenshots/Manchester_Grammar_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
+                
                 results.append({
-                    "Test Case": f"Paper {i + 1} Verification",
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
                     "Status": f"Fail: {str(e)}",
                     "Expected URL": expected_answer_urls[i],
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
                     "Screenshot": screenshot_path
                 })
 
-            # Return to main page for the next paper
+            # Go back to the main page for the next link
             self.driver.get(main_page_url)
-            time.sleep(2)
+            time.sleep(3)
+
 
         # Log results to CSV
         self.append_to_csv(results)
