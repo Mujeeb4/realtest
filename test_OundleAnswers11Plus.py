@@ -74,18 +74,18 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2020-second-form-entry-answer-paper-2",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2020-first-form-entry-answer-paper-2",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2019-second-form-entry-answer-paper-2",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2019-first-form-entry-answer-paper-2",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2018-junior-entrance-examination-first-form-entry",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2017-junior-entrance-examination-first-form-entry",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2016-junior-entrance-examination-first-form-entry",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2015-entrance-examination-first-form-entry",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2014-first-form-entry-answer-paper-2",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2013-first-form-entry-answer-paper-3",
-            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-exam-2009",
-            "https://smoothmaths.co.uk/11-plus-schools/oundle-school/oundle-school-11-plus-maths-sample-paper-2008-answers-paper"
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2020-second-form-entry-answer-paper-2/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2020-first-form-entry-answer-paper-2/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2019-second-form-entry-answer-paper-2/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2019-first-form-entry-answer-paper-2/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2018-junior-entrance-examination-first-form-entry/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2017-junior-entrance-examination-first-form-entry/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2016-junior-entrance-examination-first-form-entry/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-mathematics-2015-entrance-examination-first-form-entry/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2014-first-form-entry-answer-paper-2/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-examination-2013-first-form-entry-answer-paper-3/",
+            "https://smoothmaths.co.uk/oundle-school-11-plus-maths-junior-entrance-exam-2009/",
+            "https://smoothmaths.co.uk/11-plus-schools/oundle-school/oundle-school-11-plus-maths-sample-paper-2008-answers-paper/"
         ]
 
         answer_paper_locators = [
