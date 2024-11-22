@@ -84,8 +84,8 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/city-of-london-school-for-girls/city-of-london-school-for-girls-year-7-entrance-examination-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/city-of-london-school-for-girls-group-2-2/city-of-london-school-for-girls-mathematics-sample-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/city-of-london-school-for-girls/city-of-london-school-for-girls-year-7-entrance-examination-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/city-of-london-school-for-girls-group-2-2/city-of-london-school-for-girls-mathematics-sample-answer-paper/"
         ]
                 
         # Locators for each answer paper
