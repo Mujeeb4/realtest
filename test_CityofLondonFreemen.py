@@ -85,7 +85,7 @@ class TestWordpressLogin:
 
             # Expected URLs for each answer paper
             expected_answer_urls = [
-                "https://smoothmaths.co.uk/11-plus-schools/city-of-london-freemens-school/city-of-london-freemens-school-11-maths-foundation-answers"
+                "https://smoothmaths.co.uk/11-plus-schools/city-of-london-freemens-school/city-of-london-freemens-school-11-maths-foundation-answers/"
             ]
 
             # Locators for each answer paper
