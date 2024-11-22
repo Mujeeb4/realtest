@@ -84,9 +84,9 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/emanuel-school-11-plus-mathematics-entrance-exam-a",
-            "https://smoothmaths.co.uk/emanuel-school-11-plus-mathematics-entrance-exam-b",
-            "https://smoothmaths.co.uk/11-plus-schools/emanuel-school/emanuel-school-entrance-examination-mathematics-sample-examination-paper-year-7-11-entry-answer-paper"
+            "https://smoothmaths.co.uk/emanuel-school-11-plus-mathematics-entrance-exam-a/",
+            "https://smoothmaths.co.uk/emanuel-school-11-plus-mathematics-entrance-exam-b/",
+            "https://smoothmaths.co.uk/11-plus-schools/emanuel-school/emanuel-school-entrance-examination-mathematics-sample-examination-paper-year-7-11-entry-answer-paper/"
         ]
         
 
