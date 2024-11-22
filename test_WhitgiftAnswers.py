@@ -84,7 +84,7 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/whitgift-school/white-gift-school-mathematics-entrance-examination-syllabus-and-sample-questions-for-10-11-and-12-age-groups-answers-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/whitgift-school/white-gift-school-mathematics-entrance-examination-syllabus-and-sample-questions-for-10-11-and-12-age-groups-answers-paper/"
         ]
 
         # Locators for each answer paper
