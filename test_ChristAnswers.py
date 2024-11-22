@@ -85,7 +85,7 @@ class TestWordpressLogin:
         # Expected URLs for each answer paper
         expected_answer_urls = [
             "https://smoothmaths.co.uk/christ-school-entrance-examination-answer-paper/",
-            "https://smoothmaths.co.uk/11-plus-schools/christ-school/entrance-examination-january-2014-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/christ-school/entrance-examination-january-2014-answer-paper/"
         ]
         
 
