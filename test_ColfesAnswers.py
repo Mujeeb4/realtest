@@ -85,7 +85,7 @@ class TestWordpressLogin:
 
             # Expected URLs for each answer paper
             expected_answer_urls = [
-                "https://smoothmaths.co.uk/11-plus-schools/colfes-school/11-examination-mathematics-sample-paper-answer"
+                "https://smoothmaths.co.uk/11-plus-schools/colfes-school/11-examination-mathematics-sample-paper-answer/"
             ]
 
             # Locators for each answer paper
