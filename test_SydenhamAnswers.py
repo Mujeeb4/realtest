@@ -84,7 +84,7 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/sydenham-school/sydenham-high-school-sample-mathematics-entrance-examination-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/sydenham-school/sydenham-high-school-sample-mathematics-entrance-examination-answer-paper/"
         ]
 
 
