@@ -84,8 +84,8 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/streatham-clapham-high-school/streatham-calpham-high-school-11-plus-maths-sample-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/streatham-clapham-high-school/streatham-and-clapham-high-school-11-plus-maths-entrance-exam-section-a-and-b-paper-2019-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/streatham-clapham-high-school/streatham-calpham-high-school-11-plus-maths-sample-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/streatham-clapham-high-school/streatham-and-clapham-high-school-11-plus-maths-entrance-exam-section-a-and-b-paper-2019-answer-paper/"
         ]
         
 
