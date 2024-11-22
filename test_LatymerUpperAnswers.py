@@ -84,11 +84,11 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/latymer-upper-school/latymer-upper-school-11-plus-maths-sample-paper-2014-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/latymer-upper-school/latymer-upper-school-sample-entrance-examination-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/latymer-upper-school/latymer-upper-school-11-plus-maths-sample-paper-2-2020-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-year-7-latymer-upper-school-entrance-examination-sample-answer-paper",
-            "https://smoothmaths.co.uk/the-latymer-upper-school-11-plus-sample-paper-2-2021-answers"
+            "https://smoothmaths.co.uk/11-plus-schools/latymer-upper-school/latymer-upper-school-11-plus-maths-sample-paper-2014-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/latymer-upper-school/latymer-upper-school-sample-entrance-examination-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/latymer-upper-school/latymer-upper-school-11-plus-maths-sample-paper-2-2020-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-year-7-latymer-upper-school-entrance-examination-sample-answer-paper/",
+            "https://smoothmaths.co.uk/the-latymer-upper-school-11-plus-sample-paper-2-2021-answers/"
         ]
         
 
