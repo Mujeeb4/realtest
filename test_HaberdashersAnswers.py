@@ -74,16 +74,16 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2017-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2016-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/the-haberdashers-askes-boys-school-11-plus-entrance-examination-2015",
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2014-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/the-haberdashers-askes-boys-school-11-entrance-examination-2013-mathematics-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2011-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2010-mathematics-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2009-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/the-haberdashers-askes-boys-school-11-plus-entrance-examination-2008",
-            "https://smoothmaths.co.uk/the-haberdasher-askes-boys-school-11-plus-entrance-examination-2007"
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2017-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2016-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/the-haberdashers-askes-boys-school-11-plus-entrance-examination-2015/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2014-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/the-haberdashers-askes-boys-school-11-entrance-examination-2013-mathematics-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2011-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2010-mathematics-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-haberdashers-askes-boys-school/11-entrance-examination-2009-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/the-haberdashers-askes-boys-school-11-plus-entrance-examination-2008/",
+            "https://smoothmaths.co.uk/the-haberdasher-askes-boys-school-11-plus-entrance-examination-2007/"
         ]
 
         answer_paper_locators = [
