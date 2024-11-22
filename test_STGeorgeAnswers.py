@@ -84,8 +84,8 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/st-georges-school/st-georges-college-11-entrance-examination-sample-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/st-georges-school/st-georges-college-11-entrance-examination-mathematics-sample-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/st-georges-school/st-georges-college-11-entrance-examination-sample-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/st-georges-school/st-georges-college-11-entrance-examination-mathematics-sample-answer-paper/"
         ]
         
 
