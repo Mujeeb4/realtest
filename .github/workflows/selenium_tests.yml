@@ -223,7 +223,7 @@ jobs:
           name: screenshots
           path: screenshots/*.png
 
-      # Upload test results
+
       - name: Upload test results
         uses: actions/upload-artifact@v3
         with:
