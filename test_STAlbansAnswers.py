@@ -84,10 +84,10 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/st-albans-school/st-albans-school-11-mathematics-examination-2019-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/st-albans-school/st-albans-school-11-mathematics-examination-specimen-paper-answer",
-            "https://smoothmaths.co.uk/wp-content/uploads/securepdfs/St-Albans-High-School-for-Girls-Specimen-11-Plus-Maths-Paper-1-2016-1-1.pdf",
-            "https://smoothmaths.co.uk/st-albans-high-school-for-girls-specimen-11-plus-maths-paper-2017-answers-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/st-albans-school/st-albans-school-11-mathematics-examination-2019-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/st-albans-school/st-albans-school-11-mathematics-examination-specimen-paper-answer/",
+            "https://smoothmaths.co.uk/wp-content/uploads/securepdfs/St-Albans-High-School-for-Girls-Specimen-11-Plus-Maths-Paper-1-2016-1-1.pdf/",
+            "https://smoothmaths.co.uk/st-albans-high-school-for-girls-specimen-11-plus-maths-paper-2017-answers-paper/"
         ]
         
      
