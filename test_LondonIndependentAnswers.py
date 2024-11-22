@@ -74,16 +74,16 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/group-1-year-7-entrance-examination-mathematics-january-2017-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2016-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2015-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2014-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2014-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2012-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2011-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2010-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2009-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2008-answer-paper"
+            "https://smoothmaths.co.uk/group-1-year-7-entrance-examination-mathematics-january-2017-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2016-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2015-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2014-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2014-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2012-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2011-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2010-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2009-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-london-independent-girls-school-consortium/group-1-mathematics-entrance-examination-2008-answer-paper/"
         ]
 
         answer_paper_locators = [
