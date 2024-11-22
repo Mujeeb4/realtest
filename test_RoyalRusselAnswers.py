@@ -84,7 +84,7 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/royal-russel-school/royal-russell-school-year-7-entrance-examination-mathematics-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/royal-russel-school/royal-russell-school-year-7-entrance-examination-mathematics-answer-paper/"
         ]
 
         # Locators for each answer paper
