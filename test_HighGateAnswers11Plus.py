@@ -74,10 +74,10 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/highgate-school/entrance-examination-for-entry-into-year-7-11-example-question-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/highgate-school/mathematics-sample-11-plus-paper-a-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/highgate-school/highgate-school-11-plus-assessment-sample-mathematics-test-b-answers-paper",
-            "https://smoothmaths.co.uk/highgate-school-sample-test-c"
+            "https://smoothmaths.co.uk/11-plus-schools/highgate-school/entrance-examination-for-entry-into-year-7-11-example-question-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/highgate-school/mathematics-sample-11-plus-paper-a-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/highgate-school/highgate-school-11-plus-assessment-sample-mathematics-test-b-answers-paper/",
+            "https://smoothmaths.co.uk/highgate-school-sample-test-c/"
         ]
 
         answer_paper_locators = [
