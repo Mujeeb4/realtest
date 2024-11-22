@@ -74,19 +74,19 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/sevenoaks-school-11-plus-year-7-entrance-examination-sample-paper-mathematics",
-            "https://smoothmaths.co.uk/sevenoaks-school-11-plus-year-7-entrance-examination-january-2011-for-entry-in-september-2011-mathematics-2",
-            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2012-for-entry-in-september-2012",
-            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2013-for-entry-in-september-2013-mathematics",
-            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2014-for-entry-in-september-2014-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2015-for-entry-in-september-2015-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/year-7-11-entrance-examination-january-2016-for-entry-in-september-2016-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2017-for-entry-in-september-2017-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2018-for-entry-in-september-2018-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2019-for-entry-in-september-2019-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2020-for-entry-in-september-2020-mathematics",
-            "https://smoothmaths.co.uk/sevenoaks-school-tear-7-11-plus-entrance-examination-january-2021-for-entry-in-september-2021-mathehmatics",
-            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2022-for-entry-in-september-2022-mathematics"
+            "https://smoothmaths.co.uk/sevenoaks-school-11-plus-year-7-entrance-examination-sample-paper-mathematics/",
+            "https://smoothmaths.co.uk/sevenoaks-school-11-plus-year-7-entrance-examination-january-2011-for-entry-in-september-2011-mathematics-2/",
+            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2012-for-entry-in-september-2012/",
+            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2013-for-entry-in-september-2013-mathematics/",
+            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2014-for-entry-in-september-2014-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2015-for-entry-in-september-2015-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/year-7-11-entrance-examination-january-2016-for-entry-in-september-2016-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2017-for-entry-in-september-2017-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2018-for-entry-in-september-2018-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/sevenoaks-school/sevenoaks-school-year-7-11-entrance-examination-january-2019-for-entry-in-september-2019-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2020-for-entry-in-september-2020-mathematics/",
+            "https://smoothmaths.co.uk/sevenoaks-school-tear-7-11-plus-entrance-examination-january-2021-for-entry-in-september-2021-mathehmatics/",
+            "https://smoothmaths.co.uk/sevenoaks-school-year-7-11-plus-entrance-examination-january-2022-for-entry-in-september-2022-mathematics/"
         ]
 
         answer_paper_locators = [
