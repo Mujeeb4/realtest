@@ -84,8 +84,8 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/hampton-court-house/hampton-court-house-entrance-examination-year-7-8-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/hampton-court-house/hampton-court-house-entrance-examination-year-7-to-be-taken-in-y6-mathematics-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/hampton-court-house/hampton-court-house-entrance-examination-year-7-8-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/hampton-court-house/hampton-court-house-entrance-examination-year-7-to-be-taken-in-y6-mathematics-answer-paper/"
         ]
         
 
