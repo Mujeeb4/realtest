@@ -74,11 +74,11 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/forest-school-11-plus-practice-paper-1-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/11-entrance-and-scholarship-sample-1-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/forest-school-2/forest-school-11-plus-practice-paper-2-answers-paper",
-            "https://smoothmaths.co.uk/forest-school-11-plus-entrance-paper",
-            "https://smoothmaths.co.uk/forest-school-entrance-and-sample-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/forest-school-11-plus-practice-paper-1-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/11-entrance-and-scholarship-sample-1-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/forest-school-2/forest-school-11-plus-practice-paper-2-answers-paper/",
+            "https://smoothmaths.co.uk/forest-school-11-plus-entrance-paper/",
+            "https://smoothmaths.co.uk/forest-school-entrance-and-sample-paper/"
         ]
 
         answer_paper_locators = [
