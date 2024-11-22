@@ -84,9 +84,9 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/kings-college-school/kings-college-school-11-for-2017-entry-pre-test-for-2019-entry-specimen-paper-2017-mathematics-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/kings-college-school/kings-college-school-11-for-2017-entry-pre-test-for-2019-entry-specimen-paper-2017-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/kings-college-school/kings-college-school-specimen-paper-group-e-mathematics-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/kings-college-school/kings-college-school-11-for-2017-entry-pre-test-for-2019-entry-specimen-paper-2017-mathematics-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/kings-college-school/kings-college-school-11-for-2017-entry-pre-test-for-2019-entry-specimen-paper-2017-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/kings-college-school/kings-college-school-specimen-paper-group-e-mathematics-answer-paper/"
         ]
         
 
