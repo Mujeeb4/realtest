@@ -74,11 +74,11 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-specimen-paper-2016-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2009-10-practice-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2009-practice-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2008-09-practice-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2008-practice-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-specimen-paper-2016-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2009-10-practice-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2009-practice-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2008-09-practice-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/iseb/11-plus-maths-2008-practice-answer-paper/"
         ]
 
         answer_paper_locators = [
