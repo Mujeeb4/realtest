@@ -51,6 +51,23 @@ class TestWordpressLogin:
         except Exception as e:
             print(f"Error appending to CSV: {e}")
 
+    def scroll_to_element_incrementally(self, by, value):
+        """Incrementally scroll down until the element is clickable."""
+        element = None
+        for _ in range(20):  # Try scrolling up to 20 times
+            try:
+                element = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((by, value))
+                )
+                break  # Exit if the element becomes clickable
+            except:
+                # Scroll down by 300px if the element is not yet clickable
+                self.driver.execute_script("window.scrollBy(0, 300);")
+                time.sleep(0.5)  # Allow time for scroll to take effect
+        if not element:
+            raise Exception("Element not found or not clickable after scrolling.")
+        return element
+
 
     def test_11Plus(self):
         # Start time to calculate test duration
