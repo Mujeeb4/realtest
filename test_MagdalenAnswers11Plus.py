@@ -84,7 +84,7 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/magdalen-college-school/magdalen-college-school-11-pre-test-entrance-examination-specimen-mathematics-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/magdalen-college-school/magdalen-college-school-11-pre-test-entrance-examination-specimen-mathematics-answer-paper/"
         ]
 
         # Locators for each answer paper
