@@ -80,16 +80,16 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/alleyns-11-maths-sample-examination-paper-2-answer-paper",
-            "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-1-2023",
-            "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-2-2023"
+            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/allyens-11-maths-sample-examination-paper-1-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/alleyns-school/alleyns-11-maths-sample-examination-paper-2-answer-paper/",
+            "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-1-2023/",
+            "https://smoothmaths.co.uk/alleyns-school-11-plus-maths-sample-examination-answer-paper-2-2023/"
         ]
         
         # Expected URLs for each quiz
         expected_quiz_urls = [
-            "https://smoothmaths.co.uk/allyens-11-maths-sample-examination-paper-1-online-quiz",
-            "https://smoothmaths.co.uk/alleyns-11-maths-sample-examination-paper-2-online-quiz"
+            "https://smoothmaths.co.uk/allyens-11-maths-sample-examination-paper-1-online-quiz/",
+            "https://smoothmaths.co.uk/alleyns-11-maths-sample-examination-paper-2-online-quiz/"
         ]
         
         # Locators for each answer paper, using XPath for the fourth answer paper
