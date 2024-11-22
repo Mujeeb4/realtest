@@ -74,17 +74,17 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/11-entrance-exam-mathematics-2008-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2009-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2010-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2011-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2012-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2013-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2014-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2015-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2016-answer-paper",
-            "https://smoothmaths.co.uk/north-london-collegiate-school-11-plus-group-2-2017-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-year-7-entrance-examination-north-london-collegiate-school-2023"
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/11-entrance-exam-mathematics-2008-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2009-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2010-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2011-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2012-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2013-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2014-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2015-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/north-london-collegiate-school/group-2-mathematics-entrance-examination-2016-answer-paper/",
+            "https://smoothmaths.co.uk/north-london-collegiate-school-11-plus-group-2-2017-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-year-7-entrance-examination-north-london-collegiate-school-2023/"
         ]
 
         answer_paper_locators = [
