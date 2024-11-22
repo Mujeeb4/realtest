@@ -74,18 +74,18 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-a-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-paper-b",
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-c-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-d-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-answer-paper-e",
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-paper-f",
-            "https://smoothmaths.co.uk/dulwich-college-11plus-paper-g",
-            "https://smoothmaths.co.uk/dulwich-college-11-plus-maths-specimen-paper-h",
-            "https://smoothmaths.co.uk/dulwich-college-11-plus-specimen-paper-i",
-            "https://smoothmaths.co.uk/dulwich-college-11-plus-mathematics-specimen-paper-j-year-7-entrance-and-scholarship-examination",
-            "https://smoothmaths.co.uk/dulwich-college-11-plus-mathematics-year-7-entrance-and-scholarship-examination-specimen-paper-k",
-            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/entrance-and-scholarship-examination-at-11-specimen-mathematics-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-a-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-paper-b/",
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-c-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-d-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-answer-paper-e/",
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/year-7-entrance-and-scholarship-examination-mathematics-specimen-paper-f/",
+            "https://smoothmaths.co.uk/dulwich-college-11plus-paper-g/",
+            "https://smoothmaths.co.uk/dulwich-college-11-plus-maths-specimen-paper-h/",
+            "https://smoothmaths.co.uk/dulwich-college-11-plus-specimen-paper-i/",
+            "https://smoothmaths.co.uk/dulwich-college-11-plus-mathematics-specimen-paper-j-year-7-entrance-and-scholarship-examination/",
+            "https://smoothmaths.co.uk/dulwich-college-11-plus-mathematics-year-7-entrance-and-scholarship-examination-specimen-paper-k/",
+            "https://smoothmaths.co.uk/11-plus-schools/dulwich-college/entrance-and-scholarship-examination-at-11-specimen-mathematics-answer-paper/"
         ]
 
         answer_paper_locators = [
