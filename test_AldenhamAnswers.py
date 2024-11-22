@@ -85,8 +85,8 @@ class TestWordpressLogin:
         # Expected URLs for each answer paper
         expected_answer_urls = [
             "https://smoothmaths.co.uk/aldenham-school-11-plus-maths-sample-answer-paper-2023-1-3/",
-            "https://smoothmaths.co.uk/11-plus-schools/aldenham-school/aldenham-school-11-entrance-paper-sample-paper-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/aldenham-school/aldenham-school-11-entrance-paper-sample-paper-mathematics-answer-paper-2"
+            "https://smoothmaths.co.uk/11-plus-schools/aldenham-school/aldenham-school-11-entrance-paper-sample-paper-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/aldenham-school/aldenham-school-11-entrance-paper-sample-paper-mathematics-answer-paper-2/"
         ]
         
 
