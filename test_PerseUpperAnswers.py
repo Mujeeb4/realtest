@@ -75,11 +75,11 @@ class TestWordpressLogin:
 
         expected_answer_urls = [
             "https://smoothmaths.co.uk/the-perse-upper-school-11-plus-specimen-answer-paper-2024/",
-            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/year-7-entrance-exams-maths-specimen-1-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/year-7-entrance-exams-maths-specimen-2-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/year-7-entrance-exams-maths-specimen-3-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/the-perse-school-year-7-entrance-exams-maths-specimen-4-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/the-perse-school-year-7-entrance-exams-maths-specimen-5-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/year-7-entrance-exams-maths-specimen-1-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/year-7-entrance-exams-maths-specimen-2-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/year-7-entrance-exams-maths-specimen-3-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/the-perse-school-year-7-entrance-exams-maths-specimen-4-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-perse-school/the-perse-school-year-7-entrance-exams-maths-specimen-5-answer-paper/"
         ]
 
         answer_paper_locators = [
