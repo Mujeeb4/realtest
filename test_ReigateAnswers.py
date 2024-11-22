@@ -74,17 +74,17 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-13-pt-entrance-examination-answers",
-            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/reigate-grammar-school-entrance-examination-2022-answer-paper-2",
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-2021-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/11plus-maths-entrance-exam-paper-2020",
-            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/reigate-grammar-school-11-plus-maths-entrance-exam-paper-2019-answers-paper-2",
-            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/reigate-grammar-school-entrance-examination-mathematics-january-2018-answer-paper",
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-2017-answers",
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-mathematics-january-2015-answer-paper",
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-january-2014-answer-paper",
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-january-2013-answer-paper",
-            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-january-2012-answer-paper"
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-13-pt-entrance-examination-answers/",
+            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/reigate-grammar-school-entrance-examination-2022-answer-paper-2/",
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-2021-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/11plus-maths-entrance-exam-paper-2020/",
+            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/reigate-grammar-school-11-plus-maths-entrance-exam-paper-2019-answers-paper-2/",
+            "https://smoothmaths.co.uk/11-plus-schools/reigate-grammar-school/reigate-grammar-school-entrance-examination-mathematics-january-2018-answer-paper/",
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-2017-answers/",
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-mathematics-january-2015-answer-paper/",
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-january-2014-answer-paper/",
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-january-2013-answer-paper/",
+            "https://smoothmaths.co.uk/reigate-grammar-school-11-plus-entrance-examination-january-2012-answer-paper/"
         ]
 
         answer_paper_locators = [
