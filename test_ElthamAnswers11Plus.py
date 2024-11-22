@@ -75,11 +75,11 @@ class TestWordpressLogin:
 
         expected_answer_urls = [
             "https://smoothmaths.co.uk/eltham-college-11-plus-entrance-examination-answer-paper-2024/",
-            "https://smoothmaths.co.uk/eltham-college-11-plus-entrance-paper",
-            "https://smoothmaths.co.uk/eltham-college-entrance-examination-paper-1",
-            "https://smoothmaths.co.uk/eltham-college-paper-3",
-            "https://smoothmaths.co.uk/11-plus-schools/eltham-college/eltham-college-11-entrance-and-scholarship-examination-2019-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/eltham-college/11-plus-mathematics-and-sample-paper-answers-paper"
+            "https://smoothmaths.co.uk/eltham-college-11-plus-entrance-paper/",
+            "https://smoothmaths.co.uk/eltham-college-entrance-examination-paper-1/",
+            "https://smoothmaths.co.uk/eltham-college-paper-3/",
+            "https://smoothmaths.co.uk/11-plus-schools/eltham-college/eltham-college-11-entrance-and-scholarship-examination-2019-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/eltham-college/11-plus-mathematics-and-sample-paper-answers-paper/"
         ]
 
         answer_paper_locators = [
