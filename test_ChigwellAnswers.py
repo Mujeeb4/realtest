@@ -84,7 +84,7 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/chigwell-school/chigwell-school-11-plus-maths-specimen-paper-2020-entry-1-answers-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/chigwell-school/chigwell-school-11-plus-maths-specimen-paper-2020-entry-1-answers-paper/"
         ]
 
 
