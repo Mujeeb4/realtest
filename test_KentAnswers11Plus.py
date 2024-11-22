@@ -74,12 +74,12 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-entrance-examination-answer-paper-1-2007-2",
-            "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-entrance-examination-answer-paper-2-2007-2",
-            "https://smoothmaths.co.uk/kent-college-11-plus-maths-entrance-examination-answer-paper-201",
-            "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-entrance-examination-answer-paper-2014-2",
-            "https://smoothmaths.co.uk/kent-college-11-canterbury-plus-entrance-examination-answer-paper-2015",
-            "https://smoothmaths.co.uk/11-plus-schools/kent-college-error/kent-college-11-mathematics-paper-sample-answers-paper",
+            "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-entrance-examination-answer-paper-1-2007-2/",
+            "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-entrance-examination-answer-paper-2-2007-2/",
+            "https://smoothmaths.co.uk/kent-college-11-plus-maths-entrance-examination-answer-paper-201/",
+            "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-entrance-examination-answer-paper-2014-2/",
+            "https://smoothmaths.co.uk/kent-college-11-canterbury-plus-entrance-examination-answer-paper-2015/",
+            "https://smoothmaths.co.uk/11-plus-schools/kent-college-error/kent-college-11-mathematics-paper-sample-answers-paper/",
             "https://smoothmaths.co.uk/kent-college-canterbury-11-plus-maths-entrance-exam-answer-paper-2024/"
         ]
 
