@@ -84,8 +84,8 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/james-allens-girls-school/james-allens-girls-school-11-plus-sample-maths-entrance-examination-answers-paper-2",
-            "https://smoothmaths.co.uk/11-plus-schools/james-allens-girls-school/james-allens-girls-school-11-entrance-examination-sample-paper-mathematics-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/james-allens-girls-school/james-allens-girls-school-11-plus-sample-maths-entrance-examination-answers-paper-2/",
+            "https://smoothmaths.co.uk/11-plus-schools/james-allens-girls-school/james-allens-girls-school-11-entrance-examination-sample-paper-mathematics-answer-paper/"
         ]
         
 
