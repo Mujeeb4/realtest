@@ -84,9 +84,9 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/st-pauls-girls-school/st-pauls-school-first-year-entrance-examination-2016-example-mathematics-section-a-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/st-pauls-girls-school/st-pauls-girls-school-first-year-entrance-examination-2-mathematics-2017-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/st-pauls-girls-school/st-pauls-school-first-year-entrance-examination-example-1-mathematics-section-a-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/st-pauls-girls-school/st-pauls-school-first-year-entrance-examination-2016-example-mathematics-section-a-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/st-pauls-girls-school/st-pauls-girls-school-first-year-entrance-examination-2-mathematics-2017-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/st-pauls-girls-school/st-pauls-school-first-year-entrance-examination-example-1-mathematics-section-a-answer-paper/"
         ]
         
 
