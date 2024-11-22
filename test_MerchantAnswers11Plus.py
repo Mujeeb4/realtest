@@ -74,11 +74,11 @@ class TestWordpressLogin:
         self.driver.get(main_page_url)
 
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-official-practice-mathematics-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-official-practice-mathematics-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-official-practice-paper-mathematics-answers-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-plus-maths-practice-2009-answers-paper",
-            "https://smoothmaths.co.uk/merchant-taylors-school-11-plus-maths-entrance-examination-january-2021-answer-paper-2"
+            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-official-practice-mathematics-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-official-practice-mathematics-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-official-practice-paper-mathematics-answers-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/merchant-taylors-school/merchant-taylors-school-11-plus-maths-practice-2009-answers-paper/",
+            "https://smoothmaths.co.uk/merchant-taylors-school-11-plus-maths-entrance-examination-january-2021-answer-paper-2/"
         ]
 
         answer_paper_locators = [
