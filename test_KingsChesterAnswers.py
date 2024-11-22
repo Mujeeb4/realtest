@@ -84,8 +84,8 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/the-kings-school-chester/the-kings-school-chester-entrance-examination-mathematics-specimen-paper-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/the-kings-school-chester/the-kings-school-chester-entrance-examination-mathematics-sample-paper-2-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/the-kings-school-chester/the-kings-school-chester-entrance-examination-mathematics-specimen-paper-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/the-kings-school-chester/the-kings-school-chester-entrance-examination-mathematics-sample-paper-2-answer-paper/"
         ]
         
 
