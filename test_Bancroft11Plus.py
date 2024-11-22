@@ -76,14 +76,14 @@ class TestWordpressLogin:
         expected_answer_urls = [
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-maths-sample-entrance-answer-paper-2024/",
             "https://smoothmaths.co.uk/bancrofts-school-11-plus-sample-maths-paper-2023-answer-paper/",
-            "https://smoothmaths.co.uk/bancroft-schol-11-plus-sample-paper",
-            "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-sample-maths-paper-2-answer-paper",
-            "https://smoothmaths.co.uk/bancrofts-school-11-plus-entrance-examination-2022-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-11-plus-maths-sample-paper-2021-entry2-answer-paper",
-            "https://smoothmaths.co.uk/bancroft-school-11plus-sample-2019-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-sample-11-plus-maths-paper-2018-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroths-school-sample-paper-11-maths-entrance-examination-answer-paper",
-            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroft-s-school-sample-11-plus-maths-paper-2-2016-answers-paper"
+            "https://smoothmaths.co.uk/bancroft-schol-11-plus-sample-paper/",
+            "https://smoothmaths.co.uk/bancrofts-school-sample-11-plus-sample-maths-paper-2-answer-paper/",
+            "https://smoothmaths.co.uk/bancrofts-school-11-plus-entrance-examination-2022-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-11-plus-maths-sample-paper-2021-entry2-answer-paper/",
+            "https://smoothmaths.co.uk/bancroft-school-11plus-sample-2019-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancrofts-school-sample-11-plus-maths-paper-2018-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroths-school-sample-paper-11-maths-entrance-examination-answer-paper/",
+            "https://smoothmaths.co.uk/11-plus-schools/bancrofts-school/bancroft-s-school-sample-11-plus-maths-paper-2-2016-answers-paper/"
         ]
 
         answer_paper_locators = [
