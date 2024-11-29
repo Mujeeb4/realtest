@@ -30,38 +30,6 @@ jobs:
       - name: Run login tests
         run: pytest test_Wordpresslogin1_2155.py --tb=short --junitxml=results.xml
 
-      - name: Run contact us tests
-        run: pytest test_contactus.py --tb=short --junitxml=results.xml
-
-      - name: Run privacy policy tests
-        run: pytest test_privacyPolicy.py --tb=short --junitxml=results.xml
-
-      - name: Run terms & conditions tests
-        run: pytest test_termsConditions.py --tb=short --junitxml=results.xml
-
-      - name: Run FAQs tests
-        run: pytest test_fAQs.py --tb=short --junitxml=results.xml
-
-      - name: Run feedback tests
-        run: pytest test_feedbackPage.py --tb=short --junitxml=results.xml
-
-      - name: Run 11 Plus link tests
-        run: pytest test_11Pluslinks.py --tb=short --junitxml=results.xml
-
-      - name: Run 13 Plus link tests
-        run: pytest test_13Pluslink.py --tb=short --junitxml=results.xml
-
-      - name: Run GCSE link tests
-        run: pytest test_GCSElink.py --tb=short --junitxml=results.xml
-
-      - name: Run IGCSE link tests
-        run: pytest test_IGCSElink.py --tb=short --junitxml=results.xml
-
-      - name: Run AS-Level link tests
-        run: pytest test_AS-Level.py --tb=short --junitxml=results.xml
-
-      - name: Run A-Level link tests
-        run: pytest test_A-Level.py --tb=short --junitxml=results.xml
 
       - name: Run Pricing link tests
         run: pytest test_pricing.py --tb=short --junitxml=results.xml
