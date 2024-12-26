@@ -86,7 +86,7 @@ class TestWordpressLogin:
         # Expected URLs for each answer paper
         expected_answer_urls = [
             "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/",
-            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper'
+            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"
         ]
 
         # Expected URLs for each quiz
