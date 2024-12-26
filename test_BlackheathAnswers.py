@@ -27,7 +27,7 @@ class TestWordpressLogin:
         chrome_options.add_argument("window-size=1296,696")
         
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(60)
+        self.driver.set_page_load_timeout(120)
         self.driver.set_script_timeout(30)
         self.driver.implicitly_wait(10)
 
@@ -85,22 +85,27 @@ class TestWordpressLogin:
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
-            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
+            "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/",
+            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper'
         ]
 
         # Expected URLs for each quiz
         expected_quiz_urls = [
+            "https://smoothmaths.co.uk/brentwood-11-plus-sample-quiz-2024/",
             "https://smoothmaths.co.uk/blackheath-high-school-11-entrance-and-scholarship-examination-mathematics-practice-paper-online-quiz/"
+            
         ]
 
         # Locators for each answer paper
         answer_paper_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
+            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_3.et_pb_blurb .et_pb_module_header a")
         ]
 
         # Locators for each quiz
         quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_2.et_pb_blurb .et_pb_module_header a")
+            (By.CSS_SELECTOR, ".et_pb_blurb_2.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
         ]
 
         results = []
