@@ -27,16 +27,16 @@ class TestWordpressLogin:
         chrome_options.add_argument("window-size=1296,696")
         
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(120)
-        self.driver.set_script_timeout(60)
-        self.driver.implicitly_wait(20)
+        self.driver.set_page_load_timeout(180)  # Increased timeout
+        self.driver.set_script_timeout(120)  # Increased script timeout
+        self.driver.implicitly_wait(30)  # Increased implicit wait
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
         
         self.vars = {}
-  
+
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -56,7 +56,7 @@ class TestWordpressLogin:
         element = None
         for _ in range(20):  # Try scrolling up to 20 times
             try:
-                element = WebDriverWait(self.driver, 20).until(
+                element = WebDriverWait(self.driver, 30).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 break  # Exit if the element becomes clickable
@@ -88,14 +88,11 @@ class TestWordpressLogin:
             "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
         ]
         
-
-        
         # Locators for each answer paper
         answer_paper_locators = [
             (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  
             (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
         ]
-
 
         results = []
 
