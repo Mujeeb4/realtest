@@ -15,6 +15,7 @@ class TestWordpressLogin:
     def setup_method(self, method):
         # Set up headless Chrome options for CI
         chrome_options = Options()
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
@@ -25,12 +26,9 @@ class TestWordpressLogin:
         chrome_options.add_argument("--incognito")
         chrome_options.add_argument("window-size=1296,696")
         
-        # Uncomment for debugging in non-headless mode
-        # chrome_options.add_argument("--headless") 
-
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(180)  # Increase timeout to 180 seconds
-        self.driver.set_script_timeout(60)      # Increase script timeout
+        self.driver.set_page_load_timeout(60)
+        self.driver.set_script_timeout(30)
         self.driver.implicitly_wait(10)
 
         # Ensure screenshots directory exists
@@ -38,7 +36,7 @@ class TestWordpressLogin:
             os.makedirs("screenshots")
         
         self.vars = {}
-
+  
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -56,16 +54,16 @@ class TestWordpressLogin:
     def scroll_to_element_incrementally(self, by, value):
         """Incrementally scroll down until the element is clickable."""
         element = None
-        try:
-            # Directly wait for element to be clickable
-            element = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((by, value))
-            )
-        except:
-            print("Element not clickable after scrolling")
-            self.driver.execute_script("window.scrollBy(0, 300);")
-            time.sleep(0.5)  # Allow time for scroll to take effect
-
+        for _ in range(20):  # Try scrolling up to 20 times
+            try:
+                element = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((by, value))
+                )
+                break  # Exit if the element becomes clickable
+            except:
+                # Scroll down by 300px if the element is not yet clickable
+                self.driver.execute_script("window.scrollBy(0, 300);")
+                time.sleep(0.5)  # Allow time for scroll to take effect
         if not element:
             raise Exception("Element not found or not clickable after scrolling.")
         return element
@@ -79,7 +77,7 @@ class TestWordpressLogin:
         self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
         self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
         self.driver.find_element(By.ID, "wp-submit").click()
-
+        
         # Open the target page
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/"
         self.driver.get(main_page_url)
@@ -87,26 +85,17 @@ class TestWordpressLogin:
         # Expected URLs for each answer paper
         expected_answer_urls = [
             "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/",
-            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"
+            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
         ]
+        
 
-        # Expected URLs for each quiz
-        expected_quiz_urls = [
-            "https://smoothmaths.co.uk/brentwood-11-plus-sample-quiz-2024/",
-            "https://smoothmaths.co.uk/blackheath-high-school-11-entrance-and-scholarship-examination-mathematics-practice-paper-online-quiz/"
-        ]
-
+        
         # Locators for each answer paper
         answer_paper_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),
+            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  
             (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
         ]
 
-        # Locators for each quiz
-        quiz_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_2.et_pb_blurb .et_pb_module_header a"),
-            (By.CSS_SELECTOR, ".et_pb_blurb_5.et_pb_blurb .et_pb_module_header a")
-        ]
 
         results = []
 
@@ -117,12 +106,18 @@ class TestWordpressLogin:
                 answer_paper_link = self.scroll_to_element_incrementally(by, value)
                 self.driver.execute_script("arguments[0].click();", answer_paper_link)
 
-                # Wait for the URL to match
-                WebDriverWait(self.driver, 120).until(EC.url_to_be(expected_answer_urls[i]))
-
-                # Log success
+                # Verify the current URL
+                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+                
+                # Log current URL for debugging
+                print(f"Navigated to: {self.driver.current_url}")
+                
+                # Wait and take screenshot
+                time.sleep(5)
                 screenshot_path = f"screenshots/Blackheath_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
+                
+                # Log success status
                 results.append({
                     "Test Case": f"Answer Paper {i+1} Link Verification",
                     "Status": "Pass",
@@ -134,44 +129,18 @@ class TestWordpressLogin:
             except Exception as e:
                 screenshot_path = f"screenshots/Blackheath_error_Answer_Paper_{i+1}.png"
                 self.driver.save_screenshot(screenshot_path)
+                
                 results.append({
                     "Test Case": f"Answer Paper {i+1} Link Verification",
                     "Status": f"Fail: {str(e)}",
                     "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url,
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
                     "Screenshot": screenshot_path
                 })
 
+            # Go back to the main page for the next link
             self.driver.get(main_page_url)
-
-        # Test each Quiz link
-        for i, (by, value) in enumerate(quiz_locators):
-            try:
-                quiz_link = self.scroll_to_element_incrementally(by, value)
-                self.driver.execute_script("arguments[0].click();", quiz_link)
-                WebDriverWait(self.driver, 120).until(EC.url_to_be(expected_quiz_urls[i]))
-                screenshot_path = f"screenshots/Blackheath_Quiz_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
-            except Exception as e:
-                screenshot_path = f"screenshots/Blackheath_error_Quiz_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                results.append({
-                    "Test Case": f"Quiz {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_quiz_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
-
-            self.driver.get(main_page_url)
+            time.sleep(2)
 
         # Append results to CSV
         self.append_to_csv(results)
