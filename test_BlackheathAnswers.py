@@ -27,9 +27,9 @@ class TestWordpressLogin:
         chrome_options.add_argument("window-size=1296,696")
         
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(60)
-        self.driver.set_script_timeout(30)
-        self.driver.implicitly_wait(10)
+        self.driver.set_page_load_timeout(120)
+        self.driver.set_script_timeout(60)
+        self.driver.implicitly_wait(20)
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -56,7 +56,7 @@ class TestWordpressLogin:
         element = None
         for _ in range(20):  # Try scrolling up to 20 times
             try:
-                element = WebDriverWait(self.driver, 5).until(
+                element = WebDriverWait(self.driver, 20).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 break  # Exit if the element becomes clickable
@@ -107,7 +107,7 @@ class TestWordpressLogin:
                 self.driver.execute_script("arguments[0].click();", answer_paper_link)
 
                 # Verify the current URL
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+                WebDriverWait(self.driver, 30).until(EC.url_to_be(expected_answer_urls[i]))
                 
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
@@ -140,7 +140,7 @@ class TestWordpressLogin:
 
             # Go back to the main page for the next link
             self.driver.get(main_page_url)
-            time.sleep(2)
+            time.sleep(5)
 
         # Append results to CSV
         self.append_to_csv(results)
