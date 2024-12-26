@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 import pandas as pd
+from selenium.common.exceptions import TimeoutException
 
 # CSV file path to store all test results
 CSV_FILE_PATH = "test_results.csv"
@@ -27,9 +28,9 @@ class TestWordpressLogin:
         chrome_options.add_argument("window-size=1296,696")
         
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(180)  # Increased timeout
-        self.driver.set_script_timeout(120)  # Increased script timeout
-        self.driver.implicitly_wait(30)  # Increased implicit wait
+        self.driver.set_page_load_timeout(240)  # Further increase timeout
+        self.driver.set_script_timeout(180)  # Further increase script timeout
+        self.driver.implicitly_wait(40)  # Further increase implicit wait
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -56,17 +57,28 @@ class TestWordpressLogin:
         element = None
         for _ in range(20):  # Try scrolling up to 20 times
             try:
-                element = WebDriverWait(self.driver, 30).until(
+                element = WebDriverWait(self.driver, 40).until(
                     EC.element_to_be_clickable((by, value))
                 )
                 break  # Exit if the element becomes clickable
-            except:
+            except TimeoutException:
                 # Scroll down by 300px if the element is not yet clickable
                 self.driver.execute_script("window.scrollBy(0, 300);")
                 time.sleep(0.5)  # Allow time for scroll to take effect
         if not element:
             raise Exception("Element not found or not clickable after scrolling.")
         return element
+
+    def retry_request(self, url, retries=3, delay=5):
+        """Retry a request a specified number of times in case of a timeout."""
+        for attempt in range(retries):
+            try:
+                self.driver.get(url)
+                return True
+            except TimeoutException as e:
+                print(f"Attempt {attempt+1} failed: {str(e)}. Retrying...")
+                time.sleep(delay)
+        return False
 
     def test_11Plus(self):
         # Start time to calculate test duration
@@ -78,9 +90,10 @@ class TestWordpressLogin:
         self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
         self.driver.find_element(By.ID, "wp-submit").click()
         
-        # Open the target page
+        # Open the target page with retry mechanism
         main_page_url = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/"
-        self.driver.get(main_page_url)
+        if not self.retry_request(main_page_url):
+            raise Exception(f"Failed to open {main_page_url} after multiple attempts.")
         
         # Expected URLs for each answer paper
         expected_answer_urls = [
