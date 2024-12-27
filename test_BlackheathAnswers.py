@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -14,7 +15,19 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestBlackheathanswers:
     def setup_method(self, method):
-        self.driver = webdriver.Chrome()
+        # Set up Chrome options to disable cache and browser cache clearing
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # Optional: Run headless for CI/CD
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("window-size=1382,744")
+        chrome_options.add_argument("--disk-cache-dir=/dev/null")  # Disable cache
+
+        # Set Chrome to run with these options
+        self.driver = webdriver.Chrome(options=chrome_options)
         self.vars = {}
 
         # Ensure screenshots directory exists
@@ -35,10 +48,17 @@ class TestBlackheathanswers:
         except Exception as e:
             print(f"Error appending to CSV: {e}")
 
+    def clear_cache(self):
+        """ Clear cache between tests """
+        self.driver.get("chrome://settings/clearBrowserData")
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, "* /deep/ #clearBrowsingDataConfirm"))).click()
+
     def test_blackheathanswers(self):
+        # Clear cache before each test to ensure fresh load
+        self.clear_cache()
+
         # Log in to SmoothMaths
         self.driver.get("https://smoothmaths.co.uk/login/")
-        self.driver.set_window_size(1382, 744)
         self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
         self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
         self.driver.find_element(By.ID, "user_pass").send_keys(Keys.ENTER)
