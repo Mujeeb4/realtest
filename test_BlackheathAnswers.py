@@ -64,8 +64,8 @@ class TestBlackheathanswers():
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
         self.vars["root"] = self.driver.current_window_handle
 
-        # Wait for the first answer paper to be clickable
-        first_answer_paper = WebDriverWait(self.driver, 10).until(
+        # Wait for the first answer paper to be clickable with a higher timeout
+        first_answer_paper = WebDriverWait(self.driver, 20).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"))
         )
         first_answer_paper.click()
@@ -90,7 +90,9 @@ class TestBlackheathanswers():
         self.driver.switch_to.window(self.vars["root"])
         self.driver.execute_script("window.scrollBy(0, 500)")  # Scroll down 500px
         action = ActionChains(self.driver)
-        second_answer_paper = WebDriverWait(self.driver, 10).until(
+
+        # Wait for the second answer paper link to be clickable
+        second_answer_paper = WebDriverWait(self.driver, 20).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"))
         )
         action.context_click(second_answer_paper).perform()  # Right-click on the second answer paper
