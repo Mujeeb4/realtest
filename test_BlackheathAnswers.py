@@ -32,9 +32,9 @@ class TestBlackheathAnswers:
 
         # Create the driver with a longer timeout
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(120)  # Increased timeout for page loads
+        self.driver.set_page_load_timeout(180)  # Increased timeout for page loads
         self.driver.set_script_timeout(60)      # Increased timeout for script execution
-        self.driver.implicitly_wait(20)         # Increased implicit wait
+        self.driver.implicitly_wait(30)         # Increased implicit wait
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -60,7 +60,7 @@ class TestBlackheathAnswers:
 
     def scroll_and_click(self, locator, screenshot_name):
         """Scroll to an element, click it, and save a screenshot."""
-        element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(locator))
+        element = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable(locator))
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
         element.click()
         
@@ -81,7 +81,7 @@ class TestBlackheathAnswers:
         self.driver.find_element(By.ID, "user_pass").send_keys(Keys.ENTER)
         
         # Step 2: Navigate to the main page
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//h1[text()='Blackheath High School']")))
+        WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.XPATH, "//h1[text()='Blackheath High School']")))
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
         
         # Expected URLs for each answer paper
@@ -105,7 +105,7 @@ class TestBlackheathAnswers:
                 self.scroll_and_click((by, value), screenshot_name)
 
                 # Verify the current URL
-                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+                WebDriverWait(self.driver, 30).until(EC.url_to_be(expected_answer_urls[i]))
                 
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
