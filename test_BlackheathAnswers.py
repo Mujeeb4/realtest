@@ -38,9 +38,7 @@ class TestBlackheathanswers():
     def wait_for_window(self, timeout=2):
         time.sleep(round(timeout / 1000))
         wh_now = self.driver.window_handles
-        wh_then = self.vars["window_handles"]
-        if len(wh_now) > len(wh_then):
-            return set(wh_now).difference(set(wh_then)).pop()
+        return wh_now
 
     def append_to_csv(self, results):
         df = pd.DataFrame(results)
@@ -66,8 +64,8 @@ class TestBlackheathanswers():
 
         # Open the first answer paper in second tab and check the link
         self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a").click()
-        self.vars["win1007"] = self.wait_for_window(2000)
-        self.driver.switch_to.window(self.vars["win1007"])
+        self.vars["window_handles"] = self.wait_for_window(2000)  # Store window handles after opening the new tab
+        self.driver.switch_to.window(self.vars["window_handles"][-1])  # Switch to the newly opened tab
 
         # Verify the link on the second tab
         second_tab_link = self.driver.current_url
@@ -92,10 +90,10 @@ class TestBlackheathanswers():
 
         # Open the link in a new tab
         action.send_keys(Keys.ARROW_DOWN).send_keys(Keys.RETURN).perform()
-        self.vars["win1008"] = self.wait_for_window(2000)
+        self.vars["window_handles"] = self.wait_for_window(2000)  # Store window handles again after opening the new tab
+        self.driver.switch_to.window(self.vars["window_handles"][-1])  # Switch to the new tab
 
         # Switch to the new tab and check its link
-        self.driver.switch_to.window(self.vars["win1008"])
         new_tab_link = self.driver.current_url
         expected_new_tab_link = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
         print(f"Link in the new tab after right-click: {new_tab_link}")
@@ -110,7 +108,6 @@ class TestBlackheathanswers():
 
         # Prepare test result
         results = [{
-
             "Test Case": "Second Tab Link Verification",
             "Status": "Pass",
             "Expected URL": expected_second_tab_link,
