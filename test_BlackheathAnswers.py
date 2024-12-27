@@ -64,17 +64,11 @@ class TestBlackheathanswers():
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
         self.vars["root"] = self.driver.current_window_handle
 
-        # Wait for the first answer paper to be clickable with a longer timeout
-        try:
-            first_answer_paper = WebDriverWait(self.driver, 20).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"))
-            )
-            first_answer_paper.click()
-        except Exception as e:
-            print(f"Error: {e}")
-            self.driver.quit()
-            return
-
+        # Wait for the first answer paper to be clickable
+        first_answer_paper = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"))
+        )
+        first_answer_paper.click()
         self.vars["window_handles"] = self.wait_for_window(2000)  # Store window handles after opening the new tab
         self.driver.switch_to.window(self.vars["window_handles"][-1])  # Switch to the newly opened tab
 
@@ -86,6 +80,7 @@ class TestBlackheathanswers():
         # Take screenshot of the second tab
         screenshot_path = f"screenshots/second_tab_screenshot.png"
         self.driver.save_screenshot(screenshot_path)
+        print(f"Screenshot saved at {screenshot_path}")
 
         # Check if the link matches the expected URL
         if second_tab_link != expected_second_tab_link:
@@ -95,16 +90,11 @@ class TestBlackheathanswers():
         self.driver.switch_to.window(self.vars["root"])
         self.driver.execute_script("window.scrollBy(0, 500)")  # Scroll down 500px
         action = ActionChains(self.driver)
-        try:
-            second_answer_paper = WebDriverWait(self.driver, 20).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"))
-            )
-            action.context_click(second_answer_paper).perform()  # Right-click on the second answer paper
-            time.sleep(2)  # Wait for the context menu
-        except Exception as e:
-            print(f"Error: {e}")
-            self.driver.quit()
-            return
+        second_answer_paper = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"))
+        )
+        action.context_click(second_answer_paper).perform()  # Right-click on the second answer paper
+        time.sleep(2)  # Wait for the context menu
 
         # Open the link in a new tab
         action.send_keys(Keys.ARROW_DOWN).send_keys(Keys.RETURN).perform()
@@ -115,6 +105,11 @@ class TestBlackheathanswers():
         new_tab_link = self.driver.current_url
         expected_new_tab_link = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
         print(f"Link in the new tab after right-click: {new_tab_link}")
+
+        # Take screenshot of the new tab
+        screenshot_path_new = f"screenshots/new_tab_screenshot.png"
+        self.driver.save_screenshot(screenshot_path_new)
+        print(f"Screenshot saved at {screenshot_path_new}")
 
         # Check if the link matches the expected URL
         if new_tab_link != expected_new_tab_link:
@@ -131,6 +126,12 @@ class TestBlackheathanswers():
             "Expected URL": expected_second_tab_link,
             "Actual URL": second_tab_link,
             "Screenshot": screenshot_path
+        }, {
+            "Test Case": "New Tab Link Verification",
+            "Status": "Pass",
+            "Expected URL": expected_new_tab_link,
+            "Actual URL": new_tab_link,
+            "Screenshot": screenshot_path_new
         }]
 
         # Append results to CSV
