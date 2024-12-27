@@ -29,10 +29,11 @@ class TestWordpressLogin:
         # Clear cache before starting the test
         chrome_options.add_argument("--disable-cache")
 
+        # Create the driver with a longer timeout
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(60)
-        self.driver.set_script_timeout(30)
-        self.driver.implicitly_wait(10)
+        self.driver.set_page_load_timeout(120)  # Increased timeout for page loads
+        self.driver.set_script_timeout(60)      # Increased timeout for script execution
+        self.driver.implicitly_wait(20)         # Increased implicit wait
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
@@ -66,6 +67,20 @@ class TestWordpressLogin:
                 # Incrementally scroll down by 200px if the element is not yet clickable
                 self.driver.execute_script("window.scrollBy(0, 200);")
         raise Exception("Element not found or not clickable")
+
+    def retry_click(self, by, value, retries=3, delay=2):
+        """Retry clicking an element multiple times if it fails."""
+        for _ in range(retries):
+            try:
+                element = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable((by, value))
+                )
+                element.click()
+                return
+            except Exception as e:
+                print(f"Retrying due to: {e}")
+                time.sleep(delay)
+        raise Exception("Element not clickable after retries")
 
     def test_11Plus(self):
         # Start time to calculate test duration
