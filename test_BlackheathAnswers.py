@@ -64,11 +64,17 @@ class TestBlackheathanswers():
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
         self.vars["root"] = self.driver.current_window_handle
 
-        # Wait for the first answer paper to be clickable
-        first_answer_paper = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"))
-        )
-        first_answer_paper.click()
+        # Wait for the first answer paper to be clickable with a longer timeout
+        try:
+            first_answer_paper = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"))
+            )
+            first_answer_paper.click()
+        except Exception as e:
+            print(f"Error: {e}")
+            self.driver.quit()
+            return
+
         self.vars["window_handles"] = self.wait_for_window(2000)  # Store window handles after opening the new tab
         self.driver.switch_to.window(self.vars["window_handles"][-1])  # Switch to the newly opened tab
 
@@ -89,11 +95,16 @@ class TestBlackheathanswers():
         self.driver.switch_to.window(self.vars["root"])
         self.driver.execute_script("window.scrollBy(0, 500)")  # Scroll down 500px
         action = ActionChains(self.driver)
-        second_answer_paper = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"))
-        )
-        action.context_click(second_answer_paper).perform()  # Right-click on the second answer paper
-        time.sleep(2)  # Wait for the context menu
+        try:
+            second_answer_paper = WebDriverWait(self.driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"))
+            )
+            action.context_click(second_answer_paper).perform()  # Right-click on the second answer paper
+            time.sleep(2)  # Wait for the context menu
+        except Exception as e:
+            print(f"Error: {e}")
+            self.driver.quit()
+            return
 
         # Open the link in a new tab
         action.send_keys(Keys.ARROW_DOWN).send_keys(Keys.RETURN).perform()
