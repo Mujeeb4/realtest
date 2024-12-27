@@ -24,11 +24,13 @@ class TestBlackheathanswers:
         chrome_options.add_argument("--incognito")
         chrome_options.add_argument("window-size=1382,744")
         chrome_options.add_argument("--disable-cache")  # Disable cache
+        chrome_options.add_argument("--remote-debugging-port=9222")  # Fix for headless issues
 
         # Add this option to prevent cache in headless mode
         chrome_options.add_argument("--disk-cache-dir=/dev/null")  # Disable disk cache
+        chrome_options.add_argument("--headless")  # Headless mode for CI/CD
 
-        # Start a non-headless browser session (not using headless mode to interact with settings)
+        # Start Chrome with the specified options
         self.driver = webdriver.Chrome(options=chrome_options)
         self.vars = {}
 
