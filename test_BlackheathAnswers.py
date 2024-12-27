@@ -26,6 +26,9 @@ class TestWordpressLogin:
         chrome_options.add_argument("--incognito")
         chrome_options.add_argument("window-size=1296,696")
         
+        # Clear cache before starting the test
+        chrome_options.add_argument("--disable-cache")
+
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.set_page_load_timeout(60)
         self.driver.set_script_timeout(30)
@@ -117,7 +120,6 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to: {self.driver.current_url}")
 
-                
                 # Wait and take screenshot
                 time.sleep(5)
                 screenshot_path = f"screenshots/Blackheath_Answer_Paper_{i+1}.png"
@@ -160,7 +162,7 @@ class TestWordpressLogin:
                 # Log current URL for debugging
                 print(f"Navigated to quiz URL: {self.driver.current_url}")
 
-                # Verify URL using 'in' rather than '=='
+                # Verify URL using 'in' rather than '==' to handle minor URL changes
                 assert expected_quiz_urls[i] in self.driver.current_url, (
                     f"Expected URL to contain {expected_quiz_urls[i]}, but got {self.driver.current_url}"
                 )
