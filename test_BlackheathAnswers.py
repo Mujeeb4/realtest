@@ -8,6 +8,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # CSV file path to store all test results
 CSV_FILE_PATH = "test_results.csv"
@@ -62,8 +64,11 @@ class TestBlackheathanswers():
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
         self.vars["root"] = self.driver.current_window_handle
 
-        # Open the first answer paper in second tab and check the link
-        self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a").click()
+        # Wait for the first answer paper to be clickable
+        first_answer_paper = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"))
+        )
+        first_answer_paper.click()
         self.vars["window_handles"] = self.wait_for_window(2000)  # Store window handles after opening the new tab
         self.driver.switch_to.window(self.vars["window_handles"][-1])  # Switch to the newly opened tab
 
@@ -84,8 +89,10 @@ class TestBlackheathanswers():
         self.driver.switch_to.window(self.vars["root"])
         self.driver.execute_script("window.scrollBy(0, 500)")  # Scroll down 500px
         action = ActionChains(self.driver)
-        answer_paper = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
-        action.context_click(answer_paper).perform()  # Right-click on the second answer paper
+        second_answer_paper = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a"))
+        )
+        action.context_click(second_answer_paper).perform()  # Right-click on the second answer paper
         time.sleep(2)  # Wait for the context menu
 
         # Open the link in a new tab
