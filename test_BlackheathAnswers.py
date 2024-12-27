@@ -1,45 +1,34 @@
 import pytest
 import time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import os
 import pandas as pd
-from selenium.common.exceptions import TimeoutException
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 # CSV file path to store all test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestWordpressLogin:
+class TestBlackheathanswers():
     def setup_method(self, method):
-        # Set up headless Chrome options for CI
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--disable-extensions")
-        chrome_options.add_argument("--disable-infobars")
-        chrome_options.add_argument("--disable-popup-blocking")
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_argument("--incognito")
-        chrome_options.add_argument("window-size=1296,696")
+        self.driver = webdriver.Chrome()
+        self.vars = {}
         
-        self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.set_page_load_timeout(240)  # Further increase timeout
-        self.driver.set_script_timeout(180)  # Further increase script timeout
-        self.driver.implicitly_wait(40)  # Further increase implicit wait
-
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
-        
-        self.vars = {}
-
+    
     def teardown_method(self, method):
         self.driver.quit()
+
+    def wait_for_window(self, timeout=2):
+        time.sleep(round(timeout / 1000))
+        wh_now = self.driver.window_handles
+        wh_then = self.vars["window_handles"]
+        if len(wh_now) > len(wh_then):
+            return set(wh_now).difference(set(wh_then)).pop()
 
     def append_to_csv(self, results):
         df = pd.DataFrame(results)
@@ -52,105 +41,69 @@ class TestWordpressLogin:
         except Exception as e:
             print(f"Error appending to CSV: {e}")
 
-    def scroll_to_element_incrementally(self, by, value):
-        """Incrementally scroll down until the element is clickable."""
-        element = None
-        for _ in range(20):  # Try scrolling up to 20 times
-            try:
-                element = WebDriverWait(self.driver, 40).until(
-                    EC.element_to_be_clickable((by, value))
-                )
-                break  # Exit if the element becomes clickable
-            except TimeoutException:
-                # Scroll down by 300px if the element is not yet clickable
-                self.driver.execute_script("window.scrollBy(0, 300);")
-                time.sleep(0.5)  # Allow time for scroll to take effect
-        if not element:
-            raise Exception("Element not found or not clickable after scrolling.")
-        return element
-
-    def retry_request(self, url, retries=3, delay=5):
-        """Retry a request a specified number of times in case of a timeout."""
-        for attempt in range(retries):
-            try:
-                self.driver.get(url)
-                return True
-            except TimeoutException as e:
-                print(f"Attempt {attempt+1} failed: {str(e)}. Retrying...")
-                time.sleep(delay)
-        return False
-
-    def test_11Plus(self):
-        # Start time to calculate test duration
-        start_time = time.time()
-
-        # Log in to WordPress
+    def test_blackheathanswers(self):
+        # Login
         self.driver.get("https://smoothmaths.co.uk/login/")
         self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
         self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
         self.driver.find_element(By.ID, "wp-submit").click()
+
+        # Open the target page
+        self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
+        self.vars["root"] = self.driver.current_window_handle
+
+        # Open the first answer paper in second tab and check the link
+        self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a").click()
+        self.vars["win1007"] = self.wait_for_window(2000)
+        self.driver.switch_to.window(self.vars["win1007"])
+
+        # Verify the link on the second tab
+        second_tab_link = self.driver.current_url
+        expected_second_tab_link = "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/"
+        print(f"Link in second tab: {second_tab_link}")
         
-        # Open the target page with retry mechanism
-        main_page_url = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/"
-        if not self.retry_request(main_page_url):
-            raise Exception(f"Failed to open {main_page_url} after multiple attempts.")
-        
-        # Expected URLs for each answer paper
-        expected_answer_urls = [
-            "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/",
-            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
-        ]
-        
-        # Locators for each answer paper
-        answer_paper_locators = [
-            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  
-            (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
-        ]
+        # Take screenshot of the second tab
+        screenshot_path = f"screenshots/second_tab_screenshot.png"
+        self.driver.save_screenshot(screenshot_path)
 
-        results = []
+        # Check if the link matches the expected URL
+        if second_tab_link != expected_second_tab_link:
+            raise Exception(f"Test failed: Expected {expected_second_tab_link} but got {second_tab_link}")
 
-        # Test each Answer Paper link
-        for i, (by, value) in enumerate(answer_paper_locators):
-            try:
-                # Scroll to the element and click
-                answer_paper_link = self.scroll_to_element_incrementally(by, value)
-                self.driver.execute_script("arguments[0].click();", answer_paper_link)
+        # Return to the first tab, scroll, and right-click on the second answer paper
+        self.driver.switch_to.window(self.vars["root"])
+        self.driver.execute_script("window.scrollBy(0, 500)")  # Scroll down 500px
+        action = ActionChains(self.driver)
+        answer_paper = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
+        action.context_click(answer_paper).perform()  # Right-click on the second answer paper
+        time.sleep(2)  # Wait for the context menu
 
-                # Verify the current URL
-                WebDriverWait(self.driver, 30).until(EC.url_to_be(expected_answer_urls[i]))
-                
-                # Log current URL for debugging
-                print(f"Navigated to: {self.driver.current_url}")
-                
-                # Wait and take screenshot
-                time.sleep(5)
-                screenshot_path = f"screenshots/Blackheath_Answer_Paper_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                # Log success status
-                results.append({
-                    "Test Case": f"Answer Paper {i+1} Link Verification",
-                    "Status": "Pass",
-                    "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url,
-                    "Screenshot": screenshot_path
-                })
+        # Open the link in a new tab
+        action.send_keys(Keys.ARROW_DOWN).send_keys(Keys.RETURN).perform()
+        self.vars["win1008"] = self.wait_for_window(2000)
 
-            except Exception as e:
-                screenshot_path = f"screenshots/Blackheath_error_Answer_Paper_{i+1}.png"
-                self.driver.save_screenshot(screenshot_path)
-                
-                results.append({
-                    "Test Case": f"Answer Paper {i+1} Link Verification",
-                    "Status": f"Fail: {str(e)}",
-                    "Expected URL": expected_answer_urls[i],
-                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
-                    "Screenshot": screenshot_path
-                })
+        # Switch to the new tab and check its link
+        self.driver.switch_to.window(self.vars["win1008"])
+        new_tab_link = self.driver.current_url
+        expected_new_tab_link = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
+        print(f"Link in the new tab after right-click: {new_tab_link}")
 
-            # Go back to the main page for the next link
-            self.driver.get(main_page_url)
-            time.sleep(5)
+        # Check if the link matches the expected URL
+        if new_tab_link != expected_new_tab_link:
+            raise Exception(f"Test failed: Expected {expected_new_tab_link} but got {new_tab_link}")
+
+        # Close the tabs
+        self.driver.close()
+        self.driver.switch_to.window(self.vars["root"])
+
+        # Prepare test result
+        results = [{
+            "Test Case": "Second Tab Link Verification",
+            "Status": "Pass",
+            "Expected URL": expected_second_tab_link,
+            "Actual URL": second_tab_link,
+            "Screenshot": screenshot_path
+        }]
 
         # Append results to CSV
         self.append_to_csv(results)
