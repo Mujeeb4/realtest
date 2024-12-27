@@ -25,8 +25,6 @@ class TestBlackheathanswers:
         chrome_options.add_argument("window-size=1382,744")
         chrome_options.add_argument("--disable-cache")  # Disable cache
         chrome_options.add_argument("--remote-debugging-port=9222")  # Fix for headless issues
-
-        # Add this option to prevent cache in headless mode
         chrome_options.add_argument("--disk-cache-dir=/dev/null")  # Disable disk cache
         chrome_options.add_argument("--headless")  # Headless mode for CI/CD
 
@@ -67,16 +65,22 @@ class TestBlackheathanswers:
         self.driver.find_element(By.ID, "user_pass").send_keys(Keys.ENTER)
 
         # Wait for login to complete and navigate to the main page
-        WebDriverWait(self.driver, 10).until(expected_conditions.url_changes("https://smoothmaths.co.uk/login/"))
+        WebDriverWait(self.driver, 20).until(expected_conditions.url_changes("https://smoothmaths.co.uk/login/"))
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
 
-        # Click on the first answer paper link
-        WebDriverWait(self.driver, 10).until(expected_conditions.presence_of_element_located((By.LINK_TEXT, "Answer Paper")))
-        answer_paper_link = self.driver.find_element(By.LINK_TEXT, "Answer Paper")
-        answer_paper_link.click()
+        # Use the provided CSS selectors to find and click on the first answer paper link
+        try:
+            # Wait for the first "Answer Paper" link (using the provided CSS selector)
+            WebDriverWait(self.driver, 20).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")))
+            first_answer_paper_link = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
+            first_answer_paper_link.click()
+        except Exception as e:
+            print(f"Failed to find first 'Answer Paper' link: {e}")
+            self.driver.save_screenshot("screenshots/Error_Answer_Paper_Link_1.png")
+            raise
 
         # Wait for the first answer paper to open and verify the link
-        WebDriverWait(self.driver, 10).until(expected_conditions.url_to_be("https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/"))
+        WebDriverWait(self.driver, 20).until(expected_conditions.url_to_be("https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/"))
         current_url = self.driver.current_url
         expected_url = "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/"
 
@@ -105,13 +109,19 @@ class TestBlackheathanswers:
         # Return to the main page
         self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
 
-        # Scroll to the second answer paper link and click it
-        second_answer_paper_link = self.driver.find_element(By.LINK_TEXT, "11 Entrance and Scholarship Examination Mathematics Practice Paper Answer Paper")
-        ActionChains(self.driver).move_to_element(second_answer_paper_link).perform()
-        second_answer_paper_link.click()
+        # Use the provided CSS selectors to find and click on the second answer paper link
+        try:
+            # Wait for the second "Answer Paper" link (using the provided CSS selector)
+            WebDriverWait(self.driver, 20).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")))
+            second_answer_paper_link = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
+            second_answer_paper_link.click()
+        except Exception as e:
+            print(f"Failed to find second 'Answer Paper' link: {e}")
+            self.driver.save_screenshot("screenshots/Error_Answer_Paper_Link_2.png")
+            raise
 
         # Wait for the second answer paper to open and verify the link
-        WebDriverWait(self.driver, 10).until(expected_conditions.url_to_be("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"))
+        WebDriverWait(self.driver, 20).until(expected_conditions.url_to_be("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"))
         current_url = self.driver.current_url
         expected_url = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"
 
