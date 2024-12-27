@@ -9,6 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 # CSV file path to store all test results
 CSV_FILE_PATH = "test_results.csv"
@@ -54,6 +55,16 @@ class TestBlackheathanswers:
         """ Clear cache between tests """
         self.driver.delete_all_cookies()  # This clears cookies, helping to clear cache between tests
 
+    def safe_find_element(self, by, value, timeout=20):
+        """ Helper function to safely find an element, retrying if necessary. """
+        try:
+            WebDriverWait(self.driver, timeout).until(expected_conditions.presence_of_element_located((by, value)))
+            return self.driver.find_element(by, value)
+        except Exception as e:
+            print(f"Error finding element: {e}")
+            self.driver.save_screenshot(f"screenshots/Error_finding_element_{value}.png")
+            raise
+
     def test_blackheathanswers(self):
         # Clear cache before each test to ensure fresh load
         self.clear_cache()
@@ -70,9 +81,7 @@ class TestBlackheathanswers:
 
         # Use the provided CSS selectors to find and click on the first answer paper link
         try:
-            # Wait for the first "Answer Paper" link (using the provided CSS selector)
-            WebDriverWait(self.driver, 20).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")))
-            first_answer_paper_link = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
+            first_answer_paper_link = self.safe_find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
             first_answer_paper_link.click()
         except Exception as e:
             print(f"Failed to find first 'Answer Paper' link: {e}")
@@ -111,9 +120,7 @@ class TestBlackheathanswers:
 
         # Use the provided CSS selectors to find and click on the second answer paper link
         try:
-            # Wait for the second "Answer Paper" link (using the provided CSS selector)
-            WebDriverWait(self.driver, 20).until(expected_conditions.presence_of_element_located((By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")))
-            second_answer_paper_link = self.driver.find_element(By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
+            second_answer_paper_link = self.safe_find_element(By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
             second_answer_paper_link.click()
         except Exception as e:
             print(f"Failed to find second 'Answer Paper' link: {e}")
