@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -13,7 +14,18 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestBlackheathanswers():
     def setup_method(self, method):
-        self.driver = webdriver.Chrome()
+        # Set up headless Chrome options for CI
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("window-size=1296,696")
+        
+        # Set the correct path to ChromeDriver
+        self.driver = webdriver.Chrome(options=chrome_options)
         self.vars = {}
         
         # Ensure screenshots directory exists
@@ -98,6 +110,7 @@ class TestBlackheathanswers():
 
         # Prepare test result
         results = [{
+
             "Test Case": "Second Tab Link Verification",
             "Status": "Pass",
             "Expected URL": expected_second_tab_link,
