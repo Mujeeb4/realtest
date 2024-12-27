@@ -15,18 +15,20 @@ CSV_FILE_PATH = "test_results.csv"
 
 class TestBlackheathanswers:
     def setup_method(self, method):
-        # Set up Chrome options to disable cache and browser cache clearing
+        # Set up Chrome options to disable cache
         chrome_options = Options()
-        chrome_options.add_argument("--headless")  # Optional: Run headless for CI/CD
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--incognito")
         chrome_options.add_argument("window-size=1382,744")
-        chrome_options.add_argument("--disk-cache-dir=/dev/null")  # Disable cache
+        chrome_options.add_argument("--disable-cache")  # Disable cache
 
-        # Set Chrome to run with these options
+        # Add this option to prevent cache in headless mode
+        chrome_options.add_argument("--disk-cache-dir=/dev/null")  # Disable disk cache
+
+        # Start a non-headless browser session (not using headless mode to interact with settings)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.vars = {}
 
@@ -50,8 +52,7 @@ class TestBlackheathanswers:
 
     def clear_cache(self):
         """ Clear cache between tests """
-        self.driver.get("chrome://settings/clearBrowserData")
-        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, "* /deep/ #clearBrowsingDataConfirm"))).click()
+        self.driver.delete_all_cookies()  # This clears cookies, helping to clear cache between tests
 
     def test_blackheathanswers(self):
         # Clear cache before each test to ensure fresh load
