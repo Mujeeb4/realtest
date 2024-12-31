@@ -1,42 +1,42 @@
 import pytest
 import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import os
 import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 # CSV file path to store all test results
 CSV_FILE_PATH = "test_results.csv"
 
-class TestBlackheathanswers:
+class TestWordpressLogin:
     def setup_method(self, method):
-        # Set up Chrome options to disable cache
+        # Set up headless Chrome options for CI
         chrome_options = Options()
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--disable-infobars")
+        chrome_options.add_argument("--disable-popup-blocking")
+        chrome_options.add_argument("--disable-notifications")
         chrome_options.add_argument("--incognito")
-        chrome_options.add_argument("window-size=1382,744")
-        chrome_options.add_argument("--disable-cache")  # Disable cache
-        chrome_options.add_argument("--remote-debugging-port=9222")  # Fix for headless issues
-        chrome_options.add_argument("--disk-cache-dir=/dev/null")  # Disable disk cache
-        chrome_options.add_argument("--headless")  # Headless mode for CI/CD
-
-        # Start Chrome with the specified options
+        chrome_options.add_argument("window-size=1296,696")
+        
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.vars = {}
+        self.driver.set_page_load_timeout(60)
+        self.driver.set_script_timeout(30)
+        self.driver.implicitly_wait(10)
 
         # Ensure screenshots directory exists
         if not os.path.exists("screenshots"):
             os.makedirs("screenshots")
-
+        
+        self.vars = {}
+  
     def teardown_method(self, method):
         self.driver.quit()
 
@@ -51,107 +51,96 @@ class TestBlackheathanswers:
         except Exception as e:
             print(f"Error appending to CSV: {e}")
 
-    def clear_cache(self):
-        """ Clear cache between tests """
-        self.driver.delete_all_cookies()  # This clears cookies, helping to clear cache between tests
+    def scroll_to_element_incrementally(self, by, value):
+        """Incrementally scroll down until the element is clickable."""
+        element = None
+        for _ in range(20):  # Try scrolling up to 20 times
+            try:
+                element = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((by, value))
+                )
+                break  # Exit if the element becomes clickable
+            except:
+                # Scroll down by 300px if the element is not yet clickable
+                self.driver.execute_script("window.scrollBy(0, 300);")
+                time.sleep(0.5)  # Allow time for scroll to take effect
+        if not element:
+            raise Exception("Element not found or not clickable after scrolling.")
+        return element
 
-    def safe_find_element(self, by, value, timeout=20):
-        """ Helper function to safely find an element, retrying if necessary. """
-        try:
-            WebDriverWait(self.driver, timeout).until(expected_conditions.presence_of_element_located((by, value)))
-            return self.driver.find_element(by, value)
-        except Exception as e:
-            print(f"Error finding element: {e}")
-            self.driver.save_screenshot(f"screenshots/Error_finding_element_{value}.png")
-            raise
+    def test_11Plus(self):
+        # Start time to calculate test duration
+        start_time = time.time()
 
-    def test_blackheathanswers(self):
-        # Clear cache before each test to ensure fresh load
-        self.clear_cache()
-
-        # Log in to SmoothMaths
+        # Log in to WordPress
         self.driver.get("https://smoothmaths.co.uk/login/")
-        self.driver.find_element(By.ID, "user_login").send_keys("Hanzilatesting")
-        self.driver.find_element(By.ID, "user_pass").send_keys("012hanzila")
-        self.driver.find_element(By.ID, "user_pass").send_keys(Keys.ENTER)
+        self.driver.find_element(By.ID, "user_login").send_keys("hanzila@dovidigital.com")
+        self.driver.find_element(By.ID, "user_pass").send_keys("Hanzila*183258")
+        self.driver.find_element(By.ID, "wp-submit").click()
+        
+        # Open the target page
+        main_page_url = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/"
+        self.driver.get(main_page_url)
+        
+        # Expected URLs for each answer paper
+        expected_answer_urls = [
+            "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/",
+            "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper/"
+        ]
+        
 
-        # Wait for login to complete and navigate to the main page
-        WebDriverWait(self.driver, 20).until(expected_conditions.url_changes("https://smoothmaths.co.uk/login/"))
-        self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
+        
+        # Locators for each answer paper
+        answer_paper_locators = [
+            (By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a"),  
+            (By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
+        ]
 
-        # Use the provided CSS selectors to find and click on the first answer paper link
-        try:
-            first_answer_paper_link = self.safe_find_element(By.CSS_SELECTOR, ".et_pb_blurb_1.et_pb_blurb .et_pb_module_header a")
-            first_answer_paper_link.click()
-        except Exception as e:
-            print(f"Failed to find first 'Answer Paper' link: {e}")
-            self.driver.save_screenshot("screenshots/Error_Answer_Paper_Link_1.png")
-            raise
-
-        # Wait for the first answer paper to open and verify the link
-        WebDriverWait(self.driver, 20).until(expected_conditions.url_to_be("https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/"))
-        current_url = self.driver.current_url
-        expected_url = "https://smoothmaths.co.uk/blackheath-high-school-11-plus-sample-examination-answer-paper-2024/"
 
         results = []
-        if current_url != expected_url:
-            screenshot_path = f"screenshots/Blackheath_error_Answer_Paper_1.png"
-            self.driver.save_screenshot(screenshot_path)
-            results.append({
-                "Test Case": "First Answer Paper Link Verification",
-                "Status": f"Fail: Expected URL {expected_url}, but got {current_url}",
-                "Expected URL": expected_url,
-                "Actual URL": current_url,
-                "Screenshot": screenshot_path
-            })
-        else:
-            screenshot_path = f"screenshots/Blackheath_Answer_Paper_1.png"
-            self.driver.save_screenshot(screenshot_path)
-            results.append({
-                "Test Case": "First Answer Paper Link Verification",
-                "Status": "Pass",
-                "Expected URL": expected_url,
-                "Actual URL": current_url,
-                "Screenshot": screenshot_path
-            })
 
-        # Return to the main page
-        self.driver.get("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/")
+        # Test each Answer Paper link
+        for i, (by, value) in enumerate(answer_paper_locators):
+            try:
+                # Scroll to the element and click
+                answer_paper_link = self.scroll_to_element_incrementally(by, value)
+                self.driver.execute_script("arguments[0].click();", answer_paper_link)
 
-        # Use the provided CSS selectors to find and click on the second answer paper link
-        try:
-            second_answer_paper_link = self.safe_find_element(By.CSS_SELECTOR, ".et_pb_blurb_4.et_pb_blurb .et_pb_module_header a")
-            second_answer_paper_link.click()
-        except Exception as e:
-            print(f"Failed to find second 'Answer Paper' link: {e}")
-            self.driver.save_screenshot("screenshots/Error_Answer_Paper_Link_2.png")
-            raise
+                # Verify the current URL
+                WebDriverWait(self.driver, 10).until(EC.url_to_be(expected_answer_urls[i]))
+                
+                # Log current URL for debugging
+                print(f"Navigated to: {self.driver.current_url}")
+                
+                # Wait and take screenshot
+                time.sleep(5)
+                screenshot_path = f"screenshots/Blackheath_Answer_Paper_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                
+                # Log success status
+                results.append({
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
+                    "Status": "Pass",
+                    "Expected URL": expected_answer_urls[i],
+                    "Actual URL": self.driver.current_url,
+                    "Screenshot": screenshot_path
+                })
 
-        # Wait for the second answer paper to open and verify the link
-        WebDriverWait(self.driver, 20).until(expected_conditions.url_to_be("https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"))
-        current_url = self.driver.current_url
-        expected_url = "https://smoothmaths.co.uk/11-plus-schools/blackheath-high-school/11-entrance-and-scholarship-examination-mathematics-practice-paper-answer-paper"
+            except Exception as e:
+                screenshot_path = f"screenshots/Blackheath_error_Answer_Paper_{i+1}.png"
+                self.driver.save_screenshot(screenshot_path)
+                
+                results.append({
+                    "Test Case": f"Answer Paper {i+1} Link Verification",
+                    "Status": f"Fail: {str(e)}",
+                    "Expected URL": expected_answer_urls[i],
+                    "Actual URL": self.driver.current_url if self.driver.current_url else "N/A",
+                    "Screenshot": screenshot_path
+                })
 
-        if current_url != expected_url:
-            screenshot_path = f"screenshots/Blackheath_error_Answer_Paper_2.png"
-            self.driver.save_screenshot(screenshot_path)
-            results.append({
-                "Test Case": "Second Answer Paper Link Verification",
-                "Status": f"Fail: Expected URL {expected_url}, but got {current_url}",
-                "Expected URL": expected_url,
-                "Actual URL": current_url,
-                "Screenshot": screenshot_path
-            })
-        else:
-            screenshot_path = f"screenshots/Blackheath_Answer_Paper_2.png"
-            self.driver.save_screenshot(screenshot_path)
-            results.append({
-                "Test Case": "Second Answer Paper Link Verification",
-                "Status": "Pass",
-                "Expected URL": expected_url,
-                "Actual URL": current_url,
-                "Screenshot": screenshot_path
-            })
+            # Go back to the main page for the next link
+            self.driver.get(main_page_url)
+            time.sleep(2)
 
         # Append results to CSV
         self.append_to_csv(results)
